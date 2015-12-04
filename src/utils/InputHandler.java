@@ -23,7 +23,9 @@ public final class InputHandler {
 
         while (bin.ready()) {
             line = bin.readLine();
-            lines.add(line);
+            if (!line.equalsIgnoreCase("")) {
+                lines.add(line);
+            }
         }
 
         bin.close();
