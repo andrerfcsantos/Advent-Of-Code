@@ -12,8 +12,8 @@ import java.util.HashSet;
 public class Day_03 {
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 2 Problem 1: " + problem_01());
-        System.out.println("Solution Day 2 Problem 2: " + problem_02());
+        System.out.println("Solution Day 3 Problem 1: " + problem_01());
+        System.out.println("Solution Day 3 Problem 2: " + problem_02());
     }
 
     public static int problem_01() throws IOException {
@@ -33,19 +33,11 @@ public class Day_03 {
 
             c = line.charAt(i);
             switch (c) {
-                case '^':
-                    currentPos.goUp();
-                    break;
-                case 'v':
-                    currentPos.goDown();
-                    break;
-                case '<':
-                    currentPos.goLeft();
-                    break;
-                case '>':
-                    currentPos.goRight();
-                    break;
-                default:
+                case '^': currentPos.goUp(); break;
+                case 'v': currentPos.goDown(); break;
+                case '<': currentPos.goLeft(); break;
+                case '>': currentPos.goRight(); break;
+                default:break;
             }
         }
 
@@ -74,18 +66,10 @@ public class Day_03 {
 
             c = line.charAt(i);
             switch (c) {
-                case '^':
-                    posAux.goUp();
-                    break;
-                case 'v':
-                    posAux.goDown();
-                    break;
-                case '<':
-                    posAux.goLeft();
-                    break;
-                case '>':
-                    posAux.goRight();
-                    break;
+                case '^': posAux.goUp(); break;
+                case 'v': posAux.goDown(); break;
+                case '<': posAux.goLeft(); break;
+                case '>': posAux.goRight(); break;
                 default:
             }
         }
@@ -96,43 +80,17 @@ public class Day_03 {
     static class Coordinates {
         private int x, y;
 
-        public Coordinates() {
-            this(0, 0);
-        }
+        public Coordinates() {this(0, 0);}
+        public Coordinates(int x, int y) {this.x = x;this.y = y;}
+        public Coordinates(Coordinates c) {this.x = c.x;this.y = c.y;}
 
-        public Coordinates(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+        public int getX() {return x;}
+        public int getY() {return y;}
 
-        public Coordinates(Coordinates c) {
-            this.x = c.x;
-            this.y = c.y;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public void goUp() {
-            this.y++;
-        }
-
-        public void goDown() {
-            this.y--;
-        }
-
-        public void goRight() {
-            this.x++;
-        }
-
-        public void goLeft() {
-            this.x--;
-        }
+        public void goUp() {this.y++;}
+        public void goDown() {this.y--;}
+        public void goRight() {this.x++;}
+        public void goLeft() {this.x--;}
 
         @Override
         public boolean equals(Object o) {
