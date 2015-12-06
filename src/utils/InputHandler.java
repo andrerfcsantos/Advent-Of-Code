@@ -33,12 +33,29 @@ public final class InputHandler {
         return lines;
     }
 
-    public static void printLines(String filePath) throws IOException {
-        ArrayList<String> lines = (ArrayList<String>) getLines(filePath);
+    /*
+    Day 6 requires a special treatment for each line, that i decided to do here.
+    This is a bodge, intended to "just work". In the future i'll consider other alternatives
+     like changing the original function getLines to receive a function as argument (java 8 ftw!).
+     */
+    public static List<String> getLinesDay6(String filePath) throws IOException {
+        ArrayList<String> lines = new ArrayList<>();
+        String line;
+        File filein = new File(filePath);
+        BufferedReader bin = new BufferedReader(new FileReader(filein));
 
-        for (int i = 0; i < lines.size(); i++) {
-            System.out.println("Line " + i + ": " + lines.get(i));
+        while (bin.ready()) {
+            line = bin.readLine();
+            if (!line.equalsIgnoreCase("")) {
+                lines.add(line.replace("turn on","turnon")
+                                .replace("turn off","turnoff")
+                                .replace(" through ", " "));
+            }
         }
 
+        bin.close();
+
+        return lines;
     }
+
 }
