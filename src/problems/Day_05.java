@@ -1,5 +1,6 @@
 package problems;
 
+import utils.Crono;
 import utils.InputHandler;
 
 import java.io.IOException;
@@ -20,6 +21,9 @@ public class Day_05 {
         boolean doubleLetter = false, substrNotAllowed=false;
         char lastChar, currentChar;
         ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day05_1.txt");
+
+        Crono time = new Crono();
+        time.start();
 
         for(String line:lines){
             vowelCount =0; doubleLetter = false;
@@ -47,6 +51,9 @@ public class Day_05 {
             }
             if(!substrNotAllowed && doubleLetter && vowelCount>=3) niceStrings++;
         }
+        time.stop();
+
+        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return niceStrings;
     }
 
@@ -55,7 +62,8 @@ public class Day_05 {
         boolean repeatedLetter = false, repeatedGroup=false;
         char currentChar;
         ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day05_1.txt");
-
+        Crono time = new Crono();
+        time.start();
         for(String line:lines){
             repeatedLetter = false; repeatedGroup=false;
 
@@ -68,6 +76,9 @@ public class Day_05 {
             }
             if(repeatedGroup&&repeatedLetter) niceStrings++;
         }
+        time.stop();
+
+        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return niceStrings;
     }
 
