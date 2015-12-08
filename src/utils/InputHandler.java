@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Class that hosts the code for reading the input files.
@@ -36,24 +36,13 @@ public final class InputHandler {
      * @throws IOException File could not be read.
      */
     public static <T> List<T> getAndTransformLines(String filePath,
-                                            Predicate<String> filter,
-                                            Function<String,T> transformation) throws IOException {
-
-        ArrayList<T> lines = new ArrayList<>();
-        String line;
+                                                   Predicate<String> filter,
+                                                   Function<String,T> transformation) throws IOException {
         BufferedReader bin = new BufferedReader(new FileReader(new File(filePath)));
+        return bin.lines().filter(filter).map(transformation).collect(Collectors.toList());
+    }
 
-        while (bin.ready()) {
-            line = bin.readLine();
-            if (filter.test(line)) {
-                lines.add(transformation.apply(line));
-            }
-        }
-
-        bin.close();
-
-        return lines;
     }
 
 
-}
+
