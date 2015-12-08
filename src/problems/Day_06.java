@@ -6,6 +6,7 @@ import utils.InputHandler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.function.Function;
 
 /**
  * Problem 06
@@ -24,7 +25,14 @@ public class Day_06 {
         int lightsOn = 0;
         String instruction, lowerCoords, higherCoords;
         int x1,y1,x2,y2, deltaX, deltaY;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLinesDay6("Inputfiles/day06_1.txt");
+        Function<String, String> simplifyInstr = (e) -> e.replace("turn on","turnon")
+                                                            .replace("turn off","turnoff")
+                                                            .replace(" through ", " ");
+
+        ArrayList<String> lines = (ArrayList<String>)
+                        InputHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+                        InputHandler.NO_BLANK_LINES,
+                                simplifyInstr);
 
         Crono time = new Crono();
         time.start();
@@ -77,7 +85,13 @@ public class Day_06 {
         int brightness = 0;
         String instruction, lowerCoords, higherCoords;
         int x1,y1,x2,y2, deltaX, deltaY;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLinesDay6("Inputfiles/day06_1.txt");
+        Function<String, String> simplifyInstr = (e) -> e.replace("turn on","turnon")
+                .replace("turn off","turnoff")
+                .replace(" through ", " ");
+        ArrayList<String> lines = (ArrayList<String>)
+                InputHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+                        InputHandler.NO_BLANK_LINES,
+                        simplifyInstr);
 
         Crono time = new Crono();
         time.start();

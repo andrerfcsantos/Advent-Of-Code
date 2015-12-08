@@ -17,7 +17,7 @@ public class Day_01 {
 
     public static int problem_01() throws IOException {
         int floor = 0;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day01_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day01_1.txt");
         String line = lines.get(0);
 
         for (int i = 0; i < line.length(); i++) {
@@ -30,7 +30,7 @@ public class Day_01 {
 
     public static int problem_02() throws IOException {
         int floor = 0;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day01_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day01_1.txt");
         String line = lines.get(0);
 
         for (int i = 0; i < line.length(); i++) {

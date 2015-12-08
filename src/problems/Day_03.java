@@ -18,7 +18,7 @@ public class Day_03 {
 
     public static int problem_01() throws IOException {
         int result = 0;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day03_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day03_1.txt");
         String line = lines.get(0);
         Coordinates currentPos = new Coordinates();
         HashSet<Coordinates> placesVisited = new HashSet<>(10000);
@@ -46,7 +46,7 @@ public class Day_03 {
 
     public static int problem_02() throws IOException {
         int result = 0;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getLines("Inputfiles/day03_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day03_1.txt");
         String line = lines.get(0);
         Coordinates posAux;
         Coordinates santaPos = new Coordinates();
