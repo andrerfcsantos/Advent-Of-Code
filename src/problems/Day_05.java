@@ -1,7 +1,7 @@
 package problems;
 
 import utils.Crono;
-import utils.InputHandler;
+import utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class Day_05 {
         int niceStrings = 0, vowelCount =0;
         boolean doubleLetter = false, substrNotAllowed=false;
         char lastChar, currentChar;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
 
         Crono time = new Crono();
         time.start();
@@ -61,7 +61,7 @@ public class Day_05 {
         int niceStrings = 0, vowelCount =0;
         boolean repeatedLetter = false, repeatedGroup=false;
         char currentChar;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
         Crono time = new Crono();
         time.start();
         for(String line:lines){

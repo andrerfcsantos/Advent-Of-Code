@@ -1,6 +1,6 @@
 package problems;
 
-import utils.InputHandler;
+import utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Day_02 {
 
     public static int problem_01() throws IOException {
         int result = 0, smallestSide, l, w, h;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, "x\n\r");
@@ -40,7 +40,7 @@ public class Day_02 {
         int result = 0, l, w, h;
         int shortestSides[] = new int[2];
 
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, "x\n\r");

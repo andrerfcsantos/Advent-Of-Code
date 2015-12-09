@@ -1,6 +1,6 @@
 package problems;
 
-import utils.InputHandler;
+import utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Day_08 {
 
     public static int problem_01() throws IOException {
         int i;
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
         int totaldif=0;
         int strLen=0,actualchars=0;
 
@@ -44,7 +44,7 @@ public class Day_08 {
     }
 
     public static int problem_02() throws IOException  {
-        ArrayList<String> lines = (ArrayList<String>) InputHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
+        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
         int totaldif=0;
         int strLen=0,encodedchars=0;
 

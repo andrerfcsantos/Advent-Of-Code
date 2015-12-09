@@ -1,9 +1,6 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,9 +10,9 @@ import java.util.stream.Collectors;
  * Class that hosts the code for reading the input files.
  */
 
-public final class InputHandler {
+public final class FileHandler {
 
-    private InputHandler() {}
+    private FileHandler() {}
 
     public static Predicate<String> NO_BLANK_LINES = (e) -> !e.equalsIgnoreCase("");
     public static Function<String,String> DO_NOTHING = Function.identity();
@@ -40,6 +37,19 @@ public final class InputHandler {
                                                    Function<String,T> transformation) throws IOException {
         BufferedReader bin = new BufferedReader(new FileReader(new File(filePath)));
         return bin.lines().filter(filter).map(transformation).collect(Collectors.toList());
+    }
+
+    public static void writeFile(String path, List<String> lines) throws IOException {
+        BufferedWriter bwriter = new BufferedWriter(new PrintWriter(new File(path)));
+        lines.stream().forEach((s)->{
+            try {
+                bwriter.write(s+"\n");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+        bwriter.flush();
+        bwriter.close();
     }
 
     }

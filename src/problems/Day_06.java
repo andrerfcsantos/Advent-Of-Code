@@ -1,7 +1,7 @@
 package problems;
 
 import utils.Crono;
-import utils.InputHandler;
+import utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class Day_06 {
                                                             .replace(" through ", " ");
 
         ArrayList<String> lines = (ArrayList<String>)
-                        InputHandler.getAndTransformLines("Inputfiles/day06_1.txt",
-                        InputHandler.NO_BLANK_LINES,
+                        FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+                        FileHandler.NO_BLANK_LINES,
                                 simplifyInstr);
 
         Crono time = new Crono();
@@ -89,8 +89,8 @@ public class Day_06 {
                 .replace("turn off","turnoff")
                 .replace(" through ", " ");
         ArrayList<String> lines = (ArrayList<String>)
-                InputHandler.getAndTransformLines("Inputfiles/day06_1.txt",
-                        InputHandler.NO_BLANK_LINES,
+                FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+                        FileHandler.NO_BLANK_LINES,
                         simplifyInstr);
 
         Crono time = new Crono();

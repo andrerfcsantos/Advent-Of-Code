@@ -1,6 +1,6 @@
 package problems;
 
-import utils.InputHandler;
+import utils.FileHandler;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -33,8 +33,8 @@ public class Day_07 {
             return res;
         };
 
-        lines = (ArrayList<ArrayList<String>>) InputHandler.getAndTransformLines("Inputfiles/day07_1.txt",
-                InputHandler.NO_BLANK_LINES,
+        lines = (ArrayList<ArrayList<String>>) FileHandler.getAndTransformLines("Inputfiles/day07_1.txt",
+                FileHandler.NO_BLANK_LINES,
                 spliter);
 
         instructions = new HashMap<>();
@@ -100,8 +100,8 @@ public class Day_07 {
             return res;
         };
 
-        lines = (ArrayList<ArrayList<String>>) InputHandler.getAndTransformLines("Inputfiles/day07_1.txt",
-                InputHandler.NO_BLANK_LINES,
+        lines = (ArrayList<ArrayList<String>>) FileHandler.getAndTransformLines("Inputfiles/day07_1.txt",
+                FileHandler.NO_BLANK_LINES,
                 spliter);
 
         instructions = new HashMap<>();
