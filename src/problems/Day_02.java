@@ -1,5 +1,6 @@
 package problems;
 
+import utils.Crono;
 import utils.FileHandler;
 
 import java.io.IOException;
@@ -11,14 +12,26 @@ import java.util.StringTokenizer;
  */
 public class Day_02 {
 
+    private static ArrayList<String> lines;
+    private static Crono crono;
+
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 2 Problem 1: " + problem_01());
-        System.out.println("Solution Day 2 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
+        System.out.println("[Day 02] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 02] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 02] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
     public static int problem_01() throws IOException {
         int result = 0, smallestSide, l, w, h;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, "x\n\r");
@@ -39,8 +52,6 @@ public class Day_02 {
     public static int problem_02() throws IOException {
         int result = 0, l, w, h;
         int shortestSides[] = new int[2];
-
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day02_1.txt");
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, "x\n\r");

@@ -1,6 +1,7 @@
 package problems;
 
 import com.google.common.collect.Collections2;
+import utils.Crono;
 import utils.FileHandler;
 
 import java.io.IOException;
@@ -14,9 +15,24 @@ import java.util.List;
  */
 public class Day_09 {
 
+    private static ArrayList<String[]> lines;
+    private static Crono crono;
+
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 9 Problem 1: " + problem_01());
-        System.out.println("Solution Day 9 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String[]>) FileHandler.getAndTransformLines("Inputfiles/day09_1.txt",
+                FileHandler.NO_FILTER,
+                ((String e) -> {return e.split(" ((to)|=) ");}));
+        System.out.println("[Day 09] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 09] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 09] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
     public static int problem_01() throws IOException {
@@ -26,10 +42,6 @@ public class Day_09 {
 
         HashMap<String, Integer> citiesMap = new HashMap<>();
         ArrayList<String> citiesList = new ArrayList<>();
-        ArrayList<String> linestoprint = new ArrayList<>();
-        ArrayList<String[]> lines = (ArrayList<String[]>) FileHandler.getAndTransformLines("Inputfiles/day09_1.txt",
-                FileHandler.NO_FILTER,
-                ((String e) -> {return e.split(" ((to)|=) ");}));
 
         for(String[] line : lines){
             if(!citiesMap.containsKey(line[0])){
@@ -75,10 +87,7 @@ public class Day_09 {
 
         HashMap<String, Integer> citiesMap = new HashMap<>();
         ArrayList<String> citiesList = new ArrayList<>();
-        ArrayList<String> linestoprint = new ArrayList<>();
-        ArrayList<String[]> lines = (ArrayList<String[]>) FileHandler.getAndTransformLines("Inputfiles/day09_1.txt",
-                FileHandler.NO_FILTER,
-                ((String e) -> {return e.split(" ((to)|=) ");}));
+
 
         for(String[] line : lines){
             if(!citiesMap.containsKey(line[0])){

@@ -1,5 +1,6 @@
 package problems;
 
+import utils.Crono;
 import utils.FileHandler;
 
 import java.io.IOException;
@@ -10,16 +11,28 @@ import java.util.HashSet;
  * Problem 03
  */
 public class Day_03 {
+    private static ArrayList<String> lines;
+    private static String line;
+    private static Crono crono;
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 3 Problem 1: " + problem_01());
-        System.out.println("Solution Day 3 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day03_1.txt");
+        line = lines.get(0);
+        System.out.println("[Day 03] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 03] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 03] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
     public static int problem_01() throws IOException {
         int result = 0;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day03_1.txt");
-        String line = lines.get(0);
         Coordinates currentPos = new Coordinates();
         HashSet<Coordinates> placesVisited = new HashSet<>(10000);
         char c;
@@ -46,8 +59,6 @@ public class Day_03 {
 
     public static int problem_02() throws IOException {
         int result = 0;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day03_1.txt");
-        String line = lines.get(0);
         Coordinates posAux;
         Coordinates santaPos = new Coordinates();
         Coordinates robotSantaPos = new Coordinates();
@@ -70,7 +81,7 @@ public class Day_03 {
                 case 'v': posAux.goDown(); break;
                 case '<': posAux.goLeft(); break;
                 case '>': posAux.goRight(); break;
-                default:
+                default:break;
             }
         }
 

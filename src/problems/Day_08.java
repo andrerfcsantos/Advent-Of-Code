@@ -1,5 +1,6 @@
 package problems;
 
+import utils.Crono;
 import utils.FileHandler;
 
 import java.io.IOException;
@@ -10,15 +11,27 @@ import java.util.ArrayList;
  */
 public class Day_08 {
 
+    private static ArrayList<String> lines;
+    private static Crono crono;
+
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 8 Problem 1: " + problem_01());
-        System.out.println("Solution Day 8 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
+        System.out.println("[Day 08] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 08] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 08] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
 
     public static int problem_01() throws IOException {
         int i;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
         int totaldif=0;
         int strLen=0,actualchars=0;
 
@@ -44,7 +57,6 @@ public class Day_08 {
     }
 
     public static int problem_02() throws IOException  {
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day08_1.txt");
         int totaldif=0;
         int strLen=0,encodedchars=0;
 

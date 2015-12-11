@@ -11,19 +11,28 @@ import java.util.ArrayList;
  */
 public class Day_05 {
 
+    private static ArrayList<String> lines;
+    private static Crono crono;
+
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 5 Problem 1: " + problem_01());
-        System.out.println("Solution Day 5 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
+        System.out.println("[Day 05] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 05] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 05] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
     public static int problem_01() throws IOException{
         int niceStrings = 0, vowelCount =0;
         boolean doubleLetter = false, substrNotAllowed=false;
         char lastChar, currentChar;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
-
-        Crono time = new Crono();
-        time.start();
 
         for(String line:lines){
             vowelCount =0; doubleLetter = false;
@@ -51,9 +60,7 @@ public class Day_05 {
             }
             if(!substrNotAllowed && doubleLetter && vowelCount>=3) niceStrings++;
         }
-        time.stop();
 
-        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return niceStrings;
     }
 
@@ -61,9 +68,7 @@ public class Day_05 {
         int niceStrings = 0, vowelCount =0;
         boolean repeatedLetter = false, repeatedGroup=false;
         char currentChar;
-        ArrayList<String> lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
-        Crono time = new Crono();
-        time.start();
+
         for(String line:lines){
             repeatedLetter = false; repeatedGroup=false;
 
@@ -76,9 +81,7 @@ public class Day_05 {
             }
             if(repeatedGroup&&repeatedLetter) niceStrings++;
         }
-        time.stop();
 
-        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return niceStrings;
     }
 

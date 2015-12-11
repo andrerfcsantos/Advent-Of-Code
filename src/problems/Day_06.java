@@ -12,12 +12,32 @@ import java.util.function.Function;
  * Problem 06
  */
 public class Day_06 {
+    private static ArrayList<String> lines;
+    private static Crono crono;
+
     public static boolean lights[][] = new boolean[1000][1000];
     public static byte lightsPart2[][] = new byte[1000][1000];
 
+    public static Function<String, String> simplifyInstr = (e) -> e.replace("turn on","turnon")
+                                                                    .replace("turn off","turnoff")
+                                                                    .replace(" through ", " ");
+
     public static void main(String[] args) throws IOException {
-        System.out.println("Solution Day 6 Problem 1: " + problem_01());
-        System.out.println("Solution Day 6 Problem 2: " + problem_02());
+        crono = new Crono();
+        crono.start();
+        lines = (ArrayList<String>) FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+                                                                        FileHandler.NO_BLANK_LINES,
+                                                                        simplifyInstr);
+
+        System.out.println("[Day 06] File parsed in " + crono.stop().toMillis() + " miliseconds");
+
+        crono.start();
+        System.out.print("[Day 06] Problem 1: " + problem_01());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
+
+        crono.start();
+        System.out.print("[Day 06] Problem 2: " + problem_02());
+        System.out.println(" (" + crono.stop().toMillis() + " miliseconds)");
     }
 
 
@@ -25,17 +45,6 @@ public class Day_06 {
         int lightsOn = 0;
         String instruction, lowerCoords, higherCoords;
         int x1,y1,x2,y2, deltaX, deltaY;
-        Function<String, String> simplifyInstr = (e) -> e.replace("turn on","turnon")
-                                                            .replace("turn off","turnoff")
-                                                            .replace(" through ", " ");
-
-        ArrayList<String> lines = (ArrayList<String>)
-                        FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
-                        FileHandler.NO_BLANK_LINES,
-                                simplifyInstr);
-
-        Crono time = new Crono();
-        time.start();
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, " ,\n\r");
@@ -74,9 +83,6 @@ public class Day_06 {
             for(int j = 0; j < lights.length;j++)
                 if(lights[i][j]) lightsOn++;
 
-
-        time.stop();
-        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return lightsOn;
 
     }
@@ -85,16 +91,6 @@ public class Day_06 {
         int brightness = 0;
         String instruction, lowerCoords, higherCoords;
         int x1,y1,x2,y2, deltaX, deltaY;
-        Function<String, String> simplifyInstr = (e) -> e.replace("turn on","turnon")
-                .replace("turn off","turnoff")
-                .replace(" through ", " ");
-        ArrayList<String> lines = (ArrayList<String>)
-                FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
-                        FileHandler.NO_BLANK_LINES,
-                        simplifyInstr);
-
-        Crono time = new Crono();
-        time.start();
 
         for (String line : lines) {
             StringTokenizer strTok = new StringTokenizer(line, " ,\n\r");
@@ -133,9 +129,6 @@ public class Day_06 {
             for(int j = 0; j < lights.length;j++)
                 brightness += lightsPart2[i][j];
 
-
-        time.stop();
-        System.out.println("Time (ms): " + time.getElapsedTime().toMillis());
         return brightness;
     }
 }
