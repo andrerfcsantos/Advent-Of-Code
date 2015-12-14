@@ -25,7 +25,7 @@ public class Day_06 {
     public static void main(String[] args) throws IOException {
         crono = new Crono();
         crono.start();
-        lines = (ArrayList<String>) FileHandler.getAndTransformLines("Inputfiles/day06_1.txt",
+        lines = (ArrayList<String>) FileHandler.getAndTransformLines("../inputfiles/day06.txt",
                                                                         FileHandler.NO_BLANK_LINES,
                                                                         simplifyInstr);
 
