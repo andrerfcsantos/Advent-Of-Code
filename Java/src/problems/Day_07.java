@@ -29,7 +29,7 @@ public class Day_07 {
     };
 
     public static void main(String[] args) throws IOException {
-        lines = (ArrayList<ArrayList<String>>) FileHandler.getAndTransformLines("Inputfiles/day07_1.txt",
+        lines = (ArrayList<ArrayList<String>>) FileHandler.getAndTransformLines("../inputfiles/day07.txt",
                                                                                 FileHandler.NO_BLANK_LINES,
                                                                                 spliter);
         instructions = new HashMap<>();

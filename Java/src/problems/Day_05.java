@@ -17,7 +17,7 @@ public class Day_05 {
     public static void main(String[] args) throws IOException {
         crono = new Crono();
         crono.start();
-        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("Inputfiles/day05_1.txt");
+        lines = (ArrayList<String>) FileHandler.getNotEmptyLines("../inputfiles/day05.txt");
         System.out.println("[Day 05] File parsed in " + crono.stop().toMillis() + " miliseconds");
 
         crono.start();
