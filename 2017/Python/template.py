@@ -9,15 +9,14 @@ import collections as col
 
 DAY = 1
 
-part1, part2 = None, None
-
-inp = open(f'../in/{DAY:02}.txt')
+inp = open(f'../in/day{DAY:02}.txt')
 
 for line in inp:
     line = line.strip()
 
+inp.close()
+
+part1, part2 = None, None
 
 print(f'Part 1: {part1}')
 print(f'Part 2: {part2}')
-
-inp.close()
