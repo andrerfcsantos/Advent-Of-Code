@@ -15,7 +15,7 @@ for line in inp:
     for w1,w2 in it.permutations(line,r=2):
         if w1 == w2:
             valid_p1 = False
-        if sorted(w1) == sorted(w2[::-1]):
+        if sorted(w1) == sorted(w2):
             valid_p2 = False
         
     if valid_p1:
