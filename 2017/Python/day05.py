@@ -10,7 +10,7 @@ size = len(instr)
 
 i=0
 
-while i < size:
+while i>=0 and i < size:
     step = instr_p1[i]
     instr_p1[i]+=1
     i+=step
@@ -18,7 +18,7 @@ while i < size:
 
 i=0
 
-while i < size:
+while i >= 0 and i < size:
     step = instr_p2[i]
 
     if step >= 3:
@@ -28,7 +28,6 @@ while i < size:
         
     i+=step
     steps_p2+=1
-
 
 print(f'Part 1: {steps_p1}')
 print(f'Part 2: {steps_p2}')

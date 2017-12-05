@@ -8,7 +8,7 @@ def getAdjSum(mt, px, py):
 
 DAY = 3
 
-pos = int(open(f'../in/day{DAY:02}.txt').readline().strip())
+pos = int(open(f'../in/day{DAY:02}.txt').readline().rstrip())
 
 r=1
 result_p1 = None
@@ -75,6 +75,7 @@ while result_p2==None:
     
     r+=2
 
+result_p2 = int(result_p2)
 
 print(f'Part 1: {result_p1}')
 print(f'Part 2: {result_p2}')
