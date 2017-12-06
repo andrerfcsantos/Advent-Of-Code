@@ -16,7 +16,6 @@ for line in inp:
 
 inp.close()
 
-part1, part2 = None, None
 
-print(f'Part 1: {part1}')
-print(f'Part 2: {part2}')
+print(f'Part 1: {0}')
+print(f'Part 2: {0}')
