@@ -35,10 +35,7 @@ rs_comp    = '(?P<comp>(==|!=|<=|>=|>|<))'
 rs_change  = '(?P<change>-?\d+)'
 rs_rval    = '(?P<val>-?\d+)'
 
-print(f'{rs_dest} {rs_op} {rs_change} if {rs_orig} {rs_comp} {rs_rval}')
 rline = re.compile(f'{rs_dest} {rs_op} {rs_change} if {rs_orig} {rs_comp} {rs_rval}')
-
-
 
 inp = open(f'../in/day{DAY:02}.txt')
 
@@ -46,7 +43,6 @@ maxval = 0
 
 for line in inp:
     line = line.strip()
-    print(line)
     m = re.match(rline, line)
     dest   = m.group('dest')
     op     = m.group('op')
