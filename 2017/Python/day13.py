@@ -46,15 +46,15 @@ for line in inp:
 part1 = pass_with_delay(0)
 part2 = None
 
-# valid_run_found = False
-# delay = 0
+valid_run_found = False
+delay = 0
 
-# while not valid_run_found:
-#     run_res = pass_with_delay(delay)
-#     if not run_res.caught:
-#         valid_run_found = True
-#         part2 = delay
-#     delay += 1
+while not valid_run_found:
+    run_res = pass_with_delay(delay)
+    if not run_res.caught:
+        valid_run_found = True
+        part2 = delay
+    delay += 1
 
 
 print(f'Part 1: {part1.severity}')
