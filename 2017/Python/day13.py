@@ -2,6 +2,15 @@
 
 DAY = 13
 
+# Note: This version tries to reduce boilerplate code
+# and with the PassResults class tries to give
+# detailed infos about each pass/run.
+# While that was good to explore the problem,
+# it introduces an unecessary overhead to "just solve"
+# the challenge.
+# A more efficient version of this program is day13_alt.py,
+# which aims to run faster and "just solve" the problem.  
+
 inp = open(f'../in/day{DAY:02}.txt')
 
 class PassResults:
