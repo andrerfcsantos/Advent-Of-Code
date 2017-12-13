@@ -1,23 +1,48 @@
 # -*- coding: utf-8 -*-
 
-from igraph import Graph
-
 DAY = 12
 
-# Programs and pipes as sets since igraph
-# doesn't check for duplicate vertices and
-# edges and will happily repeat vertices with
-# the same name and edges with the same endpoints
-# Since that's not a desired behavior, set's 
-# were used to handle duplicates before inserting
-# them on the graph.
-programs, pipes = set(),set()
+village = {}
 
-village = Graph()
+def add_node(node_name):
+    global village
+    if node_name not in village:
+        village[node_name] = set()
 
-# Function renaming for role-playing puposes :)
-village.add_pipes = village.add_edges
-village.add_programs = village.add_vertices
+def add_edge(orig, dest):
+    global village
+    add_node(orig)
+    add_node(dest)
+    village[dest].add(orig)
+    village[orig].add(dest)
+
+def all_reachable(node):
+    global village
+    visited, to_visit = set(),set()
+
+    visited.add(node)
+    to_visit.update(village[node])
+
+    while len(to_visit) > 0:
+        next_node = to_visit.pop()
+        to_visit.update(village[next_node]-visited)
+        visited.add(next_node)
+
+    return visited
+
+def components():
+    global village
+    components = []
+    nodes_to_check = set(village.keys())
+
+    while len(nodes_to_check) > 0:
+        node_to_check = nodes_to_check.pop()
+        node_component = all_reachable(node_to_check)
+        components.append(node_component)
+        nodes_to_check -= node_component
+    
+    return components
+
 
 inp = open(f'../in/day{DAY:02}.txt')
 
@@ -25,15 +50,8 @@ for line in inp:
     line = line.strip().split(' <-> ')
     left_hand_side,right_hand_side= line[0],line[1].split(', ')
 
-    programs.add(left_hand_side)
-
     for program in right_hand_side:
-        pipes.add( (left_hand_side,program) )
+        add_edge(left_hand_side,program)
 
-village.add_programs(list(programs))
-village.add_pipes(list(pipes))
-
-print(f'Part 1: {len(village.subcomponent("0"))}')
-print(f'Part 2: {len(village.clusters())}')
-
-
+print(f'Part 1: {len(all_reachable("0"))}')
+print(f'Part 2: {len(components())}')
