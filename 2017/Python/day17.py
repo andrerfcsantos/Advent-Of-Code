@@ -9,24 +9,27 @@ pos = 0
 currval = 1
 
 while currval != 2017+1:
-    size = len(vals)
 
-    pos = 1 + (pos + ntimes) % size
+    pos = 1 + (pos + ntimes) % currval
     vals.insert(pos,currval)
 
     currval+=1
 
 part1 = vals[pos+1]
 
-while currval != 50000000+1:
-    size = len(vals)
+pos = 0
+pos_zero = 0
+after_zero = None
 
-    pos = 1 + (pos + ntimes) % size
-    vals.insert(pos,currval)
+for i in range(1, 50000001):
+    pos = (pos + ntimes) % i + 1
 
-    currval+=1
+    if pos < pos_zero:
+        pos_zero += 1
+    if pos == pos_zero + 1:
+        after_zero = i
 
-part2 = vals[vals.index(0)+1]
+part2 = after_zero
 
 print(f'Part 1: {part1}')
 print(f'Part 2: {part2}')
