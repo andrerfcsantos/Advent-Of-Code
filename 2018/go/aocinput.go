@@ -14,14 +14,14 @@ import (
 const INPUT_URL_TEMPLATE = "https://adventofcode.com/%d/day/%d/input"
 
 func init() {
-	err := os.MkdirAll("./inputs", 664)
+	err := os.MkdirAll("../inputs", 664)
 	if err != nil {
 		fmt.Printf("%v\n", err.Error())
 	}
 }
 
 func inputExists(year int, day int) bool {
-	filepath := fmt.Sprintf("inputs/%d_%02d.txt", year, day)
+	filepath := fmt.Sprintf("../inputs/%d_%02d.txt", year, day)
 	if _, err := os.Stat(filepath); os.IsNotExist(err) {
 		return false
 	}
@@ -91,7 +91,7 @@ func GetInput(year int, day int) (string, error) {
 		log.Printf("📁  Input file for day %02d exists. Skipping download and reading from file instead.\n", day)
 	}
 
-	filepath := fmt.Sprintf("inputs/%d_%02d.txt", year, day)
+	filepath := fmt.Sprintf("../inputs/%d_%02d.txt", year, day)
 	data, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Printf("🛑  Error reading the input file. Error: %s", err.Error())
@@ -128,8 +128,8 @@ func downloadInput(year int, day int) {
 	}
 
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		log.Printf("Request status code: %v\n", resp.StatusCode)
-		filename := fmt.Sprintf("inputs/%d_%02d.txt", year, day)
+		log.Printf("🗄️  Server replied with status code %v\n", resp.StatusCode)
+		filename := fmt.Sprintf("../inputs/%d_%02d.txt", year, day)
 		out_file, err := os.Create(filename)
 		if err != nil {
 			log.Printf("🛑  Error creating input file: %v\n", err.Error())
@@ -140,14 +140,14 @@ func downloadInput(year int, day int) {
 			log.Printf("🛑  Error copying to file. %v", err.Error())
 		}
 
-		fmt.Printf("✔️  Downloaded %s (%v bytes)\n", filename, written)
+		log.Printf("✔️  Downloaded %s (%v bytes)\n", filename, written)
 
 	} else {
 		data, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("🛑  Error reading body. %v", err.Error())
 		}
-		log.Printf("🛑  Status code: %v | URL: %v  | Body: %v", resp.StatusCode, req.URL, string(data))
+		log.Printf("🛑  Server replied with Status code: %v | URL: %v  | Body: %v", resp.StatusCode, req.URL, string(data))
 	}
 
 }
