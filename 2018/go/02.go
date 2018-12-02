@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
+var p2Lines []string
+
 func Day02() {
+
 	Day02Part01Tests := []AOCTest{
 		AOCTest{
 			Name:           "1",
@@ -44,9 +47,30 @@ func Day02() {
 	p1 := Day02Part1Solver(input)
 	p1Elapsed := time.Since(p1Start)
 
+	p2Lines = splitAndTrimLines(input)
+
 	p2Start := time.Now()
-	p2 := Day02Part2Solver(input)
-	// p2 := ""
+
+	// Create this many goroutines
+	goroutines := 10
+
+	// How far apart are the starting points of 2 consecutive goroutines
+	startPointInterval := len(p2Lines) / goroutines
+
+	// Channel to where goroutines write the result
+	var ch = make(chan string)
+
+	// Setup goroutines to start comparisons on different lines of the input
+	// If the list has 100 elements and there are 10 goroutines, the first will start comparisons
+	// at position 0 the next at position 10, the next at position 20 and so on...
+	for i := 0; i < goroutines; i++ {
+		go Day02Part2SolverGoroutine(ch, i*startPointInterval)
+	}
+
+	// Grab the first result of any goroutine
+	p2 := <-ch
+
+	// p2 := Day02Part2Solver(input)
 	p2Elapsed := time.Since(p2Start)
 
 	log.Printf("🎅  Part 1: %s (in %v)\n", p1, p1Elapsed)
@@ -56,7 +80,6 @@ func Day02() {
 
 func Day02Part1Solver(input string) string {
 	var count2, count3 int
-
 	for _, line := range splitAndTrimLines(input) {
 		var has2OfSame, has3OfSame bool
 		letterCount := make(map[rune]int)
@@ -105,6 +128,27 @@ func Day02Part2Solver(input string) string {
 	}
 
 	return ""
+}
+
+func Day02Part2SolverGoroutine(c chan string, start int) {
+
+	lines := p2Lines
+	nlines := len(lines)
+
+	for i := start; i < nlines; i++ {
+		for j := i + 1; j < nlines && lines[i] != "" && lines[j] != ""; j++ {
+			nDifs, difSet1, _ := stringDiff(lines[i], lines[j])
+			if nDifs == 1 {
+				var result = lines[i]
+				for difRune := range difSet1 {
+					result = strings.Replace(result, string(difRune), "", -1)
+				}
+				c <- result
+			}
+		}
+
+	}
+
 }
 
 func stringDiff(s1 string, s2 string) (int, map[rune]bool, map[rune]bool) {
