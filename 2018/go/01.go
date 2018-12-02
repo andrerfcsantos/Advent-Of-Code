@@ -164,9 +164,8 @@ func Day01Part1SolverV2(input []int) int {
 }
 
 func Day01Part2SolverV2(frequencyList []int) int {
-	frequencySet := make(map[int]bool)
+	frequencySet := map[int]bool{0: true}
 	frequency := 0
-	frequencySet[0] = true
 
 	for i, size := 0, len(frequencyList); ; i++ {
 
