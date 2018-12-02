@@ -46,7 +46,7 @@ func PrintTestResults(results []AOCTestResult) {
 		}
 
 		if result.Passed {
-			log.Printf("\t✔️  Test: %s | Time Elapsed: %v | Output: %s", printName, result.ElapsedTime, result.ActualOutput)
+			log.Printf("\t✔️  Test: %s | Time Elapsed: %v | Expected Output: %s (got: %s)", printName, result.ElapsedTime, result.Test.ExpectedOutput, result.ActualOutput)
 		} else {
 			log.Printf("\t❌  Test: %s | Elapsed Time: %v | Expected Output: %s (got: %s)", printName, result.ElapsedTime, result.Test.ExpectedOutput, result.ActualOutput)
 		}
