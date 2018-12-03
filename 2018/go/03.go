@@ -17,7 +17,7 @@ type FabricClaim struct {
 	ID      int
 	StartAt Point
 	Width   int
-	Lenght  int
+	Length  int
 }
 
 type FabricBoard [1000][1000]int
@@ -74,7 +74,7 @@ func Day03() {
             X (width)
             ------------------->
             |
- Y (Lenght) |
+ Y (Length) |
             |
             |
             |
@@ -94,7 +94,7 @@ func mapSubexpNames(m, n []string) map[string]string {
 
 func GetClaimsFromInput(input string) []FabricClaim {
 	var result []FabricClaim
-	regex, err := regexp.Compile(`#(?P<claimID>\d+)\s*@\s*(?P<startX>\d+),(?P<startY>\d+):\s*(?P<width>\d+)x(?P<lenght>\d+)`)
+	regex, err := regexp.Compile(`#(?P<claimID>\d+)\s*@\s*(?P<startX>\d+),(?P<startY>\d+):\s*(?P<width>\d+)x(?P<length>\d+)`)
 
 	if err != nil {
 		panic("invalid regex")
@@ -110,7 +110,7 @@ func GetClaimsFromInput(input string) []FabricClaim {
 			sx, _ := strconv.Atoi(nameMap["startX"])
 			sy, _ := strconv.Atoi(nameMap["startY"])
 			w, _ := strconv.Atoi(nameMap["width"])
-			l, _ := strconv.Atoi(nameMap["lenght"])
+			l, _ := strconv.Atoi(nameMap["length"])
 
 			claim := FabricClaim{
 				ID: id,
@@ -119,7 +119,7 @@ func GetClaimsFromInput(input string) []FabricClaim {
 					Y: sy,
 				},
 				Width:  w,
-				Lenght: l,
+				Length: l,
 			}
 
 			result = append(result, claim)
@@ -136,7 +136,7 @@ func GetBoardWithClaims(claims []FabricClaim) *FabricBoard {
 	for _, claim := range claims {
 
 		maxX := claim.StartAt.X + claim.Width
-		maxY := claim.StartAt.Y + claim.Lenght
+		maxY := claim.StartAt.Y + claim.Length
 
 		for x := claim.StartAt.X; x < maxX; x++ {
 			for y := claim.StartAt.Y; y < maxY; y++ {
@@ -166,7 +166,7 @@ func Day03Part1Solver(input string) string {
 
 func ClaimHasOverlaps(board *FabricBoard, claim FabricClaim) bool {
 	maxX := claim.StartAt.X + claim.Width
-	maxY := claim.StartAt.Y + claim.Lenght
+	maxY := claim.StartAt.Y + claim.Length
 
 	for x := claim.StartAt.X; x < maxX; x++ {
 		for y := claim.StartAt.Y; y < maxY; y++ {
