@@ -42,8 +42,9 @@ func Day03() {
 		},
 	}
 
-	PrintDayHeader(3, 2018)
+	PrintDayHeader(2018, 3)
 	input, err := GetInput(2018, 3)
+
 	if err != nil {
 		log.Printf("🛑  Error getting input: %s", err.Error())
 	}
@@ -80,17 +81,7 @@ func Day03() {
             |
             |
             V
-#1 @ 1,3: 4x4\
 */
-
-func mapSubexpNames(m, n []string) map[string]string {
-	m, n = m[1:], n[1:]
-	r := make(map[string]string, len(m))
-	for i, _ := range n {
-		r[n[i]] = m[i]
-	}
-	return r
-}
 
 func GetClaimsFromInput(input string) []FabricClaim {
 	var result []FabricClaim
@@ -103,14 +94,12 @@ func GetClaimsFromInput(input string) []FabricClaim {
 	for _, line := range splitAndTrimLines(input) {
 		if line != "" {
 			match := regex.FindStringSubmatch(line)
-			names := regex.SubexpNames()
-			nameMap := mapSubexpNames(match, names)
 
-			id, _ := strconv.Atoi(nameMap["claimID"])
-			sx, _ := strconv.Atoi(nameMap["startX"])
-			sy, _ := strconv.Atoi(nameMap["startY"])
-			w, _ := strconv.Atoi(nameMap["width"])
-			l, _ := strconv.Atoi(nameMap["length"])
+			id, _ := strconv.Atoi(match[1])
+			sx, _ := strconv.Atoi(match[2])
+			sy, _ := strconv.Atoi(match[3])
+			w, _ := strconv.Atoi(match[4])
+			l, _ := strconv.Atoi(match[5])
 
 			claim := FabricClaim{
 				ID: id,
@@ -131,16 +120,17 @@ func GetClaimsFromInput(input string) []FabricClaim {
 }
 
 func GetBoardWithClaims(claims []FabricClaim) *FabricBoard {
-
 	var board FabricBoard
+
 	for _, claim := range claims {
 
 		maxX := claim.StartAt.X + claim.Width
 		maxY := claim.StartAt.Y + claim.Length
 
-		for x := claim.StartAt.X; x < maxX; x++ {
-			for y := claim.StartAt.Y; y < maxY; y++ {
-				board[x][y]++
+		for y := claim.StartAt.Y; y < maxY; y++ {
+			for x := claim.StartAt.X; x < maxX; x++ {
+
+				board[y][x]++
 			}
 		}
 
@@ -168,9 +158,9 @@ func ClaimHasOverlaps(board *FabricBoard, claim FabricClaim) bool {
 	maxX := claim.StartAt.X + claim.Width
 	maxY := claim.StartAt.Y + claim.Length
 
-	for x := claim.StartAt.X; x < maxX; x++ {
-		for y := claim.StartAt.Y; y < maxY; y++ {
-			if board[x][y] > 1 {
+	for y := claim.StartAt.Y; y < maxY; y++ {
+		for x := claim.StartAt.X; x < maxX; x++ {
+			if board[y][x] > 1 {
 				return true
 			}
 		}
@@ -179,6 +169,7 @@ func ClaimHasOverlaps(board *FabricBoard, claim FabricClaim) bool {
 }
 
 func Day03Part2Solver(input string) string {
+
 	claims := GetClaimsFromInput(input)
 	board := GetBoardWithClaims(claims)
 

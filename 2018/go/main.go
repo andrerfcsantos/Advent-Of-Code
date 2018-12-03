@@ -3,10 +3,10 @@ package main
 import "log"
 
 func PrintCurrentDayHeader() {
-	PrintDayHeader(GetAOCDay(), GetAOCYear())
+	PrintDayHeader(GetAOCYear(), GetAOCDay())
 }
 
-func PrintDayHeader(day int, year int) {
+func PrintDayHeader(year int, day int) {
 	log.Printf("🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄\n")
 	log.Printf("🎄 🎄 🎄 AOC Day: %02d (%v)🎄 🎄 🎄 🎄\n", day, year)
 	log.Printf("🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄\n")

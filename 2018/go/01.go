@@ -55,7 +55,7 @@ func Day01() {
 		},
 	}
 
-	PrintDayHeader(1, 2018)
+	PrintDayHeader(2018, 1)
 	input, err := GetInput(2018, 1)
 	if err != nil {
 		log.Printf("🛑  Error getting input: %s", err.Error())
