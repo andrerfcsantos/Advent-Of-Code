@@ -43,8 +43,7 @@ func Day05() {
 	PrintTestResults(p2TestResults)
 
 	p1Start := time.Now()
-	//p1 := Day05Part1Solver(input)
-	p1 := ""
+	p1 := Day05Part1Solver(input)
 	p1Elapsed := time.Since(p1Start)
 
 	p2Start := time.Now()
@@ -58,12 +57,12 @@ func Day05() {
 
 const CAPITALIZE_DIFF = 'a' - 'A'
 
-func ReactingPass(s string) (string, int, error) {
+func ReactingPassSeveralAtOnce(s string) (string, int, error) {
 	var sb strings.Builder
 	size := len(s)
 	removed := 0
+
 	i := 0
-	log.Printf("Entrada reacting, string %s build len %d, str len %d", s, sb.Len(), size)
 	for i < size-1 {
 		charDiff := int(s[i]) - int(s[i+1])
 
@@ -78,21 +77,23 @@ func ReactingPass(s string) (string, int, error) {
 		}
 
 		i++
-
+		if i == size-1 {
+			err := sb.WriteByte(s[i])
+			if err != nil {
+				return "", removed, err
+			}
+		}
 	}
 	res := sb.String()
-	log.Printf("Saida reacting, string %s, removed %d, builder len: %d", res, removed, sb.Len())
-	sb.Reset()
 
 	return res, removed, nil
 }
 
-func ReactingPass2(s string) (string, int, error) {
+func ReactingPassOneAtOnce(s string) (string, int, error) {
 	var sb strings.Builder
 	size := len(s)
 	removed := 0
 	i := 0
-	log.Printf("Entrada reacting, string %s build len %d, str len %d", s, sb.Len(), size)
 	for i < size-1 {
 		charDiff := int(s[i]) - int(s[i+1])
 
@@ -112,20 +113,16 @@ func ReactingPass2(s string) (string, int, error) {
 
 	}
 	res := sb.String()
-	log.Printf("Saida reacting, string %s, removed %d, builder len: %d", res, removed, sb.Len())
 	sb.Reset()
 
 	return res, removed, nil
 }
 
-func Day05Part1Solver(input string) string {
-	polymer := splitAndTrimLines(input)[0]
+func FullReaction(polymer string) string {
+
 	hasMoreReactiveUnits := true
-
-	log.Printf("Start size %d", len(polymer))
-
 	for hasMoreReactiveUnits {
-		newPolymer, removedUnits, err := ReactingPass2(polymer)
+		newPolymer, removedUnits, err := ReactingPassSeveralAtOnce(polymer)
 		if err != nil {
 			log.Fatalf("Error trying to react with polymer %s", polymer)
 		}
@@ -134,10 +131,15 @@ func Day05Part1Solver(input string) string {
 		} else {
 			polymer = newPolymer
 		}
-		log.Printf("Removed %d units, %d left", removedUnits, len(polymer))
 	}
+	return polymer
+}
+
+func Day05Part1Solver(input string) string {
+	polymer := splitAndTrimLines(input)[0]
+
+	polymer = FullReaction(polymer)
 	unitsLeft := len(polymer)
-	log.Printf("String final: %s", polymer)
 	return fmt.Sprintf("%d", unitsLeft)
 }
 
