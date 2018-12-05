@@ -5,6 +5,10 @@ import (
 	"log"
 	"strings"
 	"time"
+	"unicode"
+
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
 )
 
 func Day05() {
@@ -21,8 +25,8 @@ func Day05() {
 	Day05Part02Tests := []AOCTest{
 		AOCTest{
 			Name:           "1",
-			Input:          "",
-			ExpectedOutput: "",
+			Input:          "dabAcCaCBAcCcaDA",
+			ExpectedOutput: "4",
 			Solver:         Day05Part2Solver,
 		},
 	}
@@ -89,42 +93,13 @@ func ReactingPassSeveralAtOnce(s string) (string, int, error) {
 	return res, removed, nil
 }
 
-func ReactingPassOneAtOnce(s string) (string, int, error) {
-	var sb strings.Builder
-	size := len(s)
-	removed := 0
-	i := 0
-	for i < size-1 {
-		charDiff := int(s[i]) - int(s[i+1])
-
-		if charDiff == CAPITALIZE_DIFF || -charDiff == CAPITALIZE_DIFF {
-			i += 2
-			removed += 2
-			sb.WriteString(s[i:])
-			ret := sb.String()
-			return ret, removed, nil
-		}
-		err := sb.WriteByte(s[i])
-		if err != nil {
-			return "", removed, err
-		}
-
-		i++
-
-	}
-	res := sb.String()
-	sb.Reset()
-
-	return res, removed, nil
-}
-
 func FullReaction(polymer string) string {
 
 	hasMoreReactiveUnits := true
 	for hasMoreReactiveUnits {
 		newPolymer, removedUnits, err := ReactingPassSeveralAtOnce(polymer)
 		if err != nil {
-			log.Fatalf("Error trying to react with polymer %s", polymer)
+			log.Fatalf("error trying to react with polymer %s : %v", polymer, err)
 		}
 		if removedUnits == 0 {
 			hasMoreReactiveUnits = false
@@ -135,15 +110,48 @@ func FullReaction(polymer string) string {
 	return polymer
 }
 
-func Day05Part1Solver(input string) string {
-	polymer := splitAndTrimLines(input)[0]
+func GetLowerCaseUnitSet(s string) UnitSet {
+	runeSet := make(map[rune]bool)
+	s = strings.ToLower(s)
+	for _, r := range s {
+		runeSet[r] = true
+	}
+	return UnitSet(runeSet)
+}
 
-	polymer = FullReaction(polymer)
-	unitsLeft := len(polymer)
-	return fmt.Sprintf("%d", unitsLeft)
+func Day05Part1Solver(input string) string {
+	return fmt.Sprintf("%d", len(FullReaction(splitAndTrimLines(input)[0])))
+}
+
+type UnitSet map[rune]bool
+
+func (us UnitSet) Contains(r rune) bool {
+	return us[r]
+}
+
+func (us UnitSet) Add(runes ...rune) {
+	for _, r := range runes {
+		us[r] = true
+	}
+
 }
 
 func Day05Part2Solver(input string) string {
+	polymer := splitAndTrimLines(input)[0]
+	lowerUnitSet := GetLowerCaseUnitSet(polymer)
 
-	return "-1"
+	minLenght := len(polymer) + 1
+
+	for lowerUnit := range lowerUnitSet {
+		removeSet := UnitSet{}
+		removeSet.Add(lowerUnit, unicode.ToUpper(lowerUnit))
+		unitRemover := runes.Remove(removeSet)
+		cleanPolymer, _, _ := transform.String(unitRemover, polymer)
+		polAfterReaction := FullReaction(cleanPolymer)
+		if len(polAfterReaction) < minLenght {
+			minLenght = len(polAfterReaction)
+		}
+	}
+
+	return fmt.Sprintf("%d", minLenght)
 }
