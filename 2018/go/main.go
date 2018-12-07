@@ -13,5 +13,5 @@ func PrintDayHeader(year int, day int) {
 }
 
 func main() {
-	Day05()
+	Day06()
 }
