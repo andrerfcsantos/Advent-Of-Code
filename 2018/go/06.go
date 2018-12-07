@@ -219,7 +219,8 @@ func GetBiggerArea(m [][]int) int {
 	}
 	biggerArea := -1
 
-	for _, size := range sizeAreas {
+	for k, size := range sizeAreas {
+		log.Printf("Area: %+v Size: %+v", k, size)
 		if size > biggerArea {
 			biggerArea = size
 		}
