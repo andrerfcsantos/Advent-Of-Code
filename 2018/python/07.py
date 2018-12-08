@@ -1,13 +1,11 @@
 import re
 import networkx as nx
-import matplotlib.pyplot as plt
+
 PATTERN = re.compile(r"Step (?P<source>\w) must be finished before step (?P<dest>\w) can begin.")
 
-# LAPFCRGHZTKWENBXIMVOSUDJQY
-global_graph = None
 def getInputGraph():
     G = nx.DiGraph()
-    with open("../inputs/2018_07_test2.txt") as in_file:
+    with open("../inputs/2018_07.txt") as in_file:
         for line in in_file:
             line = line.strip()
             m = re.match(PATTERN, line)
@@ -34,50 +32,66 @@ def canStart(graph, s, visited):
     
     return True
 
+def get_task_order(graph):
 
-
-def topologicalOrder(graph):
-    order, stack, visited = [], [], set()
-    
-    # Check roots of the graph, i.e nodes with no predeccessors
-    # and add them to the stack
+    n_nodes = len(list(graph.nodes))
+    order, available = [], []
     roots = sorted(list(getRoots(graph)),reverse=True)
-    stack.extend(roots)
+    available.extend(roots)
 
-    while len(stack) > 0:
-        # Get node from the stack, mark it visited and add it
-        # to the topological order.
-        current_node = stack.pop()
-        
-        print("Current node", current_node)
+
+    while len(order) != n_nodes:
+        available = list(sorted(available,reverse=True))
+        current_node = available.pop()
         order.append(current_node)
-        visited.add(current_node)
-
-        # Get successors of current node and check if they can
-        # be addded to the stack
-        successors = sorted(list(graph.successors(current_node)),reverse=True)
-
+        successors = list(graph.successors(current_node))
         for s in successors:
-            if s not in visited and s not in set(stack) and canStart(graph, s, visited):
-                # A successor of the node can be added to the stack
-                # if it was not already visited, it's not currently on the stack
-                # and the tasks it depended on are completed
-                stack.append(s)
+            if s not in set(order) and canStart(graph, s, set(order)):
+                available.append(s)
 
-        print("Stack",stack, "visited", visited)
     return ''.join(order)
 
+def time_completion(graph):
+    time_tick = 0
+    total_workers = 5
+    n_nodes = len(list(graph.nodes))
+    done, available = set(), []
+    available_workers, time_to_complete = total_workers, {}
+
+    available = getRoots(graph)
+
+    while len(done) != n_nodes:
+        available = list(sorted(available,reverse=True))
+
+        while available_workers > 0 and len(available) >0:
+            task = available.pop()
+            available_workers -= 1
+            time_to_complete[task] = 60 + (ord(task)-ord('A')+1)
+
+        tasks_in_completion = list(time_to_complete.keys())
+        for task_in_completion in tasks_in_completion:
+            time_to_complete[task_in_completion]-=1
+
+            if time_to_complete[task_in_completion]==0:
+                print(f"Task {task_in_completion} done")
+                done.add(task_in_completion)
+                available_workers+=1
+                del time_to_complete[task_in_completion]
+                next_tasks = list(graph.successors(task_in_completion))
+
+                for next_task in next_tasks:
+                    if next_task not in done and canStart(graph, next_task, done):
+                        available.append(next_task)
+        
+        time_tick+=1
+
+    return time_tick
 
 def main():
-    global global_graph
     graph = getInputGraph()
-    global_graph = graph
-    to = topologicalOrder(graph)
-    print(to)
-    print(set(graph.nodes)==set(to))
-
-    
-
+    task_order = get_task_order(graph)
+    print("Part 1:", task_order)
+    print("Part 2:", time_completion(graph))
 
 if __name__ == "__main__":
     main()
