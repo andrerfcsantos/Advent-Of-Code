@@ -5,7 +5,6 @@ import (
 	"log"
 	"regexp"
 	"sort"
-	"strconv"
 	"time"
 )
 
@@ -205,14 +204,6 @@ func getGuardEventsFromInput(input string) []GuardEvent {
 
 	return events
 
-}
-
-func MustAtoi(str string) int {
-	res, err := strconv.Atoi(str)
-	if err != nil {
-		panic("Could not Atoi in MustAtoi")
-	}
-	return res
 }
 
 func sortGuardEvents(guardEvents []GuardEvent) {
