@@ -67,5 +67,5 @@ func GetFileAsString(year, day int) (string, error) {
 		log.Printf("🛑  Error reading the input file. Error: %s", err.Error())
 		return "", err
 	}
-	return string(data), nil
+	return strings.TrimSpace(string(data)), nil
 }

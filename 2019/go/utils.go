@@ -1,11 +1,14 @@
 package main
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 func MustAtoi(str string) int {
 	res, err := strconv.Atoi(str)
 	if err != nil {
-		panic("Could not Atoi in MustAtoi")
+		panic(fmt.Sprintf("Could not Atoi value '%v': ", str))
 	}
 	return res
 }
