@@ -1,13 +1,17 @@
 package main
 
-import "log"
-
-func PrintDayHeader(year int, day int) {
-	log.Printf("🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄\n")
-	log.Printf("🎄 🎄 🎄 AOC Day: %02d (%v)🎄 🎄 🎄 🎄\n", day, year)
-	log.Printf("🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄 🎄\n")
-}
+import (
+	"aoc2019/puzzle"
+	"aoc2019/solutions/day02"
+	"log"
+)
 
 func main() {
-	Day02()
+	solver := day02.Day02{}
+
+	err := puzzle.RunSolver(&solver)
+	if err != nil {
+		log.Print("Error running solver: %v", err)
+	}
+
 }

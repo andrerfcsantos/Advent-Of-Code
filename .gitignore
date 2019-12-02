@@ -111,10 +111,9 @@ ENV/
 # Rope project settings
 .ropeproject
 
-
 *.code-workspace
 
-22789.json
-leaderboard.py
-
-2018/go/session.json
+# Ignore binaries
+**/go/*.exe
+**/go/aoc2018
+**/go/aoc2019
