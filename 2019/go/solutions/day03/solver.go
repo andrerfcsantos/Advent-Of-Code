@@ -3,7 +3,6 @@ package day03
 import (
 	"fmt"
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle/utils"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -11,6 +10,8 @@ import (
 // Solver implements the puzzle.Solver interface for the puzzle for day 3
 type Solver struct {
 	Wires
+	Panel         [][]int
+	Intersections []utils.Point2D
 }
 
 // ProcessInput processes the input by transforming into a list of wires. Required to implement Solver.
@@ -96,6 +97,54 @@ func GetContainingRectangle(wires ...Wire) utils.Rectangle {
 	}
 }
 
+func IntersectionSignalDelay(wire Wire, intersction utils.Point2D) int {
+	steps := 0
+	x, y := 0, 0
+
+	// For each instruction of this wire
+	for _, wireInstruction := range wire.SegmentsDefinition {
+		units, dir := wireInstruction.Units, wireInstruction.Direction
+
+		switch dir {
+
+		case DOWN:
+			for layed := 0; layed < units; layed++ {
+				if x == intersction.X && y == intersction.Y{
+					return steps
+				}
+				y--
+				steps++
+			}
+		case UP:
+			for layed := 0; layed < units; layed++ {
+				if x == intersction.X && y == intersction.Y{
+					return steps
+				}
+				y++
+				steps++
+			}
+		case LEFT:
+			for layed := 0; layed < units; layed++ {
+				if x == intersction.X && y == intersction.Y{
+					return steps
+				}
+				x--
+				steps++
+			}
+		case RIGHT:
+			for layed := 0; layed < units; layed++ {
+				if x == intersction.X && y == intersction.Y{
+					return steps
+				}
+				x++
+				steps++
+			}
+
+		}
+	}
+	return steps
+}
+
 func LayWires(panel [][]int, centralPortPos utils.Point2D, wires ...Wire) {
 	zx, zy := centralPortPos.X, centralPortPos.Y
 
@@ -156,44 +205,8 @@ func LayWires(panel [][]int, centralPortPos utils.Point2D, wires ...Wire) {
 
 }
 
-// Part1 solves part 1 of the puzzle. A copy of the opcodes slice is made before running the intcode program.
-// Required to implement Solver.
+// Part1 solves part 1 of the puzzle. Required to implement Solver.
 func (s *Solver) Part1() (string, error) {
-
-	//rows, columns := 100000, 100000
-	//centralPortPos := utils.Point2D{
-	//	X: 50000,
-	//	Y: 50000,
-	//}
-	//panel := utils.MakeIntMatrix(rows, columns)
-	//LayWires(panel, centralPortPos, s.Wires...)
-	//
-	//var intersections []utils.Point2D
-	//
-	//for y := 0; y < rows; y++ {
-	//	for x := 0; x < columns; x++ {
-	//		if panel[y][x] > 1 {
-	//			intersections = append(intersections, utils.Point2D{
-	//				X: x - centralPortPos.X,
-	//				Y: y - centralPortPos.Y,
-	//			})
-	//		}
-	//
-	//	}
-	//}
-	//
-	//min := 100000
-	//zeroZero := utils.Point2D{
-	//	X: 0,
-	//	Y: 0,
-	//}
-	//for _, intersection := range intersections {
-	//	dist := utils.ManhattanDistance(intersection, zeroZero)
-	//	if dist < min {
-	//		min = dist
-	//	}
-	//
-	//}
 
 	// Get containing rectangle and set dimensions
 	rect := GetContainingRectangle(s.Wires...)
@@ -206,15 +219,15 @@ func (s *Solver) Part1() (string, error) {
 		X: -bl.X,
 		Y: -bl.Y,
 	}
-	log.Printf("Dimensions: %v,%v", rect.AmplitudeX(), rect.AmplitudeY())
 
 	LayWires(panel, center, s.Wires...)
+	s.Panel = panel
 
 	var intersections []utils.Point2D
 
 	for y := 0; y < rows; y++ {
 		for x := 0; x < columns; x++ {
-			if panel[y][x] > 1 {
+			if panel[y][x] > 1 && y != center.Y && x != center.X {
 				intersections = append(intersections, utils.Point2D{
 					X: x - center.X,
 					Y: y - center.Y,
@@ -224,12 +237,12 @@ func (s *Solver) Part1() (string, error) {
 		}
 	}
 
-	log.Printf("Intersections %+v", intersections)
+	s.Intersections = intersections
 
 	min := utils.ManhattanDistance(rect.BottomLeftCorner(), rect.TopRightCorner())
 	for _, intersection := range intersections {
 		dist := utils.ManhattanDistance(intersection, utils.Point2D{X: 0, Y: 0,})
-		if dist < min && intersection.X !=0 && intersection.Y != 0 {
+		if dist < min && intersection.X != 0 && intersection.Y != 0 {
 			min = dist
 		}
 	}
@@ -240,5 +253,17 @@ func (s *Solver) Part1() (string, error) {
 // Part2 solves part 2 of the puzzle by brute-forcing every combination of nouns and verbs until finding the one
 // that gives the correct answer. Required to implement Solver.
 func (s *Solver) Part2() (string, error) {
-	return "", nil
+
+	minSignal := 1_000_000
+
+	for _, intersection := range s.Intersections {
+		intersectionSignal:=0
+		for _, wire := range s.Wires {
+			intersectionSignal += IntersectionSignalDelay(wire, intersection)
+		}
+		if intersectionSignal < minSignal {
+			minSignal = intersectionSignal
+		}
+	}
+	return strconv.Itoa(minSignal), nil
 }
