@@ -7,3 +7,27 @@ func Abs(number int) int {
 	}
 	return number
 }
+
+// Max returns the max between two numbers
+func Max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// Min returns the min between two numbers
+func Min(a, b int) int {
+	if b < a {
+		return b
+	}
+	return a
+}
+
+// MinMax returns the min and max between two numbers
+func MinMax(a, b int) (int, int) {
+	if b < a {
+		return b, a
+	}
+	return a, b
+}

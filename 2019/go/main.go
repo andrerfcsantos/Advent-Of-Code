@@ -2,13 +2,13 @@ package main
 
 import (
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle"
-	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/day02"
+	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/day03"
 	"log"
 )
 
 func main() {
-	solver := day02.Solver{}
-	runner := puzzle.FileRunner{FilePath: "../inputs/day02.txt"}
+	solver := day03.Solver{}
+	runner := puzzle.FileRunner{FilePath: "../inputs/day03.txt"}
 
 	err := runner.RunSolver(&solver)
 	if err != nil {
