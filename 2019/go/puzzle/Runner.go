@@ -1,8 +1,8 @@
 package puzzle
 
 import (
-	"aoc2019/puzzle/utils"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle/utils"
 	"log"
 	"os"
 	"time"

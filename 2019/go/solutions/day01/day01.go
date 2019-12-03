@@ -1,10 +1,10 @@
 package day01
 
 import (
-	"aoc2019/puzzle/utils"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle/utils"
 	"strconv"
-	)
+)
 
 // Day01 implements the puzzle.Solver interface for the puzzle for day 1
 type Day01 struct {

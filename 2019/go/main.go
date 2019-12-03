@@ -1,8 +1,8 @@
 package main
 
 import (
-	"aoc2019/puzzle"
-	"aoc2019/solutions/day02"
+	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle"
+	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/day02"
 	"log"
 )
 
