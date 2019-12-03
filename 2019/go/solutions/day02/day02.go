@@ -13,10 +13,12 @@ type Day02 struct {
 	OpCodes []int
 }
 
+// InputFile returns the path to the input file for this day. Required to implement Solver.
 func (d *Day02) InputFile() string {
 	return "../inputs/day02.txt"
 }
 
+// ProcessInput processes the input by transforming it into a slice of opcodes (ints) saved in the struct. Required to implement Solver.
 func (d *Day02) ProcessInput(fileContent string) error {
 	d.OpCodes = make([]int, 0)
 	lines := utils.TrimmedLines(fileContent)
@@ -39,6 +41,8 @@ func (d *Day02) ProcessInput(fileContent string) error {
 	return nil
 }
 
+// Part1 solves part 1 of the puzzle. A copy of the opcodes slice is made before running the intcode program.
+// Required to implement Solver.
 func (d *Day02) Part1() (string, error) {
 	// Make copy of intcode program memory before running it
 	opcodesCopy := utils.CopyIntSlice(d.OpCodes)
@@ -46,6 +50,8 @@ func (d *Day02) Part1() (string, error) {
 	return strconv.Itoa(res), nil
 }
 
+// Part2 solves part 2 of the puzzle by brute-forcing every combination of nouns and verbs until finding the one
+// that gives the correct answer. Required to implement Solver.
 func (d *Day02) Part2() (string, error) {
 
 	// Brute force every combination of nouns and verbs
@@ -63,6 +69,9 @@ func (d *Day02) Part2() (string, error) {
 	return "", fmt.Errorf("could not find combination of noun < 100 and verb < 100 that solves the problem :(")
 }
 
+// RunIntcodeProgram runs a intcode program with the given list of opcodes and the noun and verb inputs.
+// The opcode slice is changed inplace. A copy of the slice should be made before using this function if keeping
+// the original slice is desired.
 func RunIntcodeProgram(opCodes []int, noun int, verb int) int {
 	opCodes[1], opCodes[2] = noun, verb
 	pc, finished := 0, false

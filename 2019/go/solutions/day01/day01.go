@@ -6,15 +6,18 @@ import (
 	"strconv"
 )
 
-// Day01 implements the puzzle.Solver interface for the puzzle for day 1
+// Day01 implements the Solver interface for the puzzle for day 1.
 type Day01 struct {
+	// List of masses to be used for the code of both parts
 	Masses []int
 }
 
+// InputFile returns the path to the input file for this day. Required to implement Solver.
 func (d *Day01) InputFile() string {
 	return "../inputs/day01.txt"
 }
 
+// ProcessInput processes the input by transforming it into a slice of masses (ints) saved in the struct. Required to implement Solver.
 func (d *Day01) ProcessInput(fileContent string) error {
 	lines := utils.TrimmedLines(fileContent)
 
@@ -29,6 +32,7 @@ func (d *Day01) ProcessInput(fileContent string) error {
 	return nil
 }
 
+// Part1 solves part 1 of the puzzle. Required to implement Solver.
 func (d *Day01) Part1() (string, error) {
 
 	fuelSum := 0
@@ -39,6 +43,7 @@ func (d *Day01) Part1() (string, error) {
 	return strconv.Itoa(fuelSum), nil
 }
 
+// Part2 solves part 2 of the puzzle. Required to implement Solver.
 func (d *Day01) Part2() (string, error) {
 
 	fuelSum := 0
@@ -52,10 +57,13 @@ func (d *Day01) Part2() (string, error) {
 	return strconv.Itoa(fuelSum), nil
 }
 
+// ComputeFuelForMass computes the fuel requirements for a specific mass.
 func ComputeFuelForMass(mass int) int {
 	return (mass / 3) - 2
 }
 
+// ComputeFuelForFuel computes the fuel required for the specified amount of fuel. And the fuel for that fuel.
+// And the fuel for that fuel...
 func ComputeFuelForFuel(fuel int) int {
 	res := 0
 	for {
