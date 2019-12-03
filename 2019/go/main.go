@@ -7,9 +7,10 @@ import (
 )
 
 func main() {
-	solver := day02.Day02{}
+	solver := day02.Solver{}
+	runner := puzzle.FileRunner{FilePath: "../inputs/day02.txt"}
 
-	err := puzzle.RunSolver(&solver)
+	err := runner.RunSolver(&solver)
 	if err != nil {
 		log.Print("Error running solver: %v", err)
 	}

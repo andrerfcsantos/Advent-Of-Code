@@ -8,12 +8,20 @@ import (
 	"time"
 )
 
+// FileRunner is a solver runner that reads input from the file at FilePath and runs a solver
+// against that input. It runs the solver by executing solver.ProcessInput(), solver.Part1() and solver.Part2()
+// sequentially. Outputs to the console the results of Part 1 and Part 2 but also benchmarks the time each part took
+// as well as how long did the input reading and processing took.
+type FileRunner struct {
+	FilePath string
+}
+
 // RunSolver takes a solver for a Puzzle and runs it, taking care of reading the input,
 // processing it and running both parts. Also benchmarks the time for input processing and
 // solving each part of the puzzle.
-func RunSolver(solver Solver) error {
+func (fr FileRunner) RunSolver(solver Solver) error {
 
-	inputPath := solver.InputFile()
+	inputPath := fr.FilePath
 	if _, err := os.Stat(inputPath); err != nil {
 		return fmt.Errorf("could not stat input file '%s': %w", inputPath, err)
 	}
