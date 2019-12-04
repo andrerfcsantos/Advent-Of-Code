@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Solver implements the puzzle.Solver interface for the puzzle for day 3
+// Solver implements the puzzle.Solver interface for the puzzle for day 4
 type Solver struct {
 	RangeMin int
 	RangeMax int
@@ -33,8 +33,18 @@ func Has6Digits(password string) bool {
 	return len(password) == 6
 }
 
+// IsAscending checks if the digits of a string are ascending (in the non strict sense)
+func IsAscending(password string) bool {
+	size := len(password)
+	for i := 0; i < size-1; i++ {
+		if password[i] > password[i+1] {
+			return false
+		}
+	}
+	return true
+}
 
-// HasTwoEqualAdjacentDigits checks a string has at least a run of 2 consecutive equal digits
+// HasTwoEqualAdjacentDigits checks if a string has at least 1 run of 2 consecutive matching digits
 func HasTwoEqualAdjacentDigits(password string) bool {
 	size := len(password)
 	for i := 0; i < size-1; i++ {
@@ -51,6 +61,8 @@ func HasTwoEqualAdjacentDigitsStrict(password string) bool {
 	runes := utils.StringRunes(password)
 	size := len(runes)
 
+	// Initialize current and last digits to digits the password won't have.
+	// This is required so the first iteration of the cycle works
 	currentDigit, lastDigit := '-', '-'
 	currentRun := 0
 
@@ -59,9 +71,13 @@ func HasTwoEqualAdjacentDigitsStrict(password string) bool {
 
 		if currentDigit != lastDigit {
 			// We ended a run of digits, start a new one
+
 			if currentRun == 2 {
+				// The last run had 2 and only 2 of the same digits, the password is valid,
+				// simply return, no need to keep checking more digits
 				return true
 			}
+
 			currentRun = 0
 		} else {
 			// This is the same digit we saw last, continue current run
@@ -77,18 +93,6 @@ func HasTwoEqualAdjacentDigitsStrict(password string) bool {
 	return false
 }
 
-// IsAscending checks if the digits of a string are ascending (in the non strict sense)
-func IsAscending(password string) bool {
-	digits := utils.StringDigits(password)
-	size := len(digits)
-	for i := 0; i < size-1; i++ {
-		if digits[i] > digits[i+1] {
-			return false
-		}
-	}
-	return true
-}
-
 // ValidPassword checks if a password is valid given a list of criteria
 func ValidPassword(password string, criteria ...func(string) bool) bool {
 	for _, requirement := range criteria {
@@ -99,31 +103,32 @@ func ValidPassword(password string, criteria ...func(string) bool) bool {
 	return true
 }
 
-// Part1 solves part 1 of the puzzle. Required to implement Solver.
-func (s *Solver) Part1() (string, error) {
+// NumberOfValidPasswordsInRange returns the number of valid passwords between the given range.
+// A password is considered valid if satisfies all the criteria functions passed as arguments return true.
+func NumberOfValidPasswordsInRange(rangeMin int, rangeMax int, criteria ...func(string) bool) int {
 
 	validPasswords := 0
 
-	for currentNum := s.RangeMin; currentNum <= s.RangeMax; currentNum++ {
-		password := strconv.Itoa(currentNum)
-		if ValidPassword(password, Has6Digits, IsAscending, HasTwoEqualAdjacentDigits) {
+	for r := rangeMin; r <= rangeMax; r++ {
+		password := strconv.Itoa(r)
+		if ValidPassword(password, criteria...) {
 			validPasswords++
 		}
-
 	}
+
+	return validPasswords
+}
+
+// Part1 solves part 1 of the puzzle. Required to implement Solver.
+func (s *Solver) Part1() (string, error) {
+	validPasswords := NumberOfValidPasswordsInRange(s.RangeMin, s.RangeMax,
+		Has6Digits, IsAscending, HasTwoEqualAdjacentDigits)
 	return strconv.Itoa(validPasswords), nil
 }
 
 // Part2 solves part 2 of the puzzle. Required to implement Solver.
 func (s *Solver) Part2() (string, error) {
-	validPasswords := 0
-
-	for currentNum := s.RangeMin; currentNum <= s.RangeMax; currentNum++ {
-		password := strconv.Itoa(currentNum)
-		if ValidPassword(password, Has6Digits, IsAscending, HasTwoEqualAdjacentDigitsStrict) {
-			validPasswords++
-		}
-
-	}
+	validPasswords := NumberOfValidPasswordsInRange(s.RangeMin, s.RangeMax,
+		Has6Digits, IsAscending, HasTwoEqualAdjacentDigitsStrict)
 	return strconv.Itoa(validPasswords), nil
 }
