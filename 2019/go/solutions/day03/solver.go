@@ -109,7 +109,7 @@ func IntersectionSignalDelay(wire Wire, intersction utils.Point2D) int {
 
 		case DOWN:
 			for layed := 0; layed < units; layed++ {
-				if x == intersction.X && y == intersction.Y{
+				if x == intersction.X && y == intersction.Y {
 					return steps
 				}
 				y--
@@ -117,7 +117,7 @@ func IntersectionSignalDelay(wire Wire, intersction utils.Point2D) int {
 			}
 		case UP:
 			for layed := 0; layed < units; layed++ {
-				if x == intersction.X && y == intersction.Y{
+				if x == intersction.X && y == intersction.Y {
 					return steps
 				}
 				y++
@@ -125,7 +125,7 @@ func IntersectionSignalDelay(wire Wire, intersction utils.Point2D) int {
 			}
 		case LEFT:
 			for layed := 0; layed < units; layed++ {
-				if x == intersction.X && y == intersction.Y{
+				if x == intersction.X && y == intersction.Y {
 					return steps
 				}
 				x--
@@ -133,7 +133,7 @@ func IntersectionSignalDelay(wire Wire, intersction utils.Point2D) int {
 			}
 		case RIGHT:
 			for layed := 0; layed < units; layed++ {
-				if x == intersction.X && y == intersction.Y{
+				if x == intersction.X && y == intersction.Y {
 					return steps
 				}
 				x++
@@ -241,7 +241,7 @@ func (s *Solver) Part1() (string, error) {
 
 	min := utils.ManhattanDistance(rect.BottomLeftCorner(), rect.TopRightCorner())
 	for _, intersection := range intersections {
-		dist := utils.ManhattanDistance(intersection, utils.Point2D{X: 0, Y: 0,})
+		dist := utils.ManhattanDistance(intersection, utils.Point2D{X: 0, Y: 0})
 		if dist < min && intersection.X != 0 && intersection.Y != 0 {
 			min = dist
 		}
@@ -250,14 +250,13 @@ func (s *Solver) Part1() (string, error) {
 	return strconv.Itoa(min), nil
 }
 
-// Part2 solves part 2 of the puzzle by brute-forcing every combination of nouns and verbs until finding the one
-// that gives the correct answer. Required to implement Solver.
+// Part2 solves part 2 of the puzzle. Required to implement Solver.
 func (s *Solver) Part2() (string, error) {
 
 	minSignal := 1_000_000
 
 	for _, intersection := range s.Intersections {
-		intersectionSignal:=0
+		intersectionSignal := 0
 		for _, wire := range s.Wires {
 			intersectionSignal += IntersectionSignalDelay(wire, intersection)
 		}

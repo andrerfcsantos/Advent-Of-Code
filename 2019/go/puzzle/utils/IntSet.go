@@ -1,6 +1,5 @@
 package utils
 
-
 // IntSet represents a set of integers
 type IntSet struct {
 	Set map[int]bool
