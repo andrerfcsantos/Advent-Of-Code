@@ -6,8 +6,12 @@ type StringSet struct {
 }
 
 // NewStringSet returns a newly created string set
-func NewStringSet() StringSet {
-	return StringSet{Set: make(map[string]bool)}
+func NewStringSet(elems ...string) StringSet {
+	res := StringSet{Set: make(map[string]bool)}
+	for _, elem := range elems {
+		res.Set[elem] = true
+	}
+	return res
 }
 
 // Add adds an element to the string set

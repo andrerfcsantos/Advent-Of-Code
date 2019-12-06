@@ -56,6 +56,21 @@ func (g *Graph) Reachable(node string) int {
 	return total
 }
 
+func (g *Graph) Path(startNode string, endNode string) []string {
+	var res []string
+
+	currentNode := startNode
+	neighbors := g.Neighbors(currentNode)
+
+	for len(neighbors) != 0 && currentNode != endNode{
+		currentNode = neighbors[0]
+		neighbors = g.Neighbors(currentNode)
+		res = append(res,currentNode)
+	}
+
+	return res
+}
+
 func (g *Graph) ensureNode(node string) {
 	if !g.NodeExists(node) {
 		g.graph[node] = make([]string, 0)
