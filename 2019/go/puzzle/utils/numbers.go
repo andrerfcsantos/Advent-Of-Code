@@ -10,7 +10,7 @@ import (
 func MustAtoi(strNum string) int {
 	num, err := strconv.Atoi(strNum)
 	if err != nil {
-		panic(fmt.Sprintf("Atoi in MustAtoi failed trying to convert the string '%s' to a number", strNum))
+		panic(fmt.Sprintf("Atoi in MustAtoi failed trying to convert the string '%elems' to a number", strNum))
 	}
 	return num
 }

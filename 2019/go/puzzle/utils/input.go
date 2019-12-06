@@ -6,15 +6,21 @@ import (
 	"strings"
 )
 
-// TrimmedLines takes a string with the contents of a file and divides into it's lines.
+// TrimmedLines takes a string with the contents of a file and divides into it'elems lines.
 // Whitespace is trimmed from every line.
 func TrimmedLines(fileContents string) []string {
+	var res []string
+
 	lines := strings.Split(fileContents, "\n")
 
 	for i := 0; i < len(lines); i++ {
 		lines[i] = strings.TrimSpace(lines[i])
+		if lines[i] != "" {
+			res = append(res, lines[i])
+		}
 	}
-	return lines
+
+	return res
 }
 
 // GetFileAsString reads a file on the given path and returns its contents as a string with whitespace trimmed.
