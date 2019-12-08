@@ -54,8 +54,7 @@ func (fr FileRunner) RunSolver(solver Solver) error {
 	}
 	p2Elapsed := time.Since(p2Start)
 
-	log.Printf("Input reading: %v\n", fileReadElapsed)
-	log.Printf("Input processing:  %v\n", inputElapsed)
+	log.Printf("Input: reading=%v | processing=%v\n", fileReadElapsed, inputElapsed)
 	log.Printf("Part 1: %s (in %v)\n", p1, p1Elapsed)
 	log.Printf("Part 2: %s (in %v)\n", p2, p2Elapsed)
 

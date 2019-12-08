@@ -4,8 +4,8 @@ import (
 	"log"
 )
 
-// IntCodeVM is an Intcode Virtual Machine
-type IntCodeVM struct {
+// VM is an Intcode Virtual Machine
+type VM struct {
 	Tape   Memory
 	Input  IntReader
 	Output IntWriter
@@ -13,7 +13,7 @@ type IntCodeVM struct {
 
 // getVal performs an access to memory given an address and an access mode
 // and returns the value read
-func (vm *IntCodeVM) getVal(accessMode AccessMode, address int) int {
+func (vm *VM) getVal(accessMode AccessMode, address int) int {
 	switch accessMode {
 	case POSITION:
 		return vm.Tape[address]
@@ -26,7 +26,7 @@ func (vm *IntCodeVM) getVal(accessMode AccessMode, address int) int {
 }
 
 // Run runs the vm
-func (vm *IntCodeVM) Run() {
+func (vm *VM) Run() {
 	pc := 0
 
 	for {

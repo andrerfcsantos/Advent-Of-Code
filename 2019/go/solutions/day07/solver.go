@@ -61,9 +61,9 @@ func RunPermutation(permutation []int, memory intcode.Memory) int {
 	nPipes := nMachines - 1
 
 	// Make machines
-	var machines []*intcode.IntCodeVM
+	var machines []*intcode.VM
 	for i := 0; i < nMachines; i++ {
-		machine := intcode.IntCodeVM{}
+		machine := intcode.VM{}
 		machine.Tape = intcode.CloneMemory(memory)
 		machines = append(machines, &machine)
 	}
@@ -90,7 +90,7 @@ func RunPermutation(permutation []int, memory intcode.Memory) int {
 	wg.Add(nMachines)
 	// Make machines
 	for i := 0; i < nMachines; i++ {
-		go func(m *intcode.IntCodeVM) {
+		go func(m *intcode.VM) {
 			m.Run()
 			wg.Done()
 		}(machines[i])
@@ -112,9 +112,9 @@ func RunPermutationWithFeedback(permutation []int, memory intcode.Memory) int {
 	nPipes := nMachines - 1
 
 	// Make machines
-	var machines []*intcode.IntCodeVM
+	var machines []*intcode.VM
 	for i := 0; i < nMachines; i++ {
-		machine := intcode.IntCodeVM{}
+		machine := intcode.VM{}
 		machine.Tape = intcode.CloneMemory(memory)
 		machines = append(machines, &machine)
 	}
@@ -142,7 +142,7 @@ func RunPermutationWithFeedback(permutation []int, memory intcode.Memory) int {
 	wg.Add(nMachines)
 	// Make machines
 	for i := 0; i < nMachines; i++ {
-		go func(m *intcode.IntCodeVM) {
+		go func(m *intcode.VM) {
 			m.Run()
 			wg.Done()
 		}(machines[i])
