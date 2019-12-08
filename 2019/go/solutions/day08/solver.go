@@ -36,20 +36,20 @@ func (s *Solver) Part1() (string, error) {
 	var minLayer string
 
 	for _, layer := range s.Layers {
-		freq := OcurrencesInLayer(layer, '0')
+		freq := OccurrencesInLayer(layer, '0')
 		if freq < min {
 			min = freq
 			minLayer = layer
 		}
 	}
-	ones := OcurrencesInLayer(minLayer, '1')
-	twos := OcurrencesInLayer(minLayer, '2')
+	ones := OccurrencesInLayer(minLayer, '1')
+	twos := OccurrencesInLayer(minLayer, '2')
 
 	return strconv.Itoa(ones * twos), nil
 }
 
-// OcurrencesInLayer counts how many of a given pixels are in a layer/image
-func OcurrencesInLayer(layer string, pixel rune) int {
+// OccurrencesInLayer counts how many of a given pixels are in a layer/image
+func OccurrencesInLayer(layer string, pixel rune) int {
 	total := 0
 
 	for _, r := range layer {

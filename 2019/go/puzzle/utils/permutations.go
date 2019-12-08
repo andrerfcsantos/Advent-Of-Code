@@ -30,3 +30,23 @@ func IntPermutations(arr []int) [][]int {
 	helper(arr, len(arr))
 	return res
 }
+
+
+// Dist gives all the combination of lists with the given size that have value as sum
+func Dist(size int, value int) [][]int {
+	if size == 1 {
+		return [][]int{[]int{value}}
+	}
+
+	var s [][]int
+
+	for i:= value; i >= 0 ; i-- {
+		sub := Dist(size-1, value-i)
+		for _, list := range sub {
+			s = append(s, append([]int{i}, list...))
+		}
+	}
+
+	return s
+
+}
