@@ -79,10 +79,10 @@ func (g *Graph) Path(startNode string, endNode string) []string {
 	currentNode := startNode
 	neighbors := g.Neighbors(currentNode)
 
-	for len(neighbors) != 0 && currentNode != endNode{
+	for len(neighbors) != 0 && currentNode != endNode {
 		currentNode = neighbors[0]
 		neighbors = g.Neighbors(currentNode)
-		res = append(res,currentNode)
+		res = append(res, currentNode)
 	}
 
 	return res

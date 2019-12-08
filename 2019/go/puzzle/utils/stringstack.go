@@ -8,7 +8,6 @@ func NewStringStack() StringStack {
 	return StringStack{}
 }
 
-
 func (s *StringStack) Push(elem string) {
 	s.elems = append(s.elems, elem)
 }

@@ -16,13 +16,12 @@ type Solver struct {
 // ProcessInput processes the input by transforming into a list of wires. Required to implement Solver.
 func (s *Solver) ProcessInput(fileContent string) error {
 	trimmed := strings.TrimSpace(fileContent)
-	for _, strNum := range strings.Split(trimmed,",") {
+	for _, strNum := range strings.Split(trimmed, ",") {
 		num := utils.MustAtoi(strNum)
 		s.Nums = append(s.Nums, num)
 	}
 	return nil
 }
-
 
 // Part1 solves part 1 of the puzzle. Required to implement Solver.
 func (s *Solver) Part1() (string, error) {
@@ -64,15 +63,15 @@ func RunIntcodeProgram(opCodes []int, id int) int {
 		switch opcode {
 		case 1:
 			// ADD operation
-			operand1 := GetVal(opCodes,m1, opCodes[pc+1])
-			operand2 := GetVal(opCodes,m2, opCodes[pc+2])
+			operand1 := GetVal(opCodes, m1, opCodes[pc+1])
+			operand2 := GetVal(opCodes, m2, opCodes[pc+2])
 			dest := opCodes[pc+3]
 			opCodes[dest] = operand1 + operand2
 			pc += 4
 		case 2:
 			// MULTIPLY operation
-			operand1 := GetVal(opCodes,m1, opCodes[pc+1])
-			operand2 := GetVal(opCodes,m2, opCodes[pc+2])
+			operand1 := GetVal(opCodes, m1, opCodes[pc+1])
+			operand2 := GetVal(opCodes, m2, opCodes[pc+2])
 			dest := opCodes[pc+3]
 			opCodes[dest] = operand1 * operand2
 			pc += 4
@@ -87,7 +86,7 @@ func RunIntcodeProgram(opCodes []int, id int) int {
 			nextOp := fmt.Sprintf("%06d", opCodes[pc+2])
 			nextOpCode := utils.MustAtoi(nextOp[3:])
 
-			if lastOutput != 0  && nextOpCode != 99 {
+			if lastOutput != 0 && nextOpCode != 99 {
 				log.Fatalf("Intcode program failed at pc %v because it outputed a non-zero value '%v' before an non-halt operation",
 					pc,
 					lastOutput)
@@ -96,24 +95,24 @@ func RunIntcodeProgram(opCodes []int, id int) int {
 			pc += 2
 		case 5:
 			// JUMP-IF-TRUE operation
-			p1 := GetVal(opCodes,m1, opCodes[pc+1])
+			p1 := GetVal(opCodes, m1, opCodes[pc+1])
 			if p1 != 0 {
-				pc = GetVal(opCodes,m2, opCodes[pc+2])
+				pc = GetVal(opCodes, m2, opCodes[pc+2])
 			} else {
 				pc += 3
 			}
 		case 6:
 			// JUMP-IF-FALSE operation
-			p1 := GetVal(opCodes,m1, opCodes[pc+1])
+			p1 := GetVal(opCodes, m1, opCodes[pc+1])
 			if p1 == 0 {
-				pc = GetVal(opCodes,m2, opCodes[pc+2])
+				pc = GetVal(opCodes, m2, opCodes[pc+2])
 			} else {
 				pc += 3
 			}
 		case 7:
 			// LESS THAN operation
-			p1 := GetVal(opCodes,m1, opCodes[pc+1])
-			p2 := GetVal(opCodes,m2, opCodes[pc+2])
+			p1 := GetVal(opCodes, m1, opCodes[pc+1])
+			p2 := GetVal(opCodes, m2, opCodes[pc+2])
 
 			flag := 0
 			if p1 < p2 {
@@ -123,8 +122,8 @@ func RunIntcodeProgram(opCodes []int, id int) int {
 			pc += 4
 		case 8:
 			// EQUAL operation
-			p1 := GetVal(opCodes,m1, opCodes[pc+1])
-			p2 := GetVal(opCodes,m2, opCodes[pc+2])
+			p1 := GetVal(opCodes, m1, opCodes[pc+1])
+			p2 := GetVal(opCodes, m2, opCodes[pc+2])
 
 			flag := 0
 			if p1 == p2 {

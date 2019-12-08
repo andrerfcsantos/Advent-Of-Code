@@ -21,7 +21,6 @@ func (s *Solver) ProcessInput(fileContent string) error {
 	s.GraphFromCOM = NewGraph()
 	s.GraphToCOM = NewGraph()
 
-
 	lines := utils.TrimmedLines(fileContent)
 	for _, line := range lines {
 		edge := strings.Split(line, ")")
@@ -29,7 +28,6 @@ func (s *Solver) ProcessInput(fileContent string) error {
 		if len(edge) != 2 {
 			return fmt.Errorf("Expected a src and dst for the edge, got %v", edge)
 		}
-
 
 		// Append to part 1 and 2 graphs
 		s.GraphFromCOM.AddEdge(Edge{
@@ -45,7 +43,6 @@ func (s *Solver) ProcessInput(fileContent string) error {
 	}
 	return nil
 }
-
 
 // Part1 solves part 1 of the puzzle. Required to implement Solver.
 func (s *Solver) Part1() (string, error) {
