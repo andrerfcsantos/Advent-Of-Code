@@ -26,6 +26,6 @@ func (p *IntPipe) ReadInt() int {
 }
 
 // Close closes the pipe
-func (p IntPipe) Close() {
+func (p *IntPipe) Close() {
 	close(p.buffer)
 }

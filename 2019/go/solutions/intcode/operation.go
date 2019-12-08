@@ -24,7 +24,7 @@ type OperationHeader struct {
 	Op3Mode AccessMode
 }
 
-// DecodeHeader decodes an int value into an instruction header
+// DecodeHeader decodes an int value into an operation header
 func DecodeHeader(header int) OperationHeader {
 	var res OperationHeader
 	var modes int
