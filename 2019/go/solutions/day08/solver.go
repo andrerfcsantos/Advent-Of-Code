@@ -78,10 +78,10 @@ func (s *Solver) Part2() (string, error) {
 
 	// Divide final image in its rows and render it
 	var coolImage []string
-	for i:=0 ; i< HEIGHT ; i++ {
+	for i := 0; i < HEIGHT; i++ {
 		coolImage = append(coolImage, string(finalImage[i*WIDTH:(i+1)*WIDTH]))
 	}
-	return fmt.Sprintln("\n"+strings.Map(AsciiArt, strings.Join(coolImage,"\n"))), nil
+	return fmt.Sprintln("\n" + strings.Map(AsciiArt, strings.Join(coolImage, "\n"))), nil
 }
 
 // AsciiArt converts the rune pixel of an image (usually '0','1' or '2') into a character more suitable

@@ -3,6 +3,7 @@ package day07
 import (
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/puzzle/utils"
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/intcode"
+	"log"
 	"strconv"
 	"strings"
 	"sync"
@@ -91,7 +92,10 @@ func RunPermutation(permutation []int, memory intcode.Memory) int {
 	// Make machines
 	for i := 0; i < nMachines; i++ {
 		go func(m *intcode.VM) {
-			m.Run()
+			err := m.Run()
+			if err != nil {
+				log.Printf("a vm ran with errors: %v", err)
+			}
 			wg.Done()
 		}(machines[i])
 	}
