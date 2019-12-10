@@ -21,6 +21,9 @@ func NewSimpleIntReader(values ...int) SimpleIntReader {
 
 // ReadInt read a value from this reader. Implements the IntReader interface.
 func (r *SimpleIntReader) ReadInt() int {
+	if len(r.buffer) == 0 {
+		return 0
+	}
 	value := r.buffer[r.pos]
 	r.pos = (r.pos + 1) % len(r.buffer)
 	return value

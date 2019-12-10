@@ -10,7 +10,7 @@ type Wires []Wire
 // Wire represents a wire on a rectangular grid for the Day 2 of Advent of Code puzzle.
 type Wire struct {
 	Instructions WireSegmentInstructions
-	Coordinates map[utils.Point2D][]int
+	Coordinates  map[utils.Point2D][]int
 }
 
 // PerformInstructions follows the segment instructions for this wire and creates a map of coordinates
@@ -44,7 +44,6 @@ func (w *Wire) SignalOnPoint(point utils.Point2D) int {
 	return -1
 }
 
-
 // IsOnPoint tells if a wire is currently layed on a specific point on the board
 func (w *Wire) Intersection(other Wire) []utils.Point2D {
 	var res []utils.Point2D
@@ -62,8 +61,6 @@ func (w *Wire) Intersection(other Wire) []utils.Point2D {
 
 	return res
 }
-
-
 
 // WireSegmentInstructions is a list of wire segment instructions
 type WireSegmentInstructions []WireSegmentInstruction
