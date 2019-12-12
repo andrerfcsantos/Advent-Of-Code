@@ -26,7 +26,7 @@ func (s *Solver) Part1() (string, error) {
 	output := intcode.SimpleIntWriter{}
 
 	vm := intcode.VM{
-		Tape:   intcode.CloneMemory(s.Memory),
+		Memory: intcode.CloneMemory(s.Memory),
 		Input:  &input,
 		Output: &output,
 	}

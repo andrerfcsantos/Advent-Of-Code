@@ -3,7 +3,6 @@ package day02
 import (
 	"fmt"
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/intcode"
-	"log"
 	"strconv"
 )
 
@@ -26,21 +25,13 @@ func (s *Solver) ProcessInput(fileContent string) error {
 // Required to implement Solver.
 func (s *Solver) Part1() (string, error) {
 	// Make copy of intcode program memory before running it
-	memCpy := intcode.CloneMemory(s.Memory)
-	reader := intcode.NewSimpleIntReader()
-	writer := intcode.NewSimpleIntWriter()
-	vm := intcode.VM{
-		Tape:   memCpy,
-		Input:  &reader,
-		Output: &writer,
-	}
+	vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory))
 
-	memCpy[1] = 12
-	memCpy[2] = 2
+	vm.Memory[1] = 12
+	vm.Memory[2] = 2
 
 	vm.Run()
-	log.Printf("Outputs: %+v", writer.Values())
-	return strconv.Itoa(memCpy[0]), nil
+	return strconv.Itoa(vm.Memory[0]), nil
 }
 
 // Part2 solves part 2 of the puzzle by brute-forcing every combination of nouns and verbs until finding the one
@@ -50,19 +41,13 @@ func (s *Solver) Part2() (string, error) {
 	// Brute force every combination of nouns and verbs
 	for noun := 0; noun < 100; noun++ {
 		for verb := 0; verb < 100; verb++ {
-			memCpy := intcode.CloneMemory(s.Memory)
-			reader := intcode.NewSimpleIntReader()
-			writer := intcode.NewSimpleIntWriter()
-			vm := intcode.VM{
-				Tape:   memCpy,
-				Input:  &reader,
-				Output: &writer,
-			}
 
-			memCpy[1] = noun
-			memCpy[2] = verb
+			vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory))
+
+			vm.Memory[1] = noun
+			vm.Memory[2] = verb
 			vm.Run()
-			if memCpy[0] == 19690720 {
+			if vm.Memory[0] == 19690720 {
 				return strconv.Itoa(100*noun + verb), nil
 			}
 		}

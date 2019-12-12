@@ -3,7 +3,6 @@ package day09
 import (
 	"fmt"
 	"github.com/andrerfcsantos/Advent-Of-Code/2019/go/solutions/intcode"
-	"log"
 	"strconv"
 )
 
@@ -33,7 +32,7 @@ func (s *Solver) Part1() (string, error) {
 	output := intcode.SimpleIntWriter{}
 
 	vm := intcode.VM{
-		Tape:   intcode.CloneMemory(s.Memory),
+		Memory: intcode.CloneMemory(s.Memory),
 		Input:  &input,
 		Output: &output,
 	}
@@ -43,13 +42,24 @@ func (s *Solver) Part1() (string, error) {
 		return "", fmt.Errorf("error running vm: %w", err)
 	}
 
-	log.Printf("outputs: %v", output.Values())
-
-
 	return strconv.Itoa(output.LastInt()), nil
 }
 
 // Part2 solves part 2 of the puzzle. Required to implement Solver.
 func (s *Solver) Part2() (string, error) {
-	return strconv.Itoa(1), nil
+	input := intcode.NewSimpleIntReader(2)
+	output := intcode.SimpleIntWriter{}
+
+	vm := intcode.VM{
+		Memory: intcode.CloneMemory(s.Memory),
+		Input:  &input,
+		Output: &output,
+	}
+
+	err := vm.Run()
+	if err != nil {
+		return "", fmt.Errorf("error running vm: %w", err)
+	}
+
+	return strconv.Itoa(output.LastInt()), nil
 }

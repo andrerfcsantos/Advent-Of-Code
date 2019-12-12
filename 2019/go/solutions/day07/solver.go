@@ -65,7 +65,7 @@ func RunPermutation(permutation []int, memory intcode.Memory) int {
 	var machines []*intcode.VM
 	for i := 0; i < nMachines; i++ {
 		machine := intcode.VM{}
-		machine.Tape = intcode.CloneMemory(memory)
+		machine.Memory = intcode.CloneMemory(memory)
 		machines = append(machines, &machine)
 	}
 
@@ -119,7 +119,7 @@ func RunPermutationWithFeedback(permutation []int, memory intcode.Memory) int {
 	var machines []*intcode.VM
 	for i := 0; i < nMachines; i++ {
 		machine := intcode.VM{}
-		machine.Tape = intcode.CloneMemory(memory)
+		machine.Memory = intcode.CloneMemory(memory)
 		machines = append(machines, &machine)
 	}
 

@@ -6,11 +6,29 @@ import (
 
 // VM is an Intcode Virtual Machine
 type VM struct {
-	Tape      Memory
-	Input     IntReader
-	Output    IntWriter
-	pc        int
-	b         int
+	Memory Memory
+	Input  IntReader
+	Output IntWriter
+	pc     int
+	b      int
+}
+
+//
+
+// NewDefaultVM creates a new VM with the memory provided and
+// using with default a simple reader and writer as input/output.
+// Optionally, a list of inputs to be provided can be given.
+func NewDefaultVM(mem Memory, inputs ...int) VM {
+	in := NewSimpleIntReader(inputs...)
+	out := NewSimpleIntWriter()
+
+	return VM{
+		Memory: mem,
+		Input:  &in,
+		Output: &out,
+		pc:     0,
+		b:      0,
+	}
 }
 
 // resolveAddress determines which address should to be accessed based on another address and an access mode
@@ -32,16 +50,16 @@ func (vm *VM) resolveAddress(accessMode AccessMode, address int) int {
 
 // setValAt sets the value of a memory position
 func (vm *VM) setValAt(address int, val int) {
-	vm.Tape[address] = val
+	vm.Memory[address] = val
 }
 
 // valAt gets the value at a memory position. If the memory position doesn't exist, it is created
 // and initialized to 0
 func (vm *VM) valAt(address int) int{
-	if _, ok := vm.Tape[address]; !ok {
-		vm.Tape[address] = 0
+	if _, ok := vm.Memory[address]; !ok {
+		vm.Memory[address] = 0
 	}
-	return vm.Tape[address]
+	return vm.Memory[address]
 }
 
 // add operation
@@ -82,7 +100,7 @@ func (vm *VM) input(m AccessMode) error {
 // output operation
 func (vm *VM) output(m AccessMode) error {
 
-	output := vm.resolveAddress(m, vm.pc+1)
+	output := vm.valAt(vm.resolveAddress(m, vm.pc+1))
 	vm.Output.WriteInt(output)
 	vm.pc += 2
 
@@ -170,7 +188,7 @@ func (vm *VM) Run() (e error) {
 
 	var err error
 	for {
-		opHeader := DecodeHeader(vm.Tape[vm.pc])
+		opHeader := DecodeHeader(vm.Memory[vm.pc])
 		switch opHeader.Operation {
 
 		case ADD:
