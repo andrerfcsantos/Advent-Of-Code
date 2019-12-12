@@ -23,7 +23,7 @@ func (vm *VM) resolveAddress(accessMode AccessMode, address int) int {
 	case IMMEDIATE:
 		return address
 	case RELATIVE:
-		return vm.valAt(address+vm.b)
+		return vm.valAt(address)+vm.b
 	default:
 		fmt.Printf("WARNING: invalid address for mode '%v'", accessMode)
 		return 0
@@ -82,7 +82,7 @@ func (vm *VM) input(m AccessMode) error {
 // output operation
 func (vm *VM) output(m AccessMode) error {
 
-	output := vm.valAt(vm.resolveAddress(m, vm.pc+1))
+	output := vm.resolveAddress(m, vm.pc+1)
 	vm.Output.WriteInt(output)
 	vm.pc += 2
 
@@ -137,8 +137,8 @@ func (vm *VM) less(m1 AccessMode, m2 AccessMode, m3 AccessMode) error {
 // equal operation
 func (vm *VM) eq(m1 AccessMode, m2 AccessMode,m3 AccessMode) error {
 
-	p1 := vm.resolveAddress(m1, vm.valAt(vm.pc+1))
-	p2 := vm.resolveAddress(m2, vm.valAt(vm.pc+2))
+	p1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
+	p2 := vm.valAt(vm.resolveAddress(m2, vm.pc+2))
 
 	flag := 0
 	if p1 == p2 {
@@ -154,7 +154,7 @@ func (vm *VM) eq(m1 AccessMode, m2 AccessMode,m3 AccessMode) error {
 
 // base change operation
 func (vm *VM) base(m AccessMode) error {
-	p1 := vm.valAt(vm.pc+1)
+	p1 := vm.valAt(vm.resolveAddress(m, vm.pc+1))
 	vm.b += p1
 	vm.pc += 2
 	return nil
