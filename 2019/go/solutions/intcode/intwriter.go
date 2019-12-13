@@ -11,6 +11,10 @@ type SimpleIntWriter struct {
 	values []int
 }
 
+func NewSimpleIntWriter() SimpleIntWriter {
+	return SimpleIntWriter{}
+}
+
 // WriteInt writes an value to this writer. Implements the IntWriter interface.
 func (l *SimpleIntWriter) WriteInt(value int) {
 	l.values = append(l.values, value)

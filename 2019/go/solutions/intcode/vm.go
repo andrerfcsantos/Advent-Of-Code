@@ -6,22 +6,34 @@ import (
 
 // VM is an Intcode Virtual Machine
 type VM struct {
-	Tape      Memory
-	Input     IntReader
-	Output    IntWriter
-	getValErr error
-	pc        int
-	b         int
-	extraMem  map[int]int
+	Memory Memory
+	Input  IntReader
+	Output IntWriter
+	pc     int
+	b      int
 }
 
-// getOperandVal performs an access to memory given an address and an access mode
-// and returns the value read
-func (vm *VM) getOperandVal(accessMode AccessMode, address int) int {
-	if vm.getValErr != nil {
-		// Previous error happened, don't perform any operation
-		return -1
+//
+
+// NewDefaultVM creates a new VM with the memory provided and
+// using with default a simple reader and writer as input/output.
+// Optionally, a list of inputs to be provided can be given.
+func NewDefaultVM(mem Memory, inputs ...int) VM {
+	in := NewSimpleIntReader(inputs...)
+	out := NewSimpleIntWriter()
+
+	return VM{
+		Memory: mem,
+		Input:  &in,
+		Output: &out,
+		pc:     0,
+		b:      0,
 	}
+}
+
+// resolveAddress determines which address should to be accessed based on another address and an access mode
+// to that address
+func (vm *VM) resolveAddress(accessMode AccessMode, address int) int {
 
 	switch accessMode {
 	case POSITION:
@@ -29,142 +41,141 @@ func (vm *VM) getOperandVal(accessMode AccessMode, address int) int {
 	case IMMEDIATE:
 		return address
 	case RELATIVE:
-		return vm.valAt(vm.b+address)
+		return vm.valAt(address)+vm.b
 	default:
-		// Save error. Further calls to this function will become no-op's
-		vm.getValErr = fmt.Errorf("invalid address for mode '%v'", accessMode)
+		fmt.Printf("WARNING: invalid address for mode '%v'", accessMode)
 		return 0
 	}
 }
 
+// setValAt sets the value of a memory position
 func (vm *VM) setValAt(address int, val int) {
-	if address < len(vm.Tape) {
-		vm.Tape[address] = val
-	}
-
-	vm.extraMem[address] = val
+	vm.Memory[address] = val
 }
 
+// valAt gets the value at a memory position. If the memory position doesn't exist, it is created
+// and initialized to 0
 func (vm *VM) valAt(address int) int{
-	if address < len(vm.Tape) {
-		return vm.Tape[address]
+	if _, ok := vm.Memory[address]; !ok {
+		vm.Memory[address] = 0
 	}
-
-	if _, ok := vm.extraMem[address]; !ok {
-		vm.extraMem[address] = 0
-	}
-	return vm.extraMem[address]
+	return vm.Memory[address]
 }
 
-func (vm *VM) isAddressSafe(address int) bool {
-	return address < len(vm.Tape)
-}
+// add operation
+func (vm *VM) add(m1 AccessMode, m2 AccessMode, m3 AccessMode) error {
 
-func (vm *VM) add(m1 AccessMode, m2 AccessMode) error {
-
-	op1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
-	op2 := vm.getOperandVal(m2, vm.valAt(vm.pc+2))
-	dest := vm.valAt(vm.pc+3)
+	op1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
+	op2 := vm.valAt(vm.resolveAddress(m2, vm.pc+2))
+	dest := vm.resolveAddress(m3, vm.pc+3)
 
 	vm.setValAt(dest, op1 + op2)
 
 	vm.pc += 4
-	return vm.getValErr
+	return nil
 }
 
-func (vm *VM) mul(m1 AccessMode, m2 AccessMode) error {
+// multiply operation
+func (vm *VM) mul(m1 AccessMode, m2 AccessMode, m3 AccessMode) error {
 
-	op1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
-	op2 := vm.getOperandVal(m2, vm.valAt(vm.pc+2))
-	dest := vm.valAt(vm.pc+3)
+	op1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
+	op2 := vm.valAt(vm.resolveAddress(m2, vm.pc+2))
+	dest := vm.resolveAddress(m3, vm.pc+3)
 
 	vm.setValAt(dest, op1 * op2)
 	vm.pc += 4
 
-	return vm.getValErr
+	return nil
 }
 
-func (vm *VM) input() error {
+// input operation
+func (vm *VM) input(m AccessMode) error {
 
-	dest := vm.valAt(vm.pc+1)
+	dest := vm.resolveAddress(m, vm.pc+1)
 	vm.setValAt(dest, vm.Input.ReadInt())
 	vm.pc += 2
-	return vm.getValErr
+	return nil
 }
 
+// output operation
 func (vm *VM) output(m AccessMode) error {
 
-	output := vm.getOperandVal(m, vm.valAt(vm.pc+1))
+	output := vm.valAt(vm.resolveAddress(m, vm.pc+1))
 	vm.Output.WriteInt(output)
 	vm.pc += 2
 
-	return vm.getValErr
+	return nil
 }
 
+// jump if true operation
 func (vm *VM) jmptrue(m1 AccessMode, m2 AccessMode) error {
 
-	p1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
+	p1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
 	if p1 != 0 {
-		vm.pc = vm.getOperandVal(m2, vm.valAt(vm.pc+2))
+		vm.pc = vm.valAt(vm.resolveAddress(m2, vm.pc+2))
 	} else {
 		vm.pc += 3
 	}
 
-	return vm.getValErr
+	return nil
 }
 
+// jump if false operation
 func (vm *VM) jmpfalse(m1 AccessMode, m2 AccessMode) error {
 
-	p1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
+	p1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
 	if p1 == 0 {
-		vm.pc = vm.getOperandVal(m2, vm.valAt(vm.pc+2))
+		vm.pc = vm.valAt(vm.resolveAddress(m2, vm.pc+2))
 	} else {
 		vm.pc += 3
 	}
 
-	return vm.getValErr
+	return nil
 }
 
-func (vm *VM) less(m1 AccessMode, m2 AccessMode) error {
+// less operation
+func (vm *VM) less(m1 AccessMode, m2 AccessMode, m3 AccessMode) error {
 
-	p1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
-	p2 := vm.getOperandVal(m2, vm.valAt(vm.pc+2))
+	p1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
+	p2 := vm.valAt(vm.resolveAddress(m2, vm.pc+2))
 
 	flag := 0
 	if p1 < p2 {
 		flag = 1
 	}
 
-	address := vm.valAt(vm.pc+3)
+	address := vm.resolveAddress(m3, vm.pc+3)
 	vm.setValAt(address,flag)
 
 	vm.pc += 4
 
-	return vm.getValErr
+	return nil
 }
 
-func (vm *VM) eq(m1 AccessMode, m2 AccessMode) error {
+// equal operation
+func (vm *VM) eq(m1 AccessMode, m2 AccessMode,m3 AccessMode) error {
 
-	p1 := vm.getOperandVal(m1, vm.valAt(vm.pc+1))
-	p2 := vm.getOperandVal(m2, vm.valAt(vm.pc+2))
+	p1 := vm.valAt(vm.resolveAddress(m1, vm.pc+1))
+	p2 := vm.valAt(vm.resolveAddress(m2, vm.pc+2))
 
 	flag := 0
 	if p1 == p2 {
 		flag = 1
 	}
 
-	address := vm.valAt(vm.pc+3)
+	address := vm.resolveAddress(m3, vm.pc+3)
 	vm.setValAt(address, flag)
 
 	vm.pc += 4
-	return vm.getValErr
+	return nil
 }
 
-func (vm *VM) base(m1 AccessMode) error {
-	p1 := vm.valAt(vm.pc+1)
+// base change operation
+func (vm *VM) base(m AccessMode) error {
+	p1 := vm.valAt(vm.resolveAddress(m, vm.pc+1))
 	vm.b += p1
 	vm.pc += 2
-	return vm.getValErr
+	return nil
 }
 
 // Run runs the vm
@@ -175,19 +186,17 @@ func (vm *VM) Run() (e error) {
 		}
 	}()
 
-	vm.extraMem = make(map[int]int)
-
 	var err error
 	for {
-		opHeader := DecodeHeader(vm.Tape[vm.pc])
+		opHeader := DecodeHeader(vm.Memory[vm.pc])
 		switch opHeader.Operation {
 
 		case ADD:
-			err = vm.add(opHeader.Op1Mode, opHeader.Op2Mode)
+			err = vm.add(opHeader.Op1Mode, opHeader.Op2Mode, opHeader.Op3Mode)
 		case MULTIPLY:
-			err = vm.mul(opHeader.Op1Mode, opHeader.Op2Mode)
+			err = vm.mul(opHeader.Op1Mode, opHeader.Op2Mode, opHeader.Op3Mode)
 		case INPUT:
-			err = vm.input()
+			err = vm.input(opHeader.Op1Mode)
 		case OUTPUT:
 			err = vm.output(opHeader.Op1Mode)
 		case JMPTRUE:
@@ -195,9 +204,9 @@ func (vm *VM) Run() (e error) {
 		case JMPFALSE:
 			err = vm.jmpfalse(opHeader.Op1Mode, opHeader.Op2Mode)
 		case LESS:
-			err = vm.less(opHeader.Op1Mode, opHeader.Op2Mode)
+			err = vm.less(opHeader.Op1Mode, opHeader.Op2Mode,opHeader.Op3Mode)
 		case EQ:
-			err = vm.eq(opHeader.Op1Mode, opHeader.Op2Mode)
+			err = vm.eq(opHeader.Op1Mode, opHeader.Op2Mode,opHeader.Op3Mode)
 		case HALT:
 			return nil
 		case BASE:
