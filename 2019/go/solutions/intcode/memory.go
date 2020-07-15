@@ -13,7 +13,7 @@ type Memory map[int]int
 func CloneMemory(original Memory) Memory {
 	newMap := make(Memory)
 
-	for k,v := range original {
+	for k, v := range original {
 		newMap[k] = v
 	}
 

@@ -55,9 +55,8 @@ type OperationHeader struct {
 	Op3Mode AccessMode
 }
 
-
 func (o OperationHeader) String() string {
-	return fmt.Sprintf("%s %s %s %s", o.Operation, o.Op1Mode,o.Op2Mode,o.Op2Mode)
+	return fmt.Sprintf("%s %s %s %s", o.Operation, o.Op1Mode, o.Op2Mode, o.Op2Mode)
 }
 
 // DecodeHeader decodes an int value into an operation header

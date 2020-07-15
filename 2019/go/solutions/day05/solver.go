@@ -23,7 +23,7 @@ func (s *Solver) ProcessInput(fileContent string) error {
 // Part1 solves part 1 of the puzzle. Required to implement Solver.
 func (s *Solver) Part1() (string, error) {
 	out := intcode.NewSimpleIntWriter()
-	vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory),1)
+	vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory), 1)
 	vm.Output = &out
 	vm.Run()
 	return strconv.Itoa(out.LastInt()), nil
@@ -32,7 +32,7 @@ func (s *Solver) Part1() (string, error) {
 // Part2 solves part 2 of the puzzle. Required to implement Solver.
 func (s *Solver) Part2() (string, error) {
 	out := intcode.NewSimpleIntWriter()
-	vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory),5)
+	vm := intcode.NewDefaultVM(intcode.CloneMemory(s.Memory), 5)
 	vm.Output = &out
 	vm.Run()
 

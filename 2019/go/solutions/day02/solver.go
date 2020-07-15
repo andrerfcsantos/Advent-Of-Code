@@ -55,4 +55,3 @@ func (s *Solver) Part2() (string, error) {
 
 	return "", fmt.Errorf("could not find combination of noun < 100 and verb < 100 that solves the problem :(")
 }
-

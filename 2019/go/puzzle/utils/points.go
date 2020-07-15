@@ -18,43 +18,33 @@ func (p Point2D) ManhattanDistance(otherPoint Point2D) int {
 	return ManhattanDistance(p, otherPoint)
 }
 
-// FloatingPoint2D represents a 2D Point with floating point coordinates
-type FloatingPoint2D struct {
-	X float64
-	Y float64
+// Vector2D is a vector in 2 dimensions
+type Vector2D struct {
+	Origin      Point2D
+	Destination Point2D
 }
 
-// DotProduct computes the dot product of 2 vectors
-func DotProduct(v1, v2 FloatingVector) float64 {
-	return v1.U1 + v2.U2
+func (v Vector2D) ComponentX() int {
+	return v.Destination.X - v.Origin.X
 }
 
-// VectorAngle computes the angle between 2 vectors
-func VectorAngle(v1, v2 FloatingVector) float64 {
-	return math.Acos(DotProduct(v1,v2)/(VectorNorm(v1)*VectorNorm(v2)))
+func (v Vector2D) ComponentY() int {
+	return v.Destination.Y - v.Origin.Y
 }
 
-
-// VectorNorm computes the norm of a vector
-func VectorNorm(u FloatingVector) float64 {
-	return math.Sqrt(math.Pow(u.U1,2)+math.Pow(u.U2,2))
+func (v Vector2D) Norm() float64 {
+	dx, dy := v.ComponentX(), v.ComponentY()
+	return math.Sqrt(math.Pow(float64(dx), 2) + math.Pow(float64(dy), 2))
 }
 
-// FloatingVector represents a vector of 2 points with float coordinates
-type FloatingVector struct {
-	U1 float64
-	U2 float64
+func (v Vector2D) DotProduct(u Vector2D) int {
+	dx1, dy1 := v.ComponentX(), v.ComponentY()
+	dx2, dy2 := u.ComponentX(), u.ComponentY()
+	return dx1*dx2 + dy1*dy2
 }
 
-
-func (v *FloatingVector) DotProduct(other FloatingVector) float64 {
-	return DotProduct(*v, other)
+func (v Vector2D) AngleWith(u Vector2D) float64 {
+	dotProd := v.DotProduct(u)
+	n1, n2 := v.Norm(), u.Norm()
+	return math.Acos(float64(dotProd) / float64(n1*n2))
 }
-
-// Length computes the norm of a vector
-func (v *FloatingVector) Length() float64 {
-	return VectorNorm(*v)
-}
-
-
-
