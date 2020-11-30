@@ -8,7 +8,6 @@ import (
 	"strings"
 )
 
-
 // SubmitSolution submits and Advent of Code solution
 func SubmitSolution(session string, year int, day int, part int, solution string) (string, error) {
 	var client http.Client
@@ -22,14 +21,14 @@ func SubmitSolution(session string, year int, day int, part int, solution string
 	bodyReader := strings.NewReader(form.Encode())
 	req, err := http.NewRequest("POST", endpoint, bodyReader)
 	if err != nil {
-		return "", fmt.Errorf("creating POST request to submit solution at '%v': %v",endpoint, err)
+		return "", fmt.Errorf("creating POST request to submit solution at '%v': %v", endpoint, err)
 	}
 
 	req.Header.Add("cookie", fmt.Sprintf("session=%s;", session))
 	req.Header.Add("content-type", "application/x-www-form-urlencoded")
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("performing POST request to submit solution at '%v': %v",endpoint, err)
+		return "", fmt.Errorf("performing POST request to submit solution at '%v': %v", endpoint, err)
 	}
 
 	bytes, err := ioutil.ReadAll(resp.Body)

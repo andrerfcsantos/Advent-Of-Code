@@ -8,4 +8,3 @@ type Solution struct {
 	// Part2Output is the output of part 2 as a string
 	Part2Output string
 }
-

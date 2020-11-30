@@ -17,7 +17,7 @@ type SolverRunner struct {
 	// Input contains a reader to the puzzle input
 	Input io.Reader
 	// Solver is the solver that can solve the puzzle
-	Solver   Solver
+	Solver Solver
 	// PerformanceMetrics contains stats about input reading/processing and the
 	// execution of the solver
 	PerformanceMetrics
@@ -38,7 +38,7 @@ func NewSolverRunnerFromFile(filepath string, solver Solver) (*SolverRunner, err
 	}
 	readElapsed := time.Since(readStart)
 
-	sr := &SolverRunner {
+	sr := &SolverRunner{
 		Input:  bytes.NewReader(fBytes),
 		Solver: solver,
 	}
@@ -89,10 +89,10 @@ func (sr *SolverRunner) PrintSolutionAndStats(w io.Writer) {
 	fmt.Fprintf(w, "Input: reading=%v | processing=%v\n",
 		sr.PerformanceMetrics.InputReadingTime,
 		sr.PerformanceMetrics.InputProcessingTime)
-	fmt.Fprintf(w,"Part 1: %s (in %v)\n",
+	fmt.Fprintf(w, "Part 1: %s (in %v)\n",
 		sr.Part1Output,
 		sr.PerformanceMetrics.Part1Time)
-	fmt.Fprintf(w,"Part 2: %s (in %v)\n",
+	fmt.Fprintf(w, "Part 2: %s (in %v)\n",
 		sr.Part2Output,
 		sr.PerformanceMetrics.Part2Time)
 }

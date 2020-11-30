@@ -27,5 +27,3 @@ func (ns *SolveNothingSolver) Part1() (string, error) {
 func (ns *SolveNothingSolver) Part2() (string, error) {
 	return "", nil
 }
-
-

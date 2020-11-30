@@ -60,7 +60,7 @@ func main() {
 		log.Fatalf("Error getting solver for day %v of %v: %v", fDay, fYear, err)
 	}
 
-	runner, err := puzzle.NewSolverRunnerFromFile(inpFile,s)
+	runner, err := puzzle.NewSolverRunnerFromFile(inpFile, s)
 	if err != nil {
 		log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
 	}
@@ -75,13 +75,13 @@ func main() {
 	var message string
 	switch fSubmit {
 	case 1:
-		message, err = puzzle.SubmitSolution(fSession,fYear,fDay,fSubmit,runner.Part1Output)
+		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, runner.Part1Output)
 		if err != nil {
 			log.Fatalf("Error submitting solution: %v", err)
 		}
 		log.Printf("Submission result: %v", message)
 	case 2:
-		message, err = puzzle.SubmitSolution(fSession,fYear,fDay,fSubmit,runner.Part2Output)
+		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, runner.Part2Output)
 		if err != nil {
 			log.Fatalf("Error submitting solution: %v", err)
 		}
@@ -90,7 +90,5 @@ func main() {
 	default:
 		// Do nothing
 	}
-
-
 
 }

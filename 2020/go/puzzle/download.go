@@ -8,23 +8,21 @@ import (
 	"path/filepath"
 )
 
-
 // FetchAndSaveInput fetches the input for a particular year and day of an Advent of Code puzzle and
 // saves it to a file before returning it.
 func FetchAndSaveInput(session string, filePath string, year int, day int) (string, error) {
 	inp, err := FetchInput(session, year, day)
-	if err!=nil {
+	if err != nil {
 		return "", err
 	}
 
 	err = SaveInput(filePath, inp)
-	if err!=nil {
+	if err != nil {
 		return "", err
 	}
 
 	return inp, nil
 }
-
 
 // FetchInput gets an Advent of Code input directly from the site for a particular year and day.
 // The session parameter must contain the value of the session cookie that will be used to perform the request.
@@ -64,13 +62,13 @@ func SaveInput(filePath string, input string) error {
 	}
 
 	fHandle, err := os.Create(filePath)
-	if err!=nil {
+	if err != nil {
 		return fmt.Errorf("could create input file at '%s': %w", filePath, err)
 	}
 	defer fHandle.Close()
 
 	_, err = fHandle.WriteString(input)
-	if err!=nil {
+	if err != nil {
 		return fmt.Errorf("could write input data to file '%s': %w", filePath, err)
 	}
 
