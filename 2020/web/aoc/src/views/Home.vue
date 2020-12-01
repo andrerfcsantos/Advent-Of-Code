@@ -1,11 +1,9 @@
 <template>
   <div class="pt-4 home">
     <h2>2020</h2>
-    <span>Not started yet</span>
-    <h2>2019</h2>
     <ul>
       <li>
-        <router-link to="/2019/day/1">Day 01</router-link>
+        <router-link to="/2020/day/1">Day 01</router-link>
       </li>
     </ul>
   </div>

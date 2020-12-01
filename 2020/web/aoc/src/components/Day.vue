@@ -1,7 +1,7 @@
 <template>
   <div class="day">
     <h2 class="day-title">Day {{ day }} - {{ title }}</h2>
-    <a :href="'https://adventofcode.com/2019/day/' + day">
+    <a :href="'https://adventofcode.com/' + year + '/day/' + day">
       [ Problem ]
     </a>
     <v-row>
@@ -13,7 +13,6 @@
           placeholder="Paste your problem input here"
           rows="3"
           color="#ffff00"
-          :rules="rules"
           :validate-on-blur="true"
           dark
           :error="textareaErr"
@@ -59,8 +58,10 @@
 export default {
   name: "Day",
   props: {
+    year: Number,
     day: Number,
     title: String,
+    processInput: Function,
     part1Solver: Function,
     part2Solver: Function
   },
@@ -68,14 +69,6 @@ export default {
     input: "",
     part1Out: "",
     part2Out: "",
-    rules: [
-      function inputNotEmpty() {
-        if (this.input == "") {
-          return "please provide an input";
-        }
-        return true;
-      }
-    ],
     textareaErr: false,
     textareaErrMessage: ""
   }),
@@ -89,12 +82,23 @@ export default {
       this.textareaErrMessage = "";
       this.textareaErr = false;
 
+      if (this.processInput) {
+        try {
+          this.processInput(this.input);
+        } catch (e) {
+          this.textareaErrMessage = e.toString();
+          this.textareaErr = true;
+          return;
+        }
+      }
+
       if (this.part1) {
         try {
           this.part1();
         } catch (e) {
-          this.textareaErrMessage = e;
+          this.textareaErrMessage = e.toString();
           this.textareaErr = true;
+          return;
         }
       }
 
@@ -102,16 +106,17 @@ export default {
         try {
           this.part2();
         } catch (e) {
-          this.textareaErrMessage = e;
+          this.textareaErrMessage = e.toString();
           this.textareaErr = true;
+          return;
         }
       }
     },
     part1: function() {
-      this.part1Out = this.part1Solver(this.input);
+      this.part1Out = this.part1Solver();
     },
     part2: function() {
-      this.part2Out = this.part2Solver(this.input);
+      this.part2Out = this.part2Solver();
     }
   }
 };
