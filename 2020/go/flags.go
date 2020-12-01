@@ -22,13 +22,15 @@ func init() {
 	now := time.Now()
 	year = now.Year()
 	aocStart := time.Date(year, time.December, 1, 0, 0, 0, 0, loc)
-	daysSinceStart := int(math.Trunc(time.Since(aocStart).Hours() / 24))
+	daysSinceStart := int(math.Ceil(time.Since(aocStart).Hours() / 24))
 
 	if daysSinceStart < 0 {
 		day = 25
 		year = year - 1
 	} else if daysSinceStart > 25 {
 		day = 25
+	} else {
+		day = daysSinceStart
 	}
 
 	envSession := os.Getenv("AOC_SESSION")
@@ -64,6 +66,7 @@ func init() {
 	if fDownloadOnly {
 		fDownload = true
 	}
+
 }
 
 func printFlags() {

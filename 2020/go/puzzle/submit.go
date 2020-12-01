@@ -2,19 +2,20 @@ package puzzle
 
 import (
 	"fmt"
-	"io/ioutil"
+	"github.com/PuerkitoBio/goquery"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
 // SubmitSolution submits and Advent of Code solution
 func SubmitSolution(session string, year int, day int, part int, solution string) (string, error) {
 	var client http.Client
-	endpoint := fmt.Sprintf("https://adventofcode.com/%s/day/%s/answer", year, day)
+	endpoint := fmt.Sprintf("https://adventofcode.com/%v/day/%v/answer", year, day)
 
 	form := url.Values{
-		"level":  {string(part)},
+		"level":  {strconv.Itoa(part)},
 		"answer": {solution},
 	}
 
@@ -30,28 +31,14 @@ func SubmitSolution(session string, year int, day int, part int, solution string
 	if err != nil {
 		return "", fmt.Errorf("performing POST request to submit solution at '%v': %v", endpoint, err)
 	}
+	defer resp.Body.Close()
 
-	bytes, err := ioutil.ReadAll(resp.Body)
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("reading response of POST request to submit solution: %v", err)
+		return "", fmt.Errorf("error parsing POST response as html: %v", err)
 	}
 
-	body := string(bytes)
+	selection := doc.Find("body > :not(script):not(header):not(#sidebar)")
 
-	var result string
-
-	switch {
-	case strings.Contains(body, "That's the right answer"):
-		result = "That's the right answer"
-	case strings.Contains(body, "Did you already complete it"):
-		result = "Did you already complete it?"
-	case strings.Contains(body, "That's not the right answer"):
-		result = "That's not the right answer"
-	case strings.Contains(body, "You gave an answer too recently"):
-		result = "You gave an answer too recently"
-	default:
-		result = fmt.Sprintf("Unexpected answer\n%s", body)
-	}
-
-	return result, nil
+	return strings.TrimSpace(selection.Text()), nil
 }

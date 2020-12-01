@@ -11,7 +11,7 @@ import (
 
 var solverMap = map[int]map[int]puzzle.Solver{
 	2020: map[int]puzzle.Solver{
-		1: solvers.NewSolveNothing(),
+		1: solvers.NewDay01_2020Solver(),
 	},
 }
 
