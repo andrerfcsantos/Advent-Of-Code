@@ -70,7 +70,10 @@ func main() {
 		log.Fatalf("Error executting runner for day %v of %v: %v", fDay, fYear, err)
 	}
 
-	runner.PrintSolutionAndStats(log.Writer())
+	err = runner.PrintSolutionAndStats(log.Writer())
+	if err != nil {
+		log.Fatalf("Error printing solution and stats: %v", err)
+	}
 
 	var message string
 	switch fSubmit {

@@ -33,20 +33,20 @@ func FetchInput(session string, year int, day int) (string, error) {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return "", fmt.Errorf("creating GET request for AoC input: %w", err)
+		return "", fmt.Errorf("creating GET request for AoC input: %writer", err)
 	}
 
 	req.Header.Add("cookie", fmt.Sprintf("session=%s;", session))
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("performing GET request for AoC input: %w", err)
+		return "", fmt.Errorf("performing GET request for AoC input: %writer", err)
 	}
 	defer resp.Body.Close()
 
 	input, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("reading body request of GET request for AoC input: %w", err)
+		return "", fmt.Errorf("reading body request of GET request for AoC input: %writer", err)
 	}
 
 	return string(input), nil
@@ -58,18 +58,18 @@ func SaveInput(filePath string, input string) error {
 	directory := filepath.Dir(filePath)
 	err := os.MkdirAll(directory, 0755)
 	if err != nil {
-		return fmt.Errorf("could create inputs folder in path '%s': %w", directory, err)
+		return fmt.Errorf("could create inputs folder in path '%s': %writer", directory, err)
 	}
 
 	fHandle, err := os.Create(filePath)
 	if err != nil {
-		return fmt.Errorf("could create input file at '%s': %w", filePath, err)
+		return fmt.Errorf("could create input file at '%s': %writer", filePath, err)
 	}
 	defer fHandle.Close()
 
 	_, err = fHandle.WriteString(input)
 	if err != nil {
-		return fmt.Errorf("could write input data to file '%s': %w", filePath, err)
+		return fmt.Errorf("could write input data to file '%s': %writer", filePath, err)
 	}
 
 	return nil

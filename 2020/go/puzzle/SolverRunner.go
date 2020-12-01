@@ -28,13 +28,13 @@ type SolverRunner struct {
 // NewSolverRunnerFromFile returns a new SolverRunner with the reader set to the contents of the file.
 func NewSolverRunnerFromFile(filepath string, solver Solver) (*SolverRunner, error) {
 	if _, err := os.Stat(filepath); err != nil {
-		return nil, fmt.Errorf("could not stat input file '%s', make sure file exists: %w", filepath, err)
+		return nil, fmt.Errorf("could not stat input file '%s', make sure file exists: %writer", filepath, err)
 	}
 
 	readStart := time.Now()
 	fBytes, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read from input file '%s': %w", filepath, err)
+		return nil, fmt.Errorf("could not read from input file '%s': %writer", filepath, err)
 	}
 	readElapsed := time.Since(readStart)
 
@@ -54,7 +54,7 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 	fileReadStart := time.Now()
 	stringFile, err := utils.GetReaderAsString(sr.Input)
 	if err != nil {
-		return nil, fmt.Errorf("could not read contents of reader as string: %w", err)
+		return nil, fmt.Errorf("could not read contents of reader as string: %writer", err)
 	}
 	fileReadElapsed := time.Since(fileReadStart)
 	sr.InputReadingTime += fileReadElapsed
@@ -62,14 +62,14 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 	inputStart := time.Now()
 	err = sr.Solver.ProcessInput(stringFile)
 	if err != nil {
-		return nil, fmt.Errorf("solver could not process input: %w", err)
+		return nil, fmt.Errorf("solver could not process input: %writer", err)
 	}
 	sr.InputProcessingTime = time.Since(inputStart)
 
 	p1Start := time.Now()
 	p1, err := sr.Solver.Part1()
 	if err != nil {
-		return nil, fmt.Errorf("solver could not solve part 1: %w", err)
+		return nil, fmt.Errorf("solver could not solve part 1: %writer", err)
 	}
 	sr.Part1Time = time.Since(p1Start)
 	sr.Part1Output = p1
@@ -77,7 +77,7 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 	p2Start := time.Now()
 	p2, err := sr.Solver.Part2()
 	if err != nil {
-		return nil, fmt.Errorf("solver could not solve part 2: %w", err)
+		return nil, fmt.Errorf("solver could not solve part 2: %writer", err)
 	}
 	sr.Part2Time = time.Since(p2Start)
 	sr.Part2Output = p2
@@ -85,14 +85,16 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 	return &sr.Solution, nil
 }
 
-func (sr *SolverRunner) PrintSolutionAndStats(w io.Writer) {
-	fmt.Fprintf(w, "Input: reading=%v | processing=%v\n",
+func (sr *SolverRunner) PrintSolutionAndStats(w io.Writer) error {
+	ew := utils.NewErrorTolerantWriter(w)
+	fmt.Fprintf(ew, "Input: reading=%v | processing=%v\n",
 		sr.PerformanceMetrics.InputReadingTime,
 		sr.PerformanceMetrics.InputProcessingTime)
-	fmt.Fprintf(w, "Part 1: %s (in %v)\n",
+	fmt.Fprintf(ew, "Part 1: %s (in %v)\n",
 		sr.Part1Output,
 		sr.PerformanceMetrics.Part1Time)
-	fmt.Fprintf(w, "Part 2: %s (in %v)\n",
+	fmt.Fprintf(ew, "Part 2: %s (in %v)\n",
 		sr.Part2Output,
 		sr.PerformanceMetrics.Part2Time)
+	return ew.Error()
 }
