@@ -31,8 +31,8 @@ func (d *Day01_2020) Part1() (string, error) {
 	size := len(d.Nums)
 
 	for i := 0; i < size; i++ {
-		for j := i + 1; j < size; j++ {
-			if i != j && (d.Nums[i]+d.Nums[j]) == 2020 {
+		for j := i + 1; j < size - 1; j++ {
+			if (d.Nums[i]+d.Nums[j]) == 2020 {
 				return strconv.Itoa(d.Nums[i] * d.Nums[j]), nil
 			}
 		}
@@ -45,9 +45,9 @@ func (d *Day01_2020) Part2() (string, error) {
 	size := len(d.Nums)
 
 	for i := 0; i < size; i++ {
-		for j := i + 1; j < size; j++ {
-			for z := j + 1; z < size; z++ {
-				if i != j && j != z && z != i && (d.Nums[i]+d.Nums[j]+d.Nums[z]) == 2020 {
+		for j := i + 1; j < size-1; j++ {
+			for z := j + 1; z < size-2; z++ {
+				if (d.Nums[i]+d.Nums[j]+d.Nums[z]) == 2020 {
 					return strconv.Itoa(d.Nums[i] * d.Nums[j] * d.Nums[z]), nil
 				}
 			}

@@ -22,8 +22,8 @@ export function part1Solver(inp: string): string {
   const size: number = nums.length;
 
   for (let i = 0; i < size; i++) {
-    for (let j = i + 1; j < size; j++) {
-      if (i != j && nums[i] + nums[j] == 2020) {
+    for (let j = i + 1; j < size - 1; j++) {
+      if (nums[i] + nums[j] == 2020) {
         return (nums[i] * nums[j]).toString();
       }
     }
@@ -36,9 +36,9 @@ export function part2Solver(inp: string): string {
   const size: number = nums.length;
 
   for (let i = 0; i < size; i++) {
-    for (let j = i + 1; j < size; j++) {
-      for (let z = j + 1; z < size; z++) {
-        if (i != j && j != z && z != i && nums[i] + nums[j] + nums[z] == 2020) {
+    for (let j = i + 1; j < size - 1; j++) {
+      for (let z = j + 1; z < size - 2; z++) {
+        if (nums[i] + nums[j] + nums[z] == 2020) {
           return (nums[i] * nums[j] * nums[z]).toString();
         }
       }
