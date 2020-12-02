@@ -1,4 +1,4 @@
-package day02
+package day02_2020
 
 type Password struct {
 	Text   string

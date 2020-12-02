@@ -1,4 +1,4 @@
-package day02
+package day02_2020
 
 import (
 	"aoc/puzzle/utils"
@@ -7,15 +7,15 @@ import (
 	"strings"
 )
 
-type Day02_2020 struct {
+type Solver struct {
 	Passwords []Password
 }
 
-func NewDay02_2020Solver() *Day02_2020 {
-	return &Day02_2020{}
+func NewSolver() *Solver {
+	return &Solver{}
 }
 
-func (d *Day02_2020) ProcessInput(input string) error {
+func (d *Solver) ProcessInput(input string) error {
 	lines := utils.TrimmedLines(input)
 
 	for _, line := range lines {
@@ -46,7 +46,7 @@ func (d *Day02_2020) ProcessInput(input string) error {
 	return nil
 }
 
-func (d *Day02_2020) Part1() (string, error) {
+func (d *Solver) Part1() (string, error) {
 	validCount := 0
 
 	for _, p := range d.Passwords {
@@ -65,7 +65,7 @@ func (d *Day02_2020) Part1() (string, error) {
 	return strconv.Itoa(validCount), nil
 }
 
-func (d *Day02_2020) Part2() (string, error) {
+func (d *Solver) Part2() (string, error) {
 	validCount := 0
 
 	for _, p := range d.Passwords {

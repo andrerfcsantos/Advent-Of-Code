@@ -1,4 +1,4 @@
-package day01
+package day01_2020
 
 import (
 	"aoc/puzzle/utils"
@@ -6,15 +6,15 @@ import (
 	"strconv"
 )
 
-type Day01_2020 struct {
+type Solver struct {
 	Nums []int
 }
 
-func NewDay01_2020Solver() *Day01_2020 {
-	return &Day01_2020{}
+func NewSolver() *Solver {
+	return &Solver{}
 }
 
-func (d *Day01_2020) ProcessInput(input string) error {
+func (d *Solver) ProcessInput(input string) error {
 	lines := utils.TrimmedLines(input)
 
 	for _, line := range lines {
@@ -27,7 +27,7 @@ func (d *Day01_2020) ProcessInput(input string) error {
 	return nil
 }
 
-func (d *Day01_2020) Part1() (string, error) {
+func (d *Solver) Part1() (string, error) {
 	size := len(d.Nums)
 
 	for i := 0; i < size; i++ {
@@ -41,7 +41,7 @@ func (d *Day01_2020) Part1() (string, error) {
 	return "<no valid result>", fmt.Errorf("could not find 2 numbers which have 2020 as its sum :(")
 }
 
-func (d *Day01_2020) Part2() (string, error) {
+func (d *Solver) Part2() (string, error) {
 	size := len(d.Nums)
 
 	for i := 0; i < size; i++ {

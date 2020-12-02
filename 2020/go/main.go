@@ -2,8 +2,18 @@ package main
 
 import (
 	"aoc/puzzle"
-	"aoc/puzzle/solvers/2020/day01"
-	"aoc/puzzle/solvers/2020/day02"
+	"aoc/puzzle/solvers/2019/day01_2019"
+	"aoc/puzzle/solvers/2019/day02_2019"
+	"aoc/puzzle/solvers/2019/day03_2019"
+	"aoc/puzzle/solvers/2019/day04_2019"
+	"aoc/puzzle/solvers/2019/day05_2019"
+	"aoc/puzzle/solvers/2019/day06_2019"
+	"aoc/puzzle/solvers/2019/day07_2019"
+	"aoc/puzzle/solvers/2019/day08_2019"
+	"aoc/puzzle/solvers/2019/day09_2019"
+	"aoc/puzzle/solvers/2019/day10_2019"
+	"aoc/puzzle/solvers/2020/day01_2020"
+	"aoc/puzzle/solvers/2020/day02_2020"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -11,9 +21,21 @@ import (
 )
 
 var solverMap = map[int]map[int]puzzle.Solver{
+	2019: map[int]puzzle.Solver{
+		1:  day01_2019.NewSolver(),
+		2:  day02_2019.NewSolver(),
+		3:  day03_2019.NewSolver(),
+		4:  day04_2019.NewSolver(),
+		5:  day05_2019.NewSolver(),
+		6:  day06_2019.NewSolver(),
+		7:  day07_2019.NewSolver(),
+		8:  day08_2019.NewSolver(),
+		9:  day09_2019.NewSolver(),
+		10: day10_2019.NewSolver(),
+	},
 	2020: map[int]puzzle.Solver{
-		1: day01.NewDay01_2020Solver(),
-		2: day02.NewDay02_2020Solver(),
+		1: day01_2020.NewSolver(),
+		2: day02_2020.NewSolver(),
 	},
 }
 
