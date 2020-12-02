@@ -2,7 +2,8 @@ package main
 
 import (
 	"aoc/puzzle"
-	"aoc/puzzle/solvers"
+	"aoc/puzzle/solvers/2020/day01"
+	"aoc/puzzle/solvers/2020/day02"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -11,7 +12,8 @@ import (
 
 var solverMap = map[int]map[int]puzzle.Solver{
 	2020: map[int]puzzle.Solver{
-		1: solvers.NewDay01_2020Solver(),
+		1: day01.NewDay01_2020Solver(),
+		2: day02.NewDay02_2020Solver(),
 	},
 }
 

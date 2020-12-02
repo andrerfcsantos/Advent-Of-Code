@@ -1,4 +1,4 @@
-package solvers
+package day01
 
 import (
 	"aoc/puzzle/utils"
@@ -31,8 +31,8 @@ func (d *Day01_2020) Part1() (string, error) {
 	size := len(d.Nums)
 
 	for i := 0; i < size; i++ {
-		for j := i + 1; j < size - 1; j++ {
-			if (d.Nums[i]+d.Nums[j]) == 2020 {
+		for j := i + 1; j < size-1; j++ {
+			if (d.Nums[i] + d.Nums[j]) == 2020 {
 				return strconv.Itoa(d.Nums[i] * d.Nums[j]), nil
 			}
 		}
@@ -47,7 +47,7 @@ func (d *Day01_2020) Part2() (string, error) {
 	for i := 0; i < size; i++ {
 		for j := i + 1; j < size-1; j++ {
 			for z := j + 1; z < size-2; z++ {
-				if (d.Nums[i]+d.Nums[j]+d.Nums[z]) == 2020 {
+				if (d.Nums[i] + d.Nums[j] + d.Nums[z]) == 2020 {
 					return strconv.Itoa(d.Nums[i] * d.Nums[j] * d.Nums[z]), nil
 				}
 			}
