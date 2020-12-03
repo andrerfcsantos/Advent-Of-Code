@@ -13,6 +13,12 @@ type Point2D struct {
 	Y int
 }
 
+func (p *Point2D) Add(another Point2D) *Point2D {
+	p.X += another.X
+	p.Y += another.Y
+	return p
+}
+
 // ManhattanDistance computes the manhattan distance between this point and another
 func (p Point2D) ManhattanDistance(otherPoint Point2D) int {
 	return ManhattanDistance(p, otherPoint)

@@ -20,6 +20,7 @@ import (
 	"aoc/puzzle/solvers/2019/day10_2019"
 	"aoc/puzzle/solvers/2020/day01_2020"
 	"aoc/puzzle/solvers/2020/day02_2020"
+	"aoc/puzzle/solvers/2020/day03_2020"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -50,6 +51,7 @@ var solverMap = map[int]map[int]puzzle.Solver{
 	2020: map[int]puzzle.Solver{
 		1: day01_2020.NewSolver(),
 		2: day02_2020.NewSolver(),
+		3: day03_2020.NewSolver(),
 	},
 }
 
