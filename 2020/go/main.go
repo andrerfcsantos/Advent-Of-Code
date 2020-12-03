@@ -1,6 +1,7 @@
 package main
 
 import (
+	"aoc/leaderboard"
 	"aoc/puzzle"
 	"aoc/puzzle/solvers/2018/day01_2018"
 	"aoc/puzzle/solvers/2018/day02_2018"
@@ -25,18 +26,19 @@ import (
 	"fmt"
 	"log"
 	"path/filepath"
+	"sort"
 )
 
 var solverMap = map[int]map[int]puzzle.Solver{
-	2018: map[int]puzzle.Solver{
+	2018: {
 		1: day01_2018.NewSolver(),
 		2: day02_2018.NewSolver(),
 		3: day03_2018.NewSolver(),
 		4: day04_2018.NewSolver(),
 		5: day05_2018.NewSolver(),
 		6: day06_2018.NewSolver(),
-	},
-	2019: map[int]puzzle.Solver{
+		},
+	2019: {
 		1:  day01_2019.NewSolver(),
 		2:  day02_2019.NewSolver(),
 		3:  day03_2019.NewSolver(),
@@ -47,12 +49,12 @@ var solverMap = map[int]map[int]puzzle.Solver{
 		8:  day08_2019.NewSolver(),
 		9:  day09_2019.NewSolver(),
 		10: day10_2019.NewSolver(),
-	},
-	2020: map[int]puzzle.Solver{
+		},
+	2020: {
 		1: day01_2020.NewSolver(),
 		2: day02_2020.NewSolver(),
 		3: day03_2020.NewSolver(),
-	},
+		},
 }
 
 func GetSolverForDay(year int, day int) (puzzle.Solver, error) {
@@ -132,6 +134,32 @@ func main() {
 		log.Printf("Submission result: %v", message)
 	default:
 		// Do nothing
+	}
+
+	if fLeaderboard {
+		if fLeaderboardId == "" {
+			log.Printf("Error: --leaderboard flag is present, but no leaderboard id was given. " +
+				"Pass a leaderboard id with the --leaderboard-id flag or with a AOC_LEADERBOARD_ID env variable")
+		}
+		l, err := leaderboard.FetchLeaderboard(fSession, fLeaderboardId, fYear)
+		if err != nil {
+			log.Fatalf("could not get leaderboard from json: %v", err)
+			return
+		}
+
+		stars := l.StarsByDay(fDay)
+		sort.Sort(leaderboard.ByTimestamp(stars))
+
+		for _, star := range stars {
+			var starStr string
+			if star.Level == 1 {
+				starStr = "1st"
+			} else {
+				starStr = "2nd"
+			}
+
+			fmt.Printf("[%v] %v got the %v star for day %v\n", star.Timestamp, star.MemberName, starStr, star.Day)
+		}
 	}
 
 }

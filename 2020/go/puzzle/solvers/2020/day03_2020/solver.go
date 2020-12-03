@@ -33,17 +33,17 @@ func (s *Solver) ProcessInput(input string) error {
 }
 
 func (s *Solver) Part1() (string, error) {
-	trees := s.TreesWithSlope(utils.Point2D{X: 3,Y: 1})
+	trees := s.TreesWithSlope(utils.Point2D{X: 3, Y: 1})
 	return strconv.Itoa(trees), nil
 }
 
 func (s *Solver) Part2() (string, error) {
 	slopes := []utils.Point2D{
-		{X: 1,Y: 1},
-		{X: 3,Y: 1},
-		{X: 5,Y: 1},
-		{X: 7,Y: 1},
-		{X: 1,Y: 2},
+		{X: 1, Y: 1},
+		{X: 3, Y: 1},
+		{X: 5, Y: 1},
+		{X: 7, Y: 1},
+		{X: 1, Y: 2},
 	}
 
 	var trees []int
@@ -63,7 +63,7 @@ func (s *Solver) Part2() (string, error) {
 
 func (s *Solver) TreesWithSlope(slope utils.Point2D) int {
 	treeCount := 0
-	pos := utils.Point2D{X: 0,Y: 0}
+	pos := utils.Point2D{X: 0, Y: 0}
 
 	for pos.Y < s.Depth {
 		if s.Board[pos.Y][pos.X%s.Width] {
@@ -73,5 +73,3 @@ func (s *Solver) TreesWithSlope(slope utils.Point2D) int {
 	}
 	return treeCount
 }
-
-
