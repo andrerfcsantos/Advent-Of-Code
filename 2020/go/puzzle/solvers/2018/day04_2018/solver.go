@@ -26,7 +26,7 @@ func (s *Solver) ProcessInput(input string) error {
 	asleepRegex := regexp.MustCompile(`falls asleep`)
 	//[1518-11-01 00:25] wakes up
 	wakesUpRegex := regexp.MustCompile(`wakes up`)
-	for _, line := range utils.TrimmedLines(input) {
+	for _, line := range utils.TrimmedLinesNoEmpty(input) {
 		if line != "" {
 			actionMatch := generalRegex.FindStringSubmatch(line)
 			year := utils.MustAtoi(actionMatch[1])

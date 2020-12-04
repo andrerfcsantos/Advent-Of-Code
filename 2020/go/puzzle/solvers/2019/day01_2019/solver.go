@@ -19,7 +19,7 @@ func NewSolver() *Solver {
 
 // ProcessInput processes the input by transforming it into a slice of masses (ints) saved in the struct. Required to implement Solver.
 func (s *Solver) ProcessInput(fileContent string) error {
-	lines := utils.TrimmedLines(fileContent)
+	lines := utils.TrimmedLinesNoEmpty(fileContent)
 
 	for _, line := range lines {
 		mass, err := strconv.Atoi(line)

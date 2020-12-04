@@ -63,11 +63,11 @@ func init() {
 	pflag.StringVar(&fInputBaseDir, "input-dir", "./inputs/",
 		"directory where to place/read input files to/from. Defaults to an 'inputs' folder in the current directory.")
 
-	pflag.BoolVarP(&fLeaderboard,"leaderboard", "l", false, "show the leaderboard for the day. " +
-		"A leaderboard id must be given either via --leaderboard-id or by the AOC_LEADERBOARD_ID env variable." +
+	pflag.BoolVarP(&fLeaderboard, "leaderboard", "l", false, "show the leaderboard for the day. "+
+		"A leaderboard id must be given either via --leaderboard-id or by the AOC_LEADERBOARD_ID env variable."+
 		"A session is also required, either via the flag --session or by the AOC_SESSION")
 
-	pflag.StringVar(&fLeaderboardId,"leaderboard-id", os.Getenv("AOC_LEADERBOARD_ID"), "leaderboard id." +
+	pflag.StringVar(&fLeaderboardId, "leaderboard-id", os.Getenv("AOC_LEADERBOARD_ID"), "leaderboard id."+
 		"Has effect when the --leaderboard flag is also present.")
 
 	pflag.Parse()

@@ -16,7 +16,7 @@ func NewSolver() *Solver {
 }
 
 func (d *Solver) ProcessInput(input string) error {
-	lines := utils.TrimmedLines(input)
+	lines := utils.TrimmedLinesNoEmpty(input)
 
 	for _, line := range lines {
 		parts := strings.Split(line, " ")

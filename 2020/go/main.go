@@ -22,6 +22,7 @@ import (
 	"aoc/puzzle/solvers/2020/day01_2020"
 	"aoc/puzzle/solvers/2020/day02_2020"
 	"aoc/puzzle/solvers/2020/day03_2020"
+	"aoc/puzzle/solvers/2020/day04_2020"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -37,7 +38,7 @@ var solverMap = map[int]map[int]puzzle.Solver{
 		4: day04_2018.NewSolver(),
 		5: day05_2018.NewSolver(),
 		6: day06_2018.NewSolver(),
-		},
+	},
 	2019: {
 		1:  day01_2019.NewSolver(),
 		2:  day02_2019.NewSolver(),
@@ -49,12 +50,13 @@ var solverMap = map[int]map[int]puzzle.Solver{
 		8:  day08_2019.NewSolver(),
 		9:  day09_2019.NewSolver(),
 		10: day10_2019.NewSolver(),
-		},
+	},
 	2020: {
 		1: day01_2020.NewSolver(),
 		2: day02_2020.NewSolver(),
 		3: day03_2020.NewSolver(),
-		},
+		4: day04_2020.NewSolver(),
+	},
 }
 
 func GetSolverForDay(year int, day int) (puzzle.Solver, error) {

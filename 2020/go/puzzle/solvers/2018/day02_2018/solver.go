@@ -16,7 +16,7 @@ func NewSolver() *Solver {
 }
 
 func (s *Solver) ProcessInput(input string) error {
-	lines := utils.TrimmedLines(input)
+	lines := utils.TrimmedLinesNoEmpty(input)
 
 	for _, line := range lines {
 		s.Lines = append(s.Lines, line)

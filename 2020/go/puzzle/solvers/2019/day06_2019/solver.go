@@ -26,7 +26,7 @@ func (s *Solver) ProcessInput(fileContent string) error {
 	s.GraphFromCOM = NewGraph()
 	s.GraphToCOM = NewGraph()
 
-	lines := utils.TrimmedLines(fileContent)
+	lines := utils.TrimmedLinesNoEmpty(fileContent)
 	for _, line := range lines {
 		edge := strings.Split(line, ")")
 

@@ -11,11 +11,12 @@ import (
 
 type Leaderboard struct {
 	Members map[string]MemberInfo `json:"members"`
-	OwnerId string                     `json:"owner_id"`
-	Event   string                     `json:"event"`
+	OwnerId string                `json:"owner_id"`
+	Event   string                `json:"event"`
 }
 
 type ByTimestamp []Star
+
 func (s ByTimestamp) Len() int           { return len(s) }
 func (s ByTimestamp) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
 func (s ByTimestamp) Less(i, j int) bool { return s[i].Timestamp.Before(s[j].Timestamp) }
@@ -23,7 +24,7 @@ func (s ByTimestamp) Less(i, j int) bool { return s[i].Timestamp.Before(s[j].Tim
 func (l *Leaderboard) Stars() []Star {
 	var stars []Star
 
-	for _,member := range l.Members {
+	for _, member := range l.Members {
 		for day, dayInfo := range member.CompletionDayLevel {
 			for level, levelInfo := range dayInfo {
 				stars = append(stars, Star{
@@ -40,11 +41,10 @@ func (l *Leaderboard) Stars() []Star {
 	return stars
 }
 
-
 func (l *Leaderboard) StarsByMemberId(id string) []Star {
 	var stars []Star
 
-	mInfo, ok :=  l.Members[id]
+	mInfo, ok := l.Members[id]
 	if !ok {
 		return stars
 	}
@@ -66,7 +66,7 @@ func (l *Leaderboard) StarsByMemberId(id string) []Star {
 
 func (l *Leaderboard) StarsByDay(day int) []Star {
 	var stars []Star
-	for _,member := range l.Members {
+	for _, member := range l.Members {
 		dayInfo, ok := member.CompletionDayLevel[day]
 		if !ok {
 			continue
@@ -86,11 +86,11 @@ func (l *Leaderboard) StarsByDay(day int) []Star {
 }
 
 type Star struct {
-	MemberId string
+	MemberId   string
 	MemberName string
-	Day int
-	Level int
-	Timestamp time.Time
+	Day        int
+	Level      int
+	Timestamp  time.Time
 }
 
 type leaderboardReply struct {
@@ -100,14 +100,14 @@ type leaderboardReply struct {
 }
 
 func (l *leaderboardReply) toLeaderboard() (*Leaderboard, error) {
-	leaderboard :=  Leaderboard{
+	leaderboard := Leaderboard{
 		Members: make(map[string]MemberInfo),
 		OwnerId: l.OwnerId,
 		Event:   l.Event,
 	}
 
 	for mId, info := range l.Members {
-		mInfo, err  := info.toMemberInfo()
+		mInfo, err := info.toMemberInfo()
 		if err != nil {
 			return nil, fmt.Errorf("could not convert member info: %v", err)
 		}
@@ -117,9 +117,8 @@ func (l *leaderboardReply) toLeaderboard() (*Leaderboard, error) {
 	return &leaderboard, nil
 }
 
-
 type MemberInfo struct {
-	LastStarTimestamp  *time.Time                `json:"last_star_ts"`
+	LastStarTimestamp  *time.Time               `json:"last_star_ts"`
 	GlobalScore        int                      `json:"global_score"`
 	LocalScore         int                      `json:"local_score"`
 	Id                 string                   `json:"id"`
@@ -139,18 +138,18 @@ type memberInfoReply struct {
 }
 
 func (m *memberInfoReply) toMemberInfo() (*MemberInfo, error) {
-	res := MemberInfo {
-		GlobalScore: m.GlobalScore,
-		LocalScore: m.LocalScore,
-		Id: m.Id,
-		Stars: m.Stars,
-		Name: m.Name,
+	res := MemberInfo{
+		GlobalScore:        m.GlobalScore,
+		LocalScore:         m.LocalScore,
+		Id:                 m.Id,
+		Stars:              m.Stars,
+		Name:               m.Name,
 		CompletionDayLevel: make(map[int]map[int]StarInfo),
 	}
 
 	if f, ok := m.LastStarTimestamp.(string); ok {
 
-		ts, err := strconv.ParseInt(f,10,64)
+		ts, err := strconv.ParseInt(f, 10, 64)
 		if err != nil {
 			return &res, fmt.Errorf("could not parse %v as an int unix timestamp: %v", m.LastStarTimestamp, err)
 		}
@@ -163,13 +162,13 @@ func (m *memberInfoReply) toMemberInfo() (*MemberInfo, error) {
 		return nil, fmt.Errorf("could not parse last_star_ts as either string or int")
 	}
 
-	for day, levels :=  range m.CompletionDayLevel {
+	for day, levels := range m.CompletionDayLevel {
 		if _, ok := res.CompletionDayLevel[day]; !ok {
 			res.CompletionDayLevel[day] = make(map[int]StarInfo)
 		}
 
 		for level, sInfo := range levels {
-			ts, err := strconv.ParseInt(sInfo.StarTimestamp,10,64)
+			ts, err := strconv.ParseInt(sInfo.StarTimestamp, 10, 64)
 			if err != nil {
 				return nil, fmt.Errorf("could not parse %v as an int unix timestamp: %v", sInfo.StarTimestamp, err)
 			}
@@ -188,10 +187,10 @@ type starInfoReply struct {
 	StarTimestamp string `json:"get_star_ts"`
 }
 
-func (s* starInfoReply) toStarInfo() (StarInfo, error) {
+func (s *starInfoReply) toStarInfo() (StarInfo, error) {
 	var res StarInfo
 
-	ts, err := strconv.ParseInt(s.StarTimestamp,10,64)
+	ts, err := strconv.ParseInt(s.StarTimestamp, 10, 64)
 	if err != nil {
 		return res, fmt.Errorf("could not parse %v as an int unix timestamp: %v", s.StarTimestamp, err)
 	}
@@ -225,7 +224,6 @@ func FetchLeaderboard(session string, leaderboardId string, year int) (*Leaderbo
 
 	return LeaderboardFromJson(input)
 }
-
 
 func LeaderboardFromJson(leaderboard []byte) (*Leaderboard, error) {
 	var lReply leaderboardReply

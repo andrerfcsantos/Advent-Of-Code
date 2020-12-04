@@ -21,7 +21,7 @@ func NewSolver() *Solver {
 
 // ProcessInput processes the input by transforming into a list of wires. Required to implement Solver.
 func (s *Solver) ProcessInput(fileContent string) error {
-	lines := utils.TrimmedLines(fileContent)
+	lines := utils.TrimmedLinesNoEmpty(fileContent)
 	wires := Wires{}
 
 	for _, line := range lines {

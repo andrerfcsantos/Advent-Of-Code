@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-// TrimmedLines takes a string with the contents of a file and divides into it'elems lines.
+// TrimmedLinesNoEmpty takes a string with the contents of a file and divides into it'elems lines.
 // Whitespace is trimmed from every line.
-func TrimmedLines(fileContents string) []string {
+func TrimmedLinesNoEmpty(fileContents string) []string {
 	var res []string
 
 	lines := strings.Split(fileContents, "\n")
@@ -19,6 +19,21 @@ func TrimmedLines(fileContents string) []string {
 		if lines[i] != "" {
 			res = append(res, lines[i])
 		}
+	}
+
+	return res
+}
+
+// TrimmedLines takes a string with the contents of a file and divides into it'elems lines.
+// Whitespace is trimmed from every line.
+func TrimmedLines(fileContents string) []string {
+	var res []string
+
+	lines := strings.Split(fileContents, "\n")
+
+	for i := 0; i < len(lines); i++ {
+		lines[i] = strings.TrimSpace(lines[i])
+		res = append(res, lines[i])
 	}
 
 	return res

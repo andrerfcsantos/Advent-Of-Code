@@ -22,7 +22,7 @@ func NewSolver() *Solver {
 }
 
 func (s *Solver) ProcessInput(input string) error {
-	s.Lines = utils.TrimmedLines(input)
+	s.Lines = utils.TrimmedLinesNoEmpty(input)
 	return nil
 }
 

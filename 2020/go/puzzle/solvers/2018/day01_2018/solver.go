@@ -15,7 +15,7 @@ func NewSolver() *Solver {
 }
 
 func (s *Solver) ProcessInput(input string) error {
-	lines := utils.TrimmedLines(input)
+	lines := utils.TrimmedLinesNoEmpty(input)
 
 	for _, line := range lines {
 		n, err := strconv.Atoi(line)

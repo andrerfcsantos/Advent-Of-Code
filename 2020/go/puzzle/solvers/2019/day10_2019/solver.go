@@ -20,7 +20,7 @@ func NewSolver() *Solver {
 // ProcessInput processes the input. Required to implement Solver.
 func (s *Solver) ProcessInput(fileContent string) error {
 	s.Asteroids = make(map[utils.Point2D]bool)
-	s.Map = utils.TrimmedLines(fileContent)
+	s.Map = utils.TrimmedLinesNoEmpty(fileContent)
 
 	for y, line := range s.Map {
 		for x := 0; x < len(line); x++ {

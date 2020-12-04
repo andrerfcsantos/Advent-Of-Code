@@ -35,7 +35,7 @@ func (s *Solver) ProcessInput(input string) error {
 		return fmt.Errorf("error compiling regex")
 	}
 
-	lines := utils.TrimmedLines(input)
+	lines := utils.TrimmedLinesNoEmpty(input)
 
 	for _, line := range lines {
 		match := regex.FindStringSubmatch(line)
