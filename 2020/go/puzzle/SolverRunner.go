@@ -87,14 +87,16 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 
 func (sr *SolverRunner) PrintSolutionAndStats(w io.Writer) error {
 	ew := utils.NewErrorTolerantWriter(w)
-	fmt.Fprintf(ew, "Input: reading=%v | processing=%v\n",
+	fmt.Fprintf(ew, "🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅\n")
+	fmt.Fprintf(ew, "🎄 Input: reading=%v | processing=%v\n",
 		sr.PerformanceMetrics.InputReadingTime,
 		sr.PerformanceMetrics.InputProcessingTime)
-	fmt.Fprintf(ew, "Part 1: %s (in %v)\n",
+	fmt.Fprintf(ew, "🎄 Part 1: %s (in %v)\n",
 		sr.Part1Output,
 		sr.PerformanceMetrics.Part1Time)
-	fmt.Fprintf(ew, "Part 2: %s (in %v)\n",
+	fmt.Fprintf(ew, "🎄 Part 2: %s (in %v)\n",
 		sr.Part2Output,
 		sr.PerformanceMetrics.Part2Time)
+	fmt.Fprintf(ew, "🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅\n")
 	return ew.Error()
 }
