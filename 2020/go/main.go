@@ -24,6 +24,7 @@ import (
 	"aoc/puzzle/solvers/2020/day03_2020"
 	"aoc/puzzle/solvers/2020/day04_2020"
 	"aoc/puzzle/solvers/2020/day05_2020"
+	"aoc/puzzle/solvers/2020/day06_2020"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -58,6 +59,7 @@ var solverMap = map[int]map[int]puzzle.Solver{
 		3: day03_2020.NewSolver(),
 		4: day04_2020.NewSolver(),
 		5: day05_2020.NewSolver(),
+		6: day06_2020.NewSolver(),
 	},
 }
 
@@ -71,7 +73,7 @@ func GetSolverForDay(year int, day int) (puzzle.Solver, error) {
 	}
 
 	if s, ok = yearSolvers[day]; !ok {
-		return nil, fmt.Errorf("there is no solver for the year %v", year)
+		return nil, fmt.Errorf("there is no solver for the day %v of %v", day, year)
 	}
 
 	return s, nil
