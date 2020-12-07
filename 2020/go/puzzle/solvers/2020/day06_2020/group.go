@@ -1,9 +1,8 @@
 package day06_2020
 
-
 type Group struct {
 	Answers map[rune]int
-	Size int
+	Size    int
 }
 
 func NewGroup() *Group {

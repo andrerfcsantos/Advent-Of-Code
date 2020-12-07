@@ -4,8 +4,8 @@ type StringStack struct {
 	elems []string
 }
 
-func NewStringStack() StringStack {
-	return StringStack{}
+func NewStringStack() *StringStack {
+	return &StringStack{}
 }
 
 func (s *StringStack) Push(elem string) {
@@ -20,4 +20,8 @@ func (s *StringStack) Pop() string {
 
 func (s *StringStack) Elems() int {
 	return len(s.elems)
+}
+
+func (s *StringStack) IsEmpty() bool {
+	return len(s.elems) == 0
 }
