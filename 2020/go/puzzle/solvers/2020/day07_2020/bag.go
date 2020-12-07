@@ -20,8 +20,8 @@ func (b *BagTree) AddBag(color string, innerBags ...InnerBag) {
 	b.Adjacency[color] = append(b.Adjacency[color], innerBags...)
 }
 
-// BagsContainedBy returns the bags contained directly by the bag of the color specified
-func (b *BagTree) BagsContainedBy(color string) []InnerBag {
+// BagsInside returns the list of bags contained directly by the bag of the color specified
+func (b *BagTree) BagsInside(color string) []InnerBag {
 	if _, ok := b.Adjacency[color]; ok {
 		return b.Adjacency[color]
 	}
@@ -29,7 +29,7 @@ func (b *BagTree) BagsContainedBy(color string) []InnerBag {
 	return nil
 }
 
-// BagContainsColor tells in a bag contains a bag of the target color, either directly or indirectly
+// BagContainsColor tells if a bag contains a bag of the target color, either directly or indirectly
 func (b *BagTree) BagContainsColor(bag string, targetColor string) bool {
 	var innerBags []InnerBag
 	var ok bool
@@ -43,8 +43,7 @@ func (b *BagTree) BagContainsColor(bag string, targetColor string) bool {
 			return true
 		}
 
-		contains := b.BagContainsColor(innerBag.Color, targetColor)
-		if contains {
+		if b.BagContainsColor(innerBag.Color, targetColor) {
 			return true
 		}
 	}
@@ -74,15 +73,10 @@ func (b *BagTree) NumberOfBagsContaining(color string) int {
 // The total returned refers to the total number of bags contained directly or indirectly by the
 // bag of the specified color.
 func (b *BagTree) TotalInnerBagsOf(color string) int {
-	bags := b.BagsContainedBy(color)
-	if len(bags) == 0 {
-		return 0
-	}
-
 	res := 0
-	for _, contained := range bags {
-		containerSpace := b.TotalInnerBagsOf(contained.Color)
-		nBags := contained.Qtd + contained.Qtd*containerSpace
+
+	for _, innerBag := range b.BagsInside(color) {
+		nBags := innerBag.Qtd + innerBag.Qtd * b.TotalInnerBagsOf(innerBag.Color)
 		res += nBags
 	}
 
