@@ -33,41 +33,41 @@ import (
 	"sort"
 )
 
-var solverMap = map[int]map[int]puzzle.Solver{
+var solverMap = map[int]map[int][]puzzle.Solver{
 	2018: {
-		1: day01_2018.NewSolver(),
-		2: day02_2018.NewSolver(),
-		3: day03_2018.NewSolver(),
-		4: day04_2018.NewSolver(),
-		5: day05_2018.NewSolver(),
-		6: day06_2018.NewSolver(),
+		1: {day01_2018.NewSolver()},
+		2: {day02_2018.NewSolver()},
+		3: {day03_2018.NewSolver()},
+		4: {day04_2018.NewSolver()},
+		5: {day05_2018.NewSolver()},
+		6: {day06_2018.NewSolver()},
 	},
 	2019: {
-		1:  day01_2019.NewSolver(),
-		2:  day02_2019.NewSolver(),
-		3:  day03_2019.NewSolver(),
-		4:  day04_2019.NewSolver(),
-		5:  day05_2019.NewSolver(),
-		6:  day06_2019.NewSolver(),
-		7:  day07_2019.NewSolver(),
-		8:  day08_2019.NewSolver(),
-		9:  day09_2019.NewSolver(),
-		10: day10_2019.NewSolver(),
+		1:  {day01_2019.NewSolver()},
+		2:  {day02_2019.NewSolver()},
+		3:  {day03_2019.NewSolver()},
+		4:  {day04_2019.NewSolver()},
+		5:  {day05_2019.NewSolver()},
+		6:  {day06_2019.NewSolver()},
+		7:  {day07_2019.NewSolver()},
+		8:  {day08_2019.NewSolver()},
+		9:  {day09_2019.NewSolver()},
+		10: {day10_2019.NewSolver()},
 	},
 	2020: {
-		1: day01_2020.NewSolver(),
-		2: day02_2020.NewSolver(),
-		3: day03_2020.NewSolver(),
-		4: day04_2020.NewSolver(),
-		5: day05_2020.NewSolver(),
-		6: day06_2020.NewSolver(),
-		7: day07_2020.NewSolver(),
-	},
+		1: {day01_2020.NewSolver()},
+		2: {day02_2020.NewSolver()},
+		3: {day03_2020.NewSolver()},
+		4: {day04_2020.NewSolver()},
+		5: {day05_2020.NewSolver()},
+		6: {day06_2020.NewSolver()},
+		7: {day07_2020.NewSolver()},
+		},
 }
 
-func GetSolverForDay(year int, day int) (puzzle.Solver, error) {
-	var yearSolvers map[int]puzzle.Solver
-	var s puzzle.Solver
+func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
+	var yearSolvers map[int][]puzzle.Solver
+	var s []puzzle.Solver
 	var ok bool
 
 	if yearSolvers, ok = solverMap[year]; !ok {
@@ -83,7 +83,7 @@ func GetSolverForDay(year int, day int) (puzzle.Solver, error) {
 
 func main() {
 	var err error
-	var s puzzle.Solver
+	var solvers []puzzle.Solver
 	var input string
 	inpFile := filepath.Join(fInputBaseDir, fmt.Sprintf("%d_%02d.txt", fYear, fDay))
 
@@ -101,40 +101,49 @@ func main() {
 	if input == "" {
 		input, err = utils.GetFileAsString(inpFile)
 		if err != nil {
-			log.Fatalf("Error reding input file %s: %v", inpFile, err)
+			log.Fatalf("Error reding input file %solvers: %v", inpFile, err)
 		}
 	}
 
-	s, err = GetSolverForDay(fYear, fDay)
+	solvers, err = GetSolversForDay(fYear, fDay)
 	if err != nil {
-		log.Fatalf("Error getting solver for day %v of %v: %v", fDay, fYear, err)
+		log.Fatalf("Error getting solvers for day %v of %v: %v", fDay, fYear, err)
 	}
 
-	runner, err := puzzle.NewSolverRunnerFromFile(inpFile, s)
-	if err != nil {
-		log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
+	var runners []*puzzle.SolverRunner
+
+	for _, solver := range solvers {
+		runner, err := puzzle.NewSolverRunnerFromFile(inpFile, solver)
+		if err != nil {
+			log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
+		}
+		runners = append(runners, runner)
 	}
 
-	_, err = runner.Run()
-	if err != nil {
-		log.Fatalf("Error executting runner for day %v of %v: %v", fDay, fYear, err)
-	}
+	for _, runner := range runners {
+		_, err = runner.Run()
+		if err != nil {
+			log.Fatalf("Error executting runner for day %v of %v: %v", fDay, fYear, err)
+		}
 
-	err = runner.PrintSolutionAndStats(log.Writer())
-	if err != nil {
-		log.Fatalf("Error printing solution and stats: %v", err)
+		err = runner.PrintSolutionAndStats(log.Writer())
+		if err != nil {
+			log.Fatalf("Error printing solution and stats: %v", err)
+		}
 	}
 
 	var message string
+	mainRunner := runners[0]
+
 	switch fSubmit {
 	case 1:
-		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, runner.Part1Output)
+		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, mainRunner.Part1Output)
 		if err != nil {
 			log.Fatalf("Error submitting solution: %v", err)
 		}
 		log.Printf("Submission result: %v", message)
 	case 2:
-		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, runner.Part2Output)
+		message, err = puzzle.SubmitSolution(fSession, fYear, fDay, fSubmit, mainRunner.Part2Output)
 		if err != nil {
 			log.Fatalf("Error submitting solution: %v", err)
 		}
@@ -166,7 +175,7 @@ func main() {
 				starStr = "2nd"
 			}
 
-			fmt.Printf("[%v] %v got the %v star for day %v\n", star.Timestamp, star.MemberName, starStr, star.Day)
+			fmt.Printf("[%v] %v got the %v star for day %v\n", star.Timestamp.Format("2 Jan 2006 @ 15:04:05"), star.MemberName, starStr, star.Day)
 		}
 	}
 

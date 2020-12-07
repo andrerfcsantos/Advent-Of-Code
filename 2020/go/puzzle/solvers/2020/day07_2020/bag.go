@@ -7,24 +7,20 @@ type InnerBag struct {
 
 type BagTree struct {
 	Adjacency    map[string][]InnerBag
-	InversedTree map[string][]string
 }
 
 func NewBagTree() *BagTree {
 	return &BagTree{
 		Adjacency:    make(map[string][]InnerBag),
-		InversedTree: make(map[string][]string),
 	}
 }
 
+// AddBag adds a bag to the bag tree
 func (b *BagTree) AddBag(color string, innerBags ...InnerBag) {
-	for _, innerBag := range innerBags {
-		b.InversedTree[innerBag.Color] = append(b.InversedTree[innerBag.Color], color)
-	}
-
 	b.Adjacency[color] = append(b.Adjacency[color], innerBags...)
 }
 
+// BagsContainedBy returns the bags contained directly by the bag of the color specified
 func (b *BagTree) BagsContainedBy(color string) []InnerBag {
 	if _, ok := b.Adjacency[color]; ok {
 		return b.Adjacency[color]
@@ -33,6 +29,7 @@ func (b *BagTree) BagsContainedBy(color string) []InnerBag {
 	return nil
 }
 
+// BagContainsColor tells in a bag contains a bag of the target color, either directly or indirectly
 func (b *BagTree) BagContainsColor(bag string, targetColor string) bool {
 	var innerBags []InnerBag
 	var ok bool
@@ -41,12 +38,12 @@ func (b *BagTree) BagContainsColor(bag string, targetColor string) bool {
 		return false
 	}
 
-	for _, bag := range innerBags {
-		if bag.Color == targetColor {
+	for _, innerBag := range innerBags {
+		if innerBag.Color == targetColor {
 			return true
 		}
 
-		contains := b.BagContainsColor(bag.Color, targetColor)
+		contains := b.BagContainsColor(innerBag.Color, targetColor)
 		if contains {
 			return true
 		}
@@ -55,14 +52,27 @@ func (b *BagTree) BagContainsColor(bag string, targetColor string) bool {
 	return false
 }
 
+// BagsContaining gets the list of colors of the bags that contain bags with the specified color
 func (b *BagTree) BagsContaining(color string) []string {
-	if _, ok := b.InversedTree[color]; ok {
-		return b.InversedTree[color]
+	var res []string
+
+	for bag, _ := range b.Adjacency {
+		if b.BagContainsColor(bag, color) {
+			res = append(res, bag)
+		}
 	}
 
-	return nil
+	return res
 }
 
+// NumberOfBagsContaining gets the number of color of bags that contain bags with the specified color
+func (b *BagTree) NumberOfBagsContaining(color string) int {
+	return len(b.BagsContaining(color))
+}
+
+// TotalInnerBagsOf returns the total number of inner bags of a bag with the specified color.
+// The total returned refers to the total number of bags contained directly or indirectly by the
+// bag of the specified color.
 func (b *BagTree) TotalInnerBagsOf(color string) int {
 	bags := b.BagsContainedBy(color)
 	if len(bags) == 0 {
@@ -72,8 +82,8 @@ func (b *BagTree) TotalInnerBagsOf(color string) int {
 	res := 0
 	for _, contained := range bags {
 		containerSpace := b.TotalInnerBagsOf(contained.Color)
-		bags := contained.Qtd + contained.Qtd*containerSpace
-		res += bags
+		nBags := contained.Qtd + contained.Qtd*containerSpace
+		res += nBags
 	}
 
 	return res

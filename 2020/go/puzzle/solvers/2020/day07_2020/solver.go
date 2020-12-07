@@ -49,38 +49,9 @@ func (s *Solver) ProcessInput(input string) error {
 }
 
 func (s *Solver) Part1() (string, error) {
-	set := make(map[string]bool)
-	stack := utils.NewStringStack()
-	stack.Push("shiny gold")
-
-	for !stack.IsEmpty() {
-		elem := stack.Pop()
-		neighbors := s.Bags.BagsContaining(elem)
-		for _, n := range neighbors {
-			set[n] = true
-			stack.Push(n)
-		}
-	}
-
-	return strconv.Itoa(len(set)), nil
+	return strconv.Itoa(s.Bags.NumberOfBagsContaining("shiny gold")), nil
 }
 
 func (s *Solver) Part2() (string, error) {
-	return strconv.Itoa(s.bagsRequired("shiny gold")), nil
-}
-
-func (s *Solver) bagsRequired(color string) int {
-	bags := s.Bags.BagsContainedBy(color)
-	if len(bags) == 0 {
-		return 0
-	}
-
-	res := 0
-	for _, contained := range bags {
-		containerSpace := s.bagsRequired(contained.Color)
-		bags := contained.Qtd + contained.Qtd*containerSpace
-		res += bags
-	}
-
-	return res
+	return strconv.Itoa(s.Bags.TotalInnerBagsOf("shiny gold")), nil
 }
