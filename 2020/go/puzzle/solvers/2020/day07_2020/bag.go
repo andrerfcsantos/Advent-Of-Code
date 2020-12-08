@@ -6,12 +6,12 @@ type InnerBag struct {
 }
 
 type BagTree struct {
-	Adjacency    map[string][]InnerBag
+	Adjacency map[string][]InnerBag
 }
 
 func NewBagTree() *BagTree {
 	return &BagTree{
-		Adjacency:    make(map[string][]InnerBag),
+		Adjacency: make(map[string][]InnerBag),
 	}
 }
 
@@ -76,7 +76,7 @@ func (b *BagTree) TotalInnerBagsOf(color string) int {
 	res := 0
 
 	for _, innerBag := range b.BagsInside(color) {
-		nBags := innerBag.Qtd + innerBag.Qtd * b.TotalInnerBagsOf(innerBag.Color)
+		nBags := innerBag.Qtd + innerBag.Qtd*b.TotalInnerBagsOf(innerBag.Color)
 		res += nBags
 	}
 
