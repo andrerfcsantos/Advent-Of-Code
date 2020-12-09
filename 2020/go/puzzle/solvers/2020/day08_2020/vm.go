@@ -62,7 +62,6 @@ func (vm *VM) AddInstruction(ins Instruction) *VM {
 }
 
 func (vm *VM) CurrentInstruction() Instruction {
-
 	if vm.pc < len(vm.Instructions) {
 		return vm.Instructions[vm.pc]
 	}

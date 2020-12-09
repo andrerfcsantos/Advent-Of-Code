@@ -46,6 +46,7 @@ func (s *Solver) Part2() (string, error) {
 			s.VM.ExecWithInfiniteLoopPrevention(1)
 
 			if s.VM.Finished() {
+				fmt.Printf("Found JMP that was causing the problem at pos %v\n", i)
 				found = true
 			} else {
 				s.VM.Instructions[i].Op = JMP
@@ -57,6 +58,7 @@ func (s *Solver) Part2() (string, error) {
 			s.VM.ExecWithInfiniteLoopPrevention(1)
 
 			if s.VM.Finished() {
+				fmt.Printf("Found NOP that was causing the problem at pos %v\n", i)
 				found = true
 			} else {
 				s.VM.Instructions[i].Op = NOP

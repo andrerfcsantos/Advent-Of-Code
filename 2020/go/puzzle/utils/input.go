@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
@@ -37,6 +38,26 @@ func TrimmedLines(fileContents string) []string {
 	}
 
 	return res
+}
+
+// LinesAsInts reads the string as a list of numbers.
+func LinesAsInts(fileContents string) ([]int, error) {
+	var res []int
+
+	lines := strings.Split(fileContents, "\n")
+
+	for _, line := range lines {
+		l := strings.TrimSpace(line)
+		if l != "" {
+			n, err := strconv.Atoi(l)
+			if err != nil {
+				return nil, fmt.Errorf("could not convert '%v' to number: %v", line, err)
+			}
+			res = append(res, n)
+		}
+	}
+
+	return res, nil
 }
 
 // GetFileAsString reads a file on the given path and returns its contents as a string with whitespace trimmed.
