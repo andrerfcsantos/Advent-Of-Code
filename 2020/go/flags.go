@@ -17,6 +17,7 @@ var fDownloadOnly bool
 var fInputBaseDir string
 var fLeaderboard bool
 var fLeaderboardId string
+var command string
 
 func init() {
 	var year, day int
@@ -74,6 +75,11 @@ func init() {
 
 	if fDownloadOnly {
 		fDownload = true
+	}
+
+	nonFlagArgs := pflag.Args()
+	if len(nonFlagArgs) > 0 {
+		command = nonFlagArgs[0]
 	}
 
 }

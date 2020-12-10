@@ -30,7 +30,10 @@ import (
 	"aoc/puzzle/solvers/2020/day09_2020"
 	"aoc/puzzle/solvers/2020/day10_2020"
 	"aoc/puzzle/utils"
+	"aoc/stats"
 	"fmt"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 	"log"
 	"path/filepath"
 	"sort"
@@ -88,6 +91,28 @@ func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
 }
 
 func main() {
+
+	if command == "stats" {
+		yearStats, err := stats.GetStats(fYear)
+		if err != nil {
+			log.Printf("error getting stats: %v", err)
+			return
+		}
+
+		p := message.NewPrinter(language.Portuguese)
+
+		fmt.Printf(" Day |  Total  |         *        |       **         \n")
+		for _, s := range yearStats {
+			p.Printf("%4d | %7d | %7d (%5.2f%%) | %7d (%5.2f%%) \n",
+				s.Day, s.Total,
+				s.FirstStar, float64(s.FirstStar * 100.0) / float64(s.Total),
+				s.BothStars, float64(s.BothStars * 100.0) / float64(s.Total),
+			)
+		}
+
+		return
+	}
+
 	var err error
 	var solvers []puzzle.Solver
 	var input string
