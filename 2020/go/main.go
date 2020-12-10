@@ -28,6 +28,7 @@ import (
 	"aoc/puzzle/solvers/2020/day07_2020"
 	"aoc/puzzle/solvers/2020/day08_2020"
 	"aoc/puzzle/solvers/2020/day09_2020"
+	"aoc/puzzle/solvers/2020/day10_2020"
 	"aoc/puzzle/utils"
 	"fmt"
 	"log"
@@ -57,15 +58,16 @@ var solverMap = map[int]map[int][]puzzle.Solver{
 		10: {day10_2019.NewSolver()},
 	},
 	2020: {
-		1: {day01_2020.NewSolver()},
-		2: {day02_2020.NewSolver()},
-		3: {day03_2020.NewSolver()},
-		4: {day04_2020.NewSolver()},
-		5: {day05_2020.NewSolver()},
-		6: {day06_2020.NewSolver()},
-		7: {day07_2020.NewSolver()},
-		8: {day08_2020.NewSolver()},
-		9: {day09_2020.NewSolver()},
+		1:  {day01_2020.NewSolver()},
+		2:  {day02_2020.NewSolver()},
+		3:  {day03_2020.NewSolver()},
+		4:  {day04_2020.NewSolver()},
+		5:  {day05_2020.NewSolver()},
+		6:  {day06_2020.NewSolver()},
+		7:  {day07_2020.NewSolver()},
+		8:  {day08_2020.NewSolver()},
+		9:  {day09_2020.NewSolver()},
+		10: {day10_2020.NewSolver()},
 	},
 }
 
