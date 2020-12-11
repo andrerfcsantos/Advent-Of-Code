@@ -4,15 +4,21 @@ import (
 	"strings"
 )
 
+// SeatState represents a seat state
+type SeatState uint8
+
 const (
+	// Occupied represents an occupied seat
 	Occupied SeatState = iota
+	// Occupied represents an empty seat
 	Empty
+	// Occupied represents a floor tile, where no seat is present
 	Floor
+	// Occupied represents a tile that is out of bounds
 	OutOfBounds
 )
 
-type SeatState uint8
-
+// StateFromRune returns the state represented by the rune.
 func StateFromRune(r rune) SeatState {
 	switch r {
 	case 'L':
@@ -24,6 +30,7 @@ func StateFromRune(r rune) SeatState {
 	}
 }
 
+// StateRune returns the rune that represents the given state.
 func StateRune(state SeatState) rune {
 	switch state {
 	case Empty:
@@ -35,26 +42,42 @@ func StateRune(state SeatState) rune {
 	}
 }
 
+// SeatDescription contains the position and state of a sear
 type SeatDescription struct {
-	Row      int
-	Col      int
-	NewState SeatState
+	Coordinates
+	SeatState
 }
 
+// NewSeatDescription returns a new seat description at the given position and state
+func NewSeatDescription(row, col int, state SeatState) SeatDescription {
+	return SeatDescription{
+		Coordinates: Coordinates{
+			Row:    row,
+			Column: col,
+		},
+		SeatState: state,
+	}
+}
+
+// SeatStatesList represents a list of states
 type SeatStatesList []SeatState
 
+// NoOccupied returns true if no seats in the list are occupied.
 func (l SeatStatesList) NoOccupied() bool {
 	return l.OnState(Occupied) == 0
 }
 
+// FourOrMoreOccupied returns true if four or more seats in the list are occupied.
 func (l SeatStatesList) FourOrMoreOccupied() bool {
 	return l.OnState(Occupied) >= 4
 }
 
+// FiveOrMoreOccupied returns true if five or more seats in the list are occupied.
 func (l SeatStatesList) FiveOrMoreOccupied() bool {
 	return l.OnState(Occupied) >= 5
 }
 
+// OnState returns how many seats on the list are on the given state
 func (l SeatStatesList) OnState(state SeatState) int {
 	res := 0
 	for _, s := range l {
@@ -65,33 +88,37 @@ func (l SeatStatesList) OnState(state SeatState) int {
 	return res
 }
 
-type Seats struct {
-	State []SeatStatesList
+// Plane represents the seating system of the plane
+type Plane struct {
+	Seats []SeatStatesList
 }
 
-func (s *Seats) Clone() *Seats {
-	var res Seats
+// Clone makes a deep copy of a plane
+func (p *Plane) Clone() *Plane {
+	var res Plane
 
-	for i, sList := range s.State {
-		res.State = append(res.State, make(SeatStatesList, len(sList)))
+	for i, sList := range p.Seats {
+		res.Seats = append(res.Seats, make(SeatStatesList, len(sList)))
 		for j, state := range sList {
-			res.State[i][j] = state
+			res.Seats[i][j] = state
 		}
 	}
 	return &res
 }
 
-func (s *Seats) SeatsOnState(state SeatState) int {
+// SeatsOnState returns how many seats are on the given state in the plane
+func (p *Plane) SeatsOnState(state SeatState) int {
 	res := 0
-	for _, sList := range s.State {
+	for _, sList := range p.Seats {
 		res += sList.OnState(state)
 	}
 	return res
 }
 
-func (s *Seats) String() string {
+// String returns the string representation of the seats in the plane
+func (p *Plane) String() string {
 	var lines []string
-	for _, l := range s.State {
+	for _, l := range p.Seats {
 		var lineBuilder strings.Builder
 		for _, state := range l {
 			lineBuilder.WriteRune(StateRune(state))
@@ -101,52 +128,70 @@ func (s *Seats) String() string {
 	return strings.Join(lines, "\n")
 }
 
-func (s *Seats) RunUntilStableByAdjacent() {
-	s.runUntilStable(s.ChangeByAdjacent)
+// RunUntilEquilibriumByAdjacent changes the state of the seats until equilibrium is reached
+// where every state change of a seat is given by the state of its adjacent seats.
+func (p *Plane) RunUntilEquilibriumByAdjacent() {
+	p.runUntilEquilibrium(p.GetChangeByAdjacent)
 }
 
-func (s *Seats) RunUntilStableByVisibility() {
-	s.runUntilStable(s.ChangeByVisibility)
+// RunUntilEquilibriumByVisibility changes the state of the seats until equilibrium is reached
+// where every state change of a seat is given by the "visibility" to other seats
+func (p *Plane) RunUntilEquilibriumByVisibility() {
+	p.runUntilEquilibrium(p.GetChangeByVisibility)
 }
 
-func (s *Seats) runUntilStable(changeFunc ChangeFunc) {
+func (p *Plane) runUntilEquilibrium(changeFunc GetChangeFunc) {
 	for {
-		if s.RunIteration(changeFunc) == 0 {
+		if p.runIteration(changeFunc) == 0 {
 			break
 		}
 	}
 }
 
-func (s *Seats) RunIteration(changeFunc ChangeFunc) int {
+// RunIterationByAdjacent runs an iteration of the seating system where the new
+// state of a seat is computed by looking at its adjacent seats
+func (p *Plane) RunIterationByAdjacent() {
+	p.runIteration(p.GetChangeByAdjacent)
+}
+
+// RunIterationByVisibility runs an iteration of the seating system where the new
+// state of a seat is computed by looking at the seats it was visibility to
+func (p *Plane) RunIterationByVisibility() {
+	p.runIteration(p.GetChangeByVisibility)
+}
+
+// runIteration runs an iteration with the given change func
+func (p *Plane) runIteration(changeFunc GetChangeFunc) int {
 	var changes []SeatDescription
 
 	// Compute changes
-	for i, row := range s.State {
+	for i, row := range p.Seats {
 		for j := range row {
-			needChange, newState := changeFunc(i, j)
-			if needChange {
-				changes = append(changes, SeatDescription{
-					Row:      i,
-					Col:      j,
-					NewState: newState,
-				})
+			if needChange, newState := changeFunc(i, j); needChange {
+				changes = append(changes, NewSeatDescription(i, j, newState))
 			}
 		}
 	}
 
 	// Apply changes
 	for _, c := range changes {
-		s.State[c.Row][c.Col] = c.NewState
+		p.Seats[c.Row][c.Column] = c.SeatState
 	}
 
 	return len(changes)
 }
 
-type ChangeFunc func(int, int) (bool, SeatState)
+// GetChangeFunc represents a function that given the position of a seat, returns
+// if the seat should change its state in the next iteration. If the seat should change,
+// also returns this function also returns the new state of the seat
+type GetChangeFunc func(int, int) (bool, SeatState)
 
-func (s *Seats) ChangeByAdjacent(row, col int) (bool, SeatState) {
-	currentState := s.Get(row, col)
-	adj := s.GetAdjacentOf(row, col)
+// GetChangeByAdjacent returns if a seat at the given positions should change in the next iteration,
+// by taking into account its adjacent seats. If the seat should change its state, this function
+// also returns the new state of the seat, otherwise returns the current state of the seat.
+func (p *Plane) GetChangeByAdjacent(row, col int) (bool, SeatState) {
+	currentState := p.Get(row, col)
+	adj := p.GetAdjacentOf(row, col)
 
 	switch currentState {
 	case Empty:
@@ -162,9 +207,12 @@ func (s *Seats) ChangeByAdjacent(row, col int) (bool, SeatState) {
 	return false, currentState
 }
 
-func (s *Seats) ChangeByVisibility(row, col int) (bool, SeatState) {
-	currentState := s.Get(row, col)
-	adj := s.GetVisibleFrom(row, col)
+// GetChangeByVisibility returns if a seat at the given positions should change in the next iteration,
+// by taking into account the nearby seats that are visible from it.
+// If the seat should change, also returns the new state of the seat, otherwise returns the current state of the seat.
+func (p *Plane) GetChangeByVisibility(row, col int) (bool, SeatState) {
+	currentState := p.Get(row, col)
+	adj := p.GetVisibleFrom(row, col)
 
 	switch currentState {
 	case Empty:
@@ -180,26 +228,31 @@ func (s *Seats) ChangeByVisibility(row, col int) (bool, SeatState) {
 	return false, currentState
 }
 
-func (s *Seats) Get(row, col int) SeatState {
-	rows := len(s.State)
+// Get gets the state of the seat at the given positions
+func (p *Plane) Get(row, col int) SeatState {
+	rows := len(p.Seats)
 	if row >= rows || row < 0 {
 		return OutOfBounds
 	}
 
-	cols := len(s.State[row])
+	cols := len(p.Seats[row])
 	if col >= cols || col < 0 {
 		return OutOfBounds
 	}
 
-	return s.State[row][col]
+	return p.Seats[row][col]
 }
 
-type direction struct {
-	r int
-	c int
+// Coordinates represents the coordinates of a seat in the plane.
+// It also represents the coordinates of direction vectors to search
+// for adjacent seats and by visibility
+type Coordinates struct {
+	Row    int
+	Column int
 }
 
-var directions = []direction{
+// directions is a list of direction vectors where to look for nearby seats
+var directions = []Coordinates{
 	{-1, -1},
 	{-1, 0},
 	{-1, +1},
@@ -210,22 +263,24 @@ var directions = []direction{
 	{+1, +1},
 }
 
-func (s *Seats) GetAdjacentOf(row, col int) SeatStatesList {
+// GetAdjacentOf gets the states of the seats adjacent to the seat in the given row and column
+func (p *Plane) GetAdjacentOf(row, col int) SeatStatesList {
 	var res SeatStatesList
 
 	for _, d := range directions {
-		res = append(res, s.Get(row+d.r, col+d.c))
+		res = append(res, p.Get(row+d.Row, col+d.Column))
 	}
 
 	return res
 }
 
-func (s *Seats) GetVisibleFrom(row, col int) SeatStatesList {
+// GetVisibleFrom gets states of the seats visible from the seat in the given row and column
+func (p *Plane) GetVisibleFrom(row, col int) SeatStatesList {
 	var res SeatStatesList
 
 	for _, d := range directions {
 		for i := 1; true; i++ {
-			state := s.Get(row+d.r*i, col+d.c*i)
+			state := p.Get(row+d.Row*i, col+d.Column*i)
 			if state == OutOfBounds {
 				break
 			}
@@ -234,7 +289,6 @@ func (s *Seats) GetVisibleFrom(row, col int) SeatStatesList {
 				res = append(res, state)
 				break
 			}
-
 		}
 	}
 

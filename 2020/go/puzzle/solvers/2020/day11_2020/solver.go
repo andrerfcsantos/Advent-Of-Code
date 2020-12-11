@@ -6,7 +6,7 @@ import (
 )
 
 type Solver struct {
-	Seats Seats
+	Plane Plane
 }
 
 func NewSolver() *Solver {
@@ -16,22 +16,22 @@ func NewSolver() *Solver {
 func (s *Solver) ProcessInput(input string) error {
 	lines := utils.TrimmedLinesNoEmpty(input)
 	for i, line := range lines {
-		s.Seats.State = append(s.Seats.State, make([]SeatState, 0))
+		s.Plane.Seats = append(s.Plane.Seats, make([]SeatState, 0))
 		for _, c := range []rune(line) {
-			s.Seats.State[i] = append(s.Seats.State[i], StateFromRune(c))
+			s.Plane.Seats[i] = append(s.Plane.Seats[i], StateFromRune(c))
 		}
 	}
 	return nil
 }
 
 func (s *Solver) Part1() (string, error) {
-	seatsCopy := s.Seats.Clone()
-	seatsCopy.RunUntilStableByAdjacent()
+	seatsCopy := s.Plane.Clone()
+	seatsCopy.RunUntilEquilibriumByAdjacent()
 	return strconv.Itoa(seatsCopy.SeatsOnState(Occupied)), nil
 }
 
 func (s *Solver) Part2() (string, error) {
-	seatsCopy := s.Seats.Clone()
-	seatsCopy.RunUntilStableByVisibility()
+	seatsCopy := s.Plane.Clone()
+	seatsCopy.RunUntilEquilibriumByVisibility()
 	return strconv.Itoa(seatsCopy.SeatsOnState(Occupied)), nil
 }
