@@ -11,12 +11,11 @@ import (
 type Aoc []AocDay
 
 type AocDay struct {
-	Day int
+	Day       int
 	FirstStar int
 	BothStars int
-	Total int
+	Total     int
 }
-
 
 func GetStats(year int) (Aoc, error) {
 	var res Aoc
@@ -48,14 +47,13 @@ func GetStats(year int) (Aoc, error) {
 			Day:       day,
 			FirstStar: one,
 			BothStars: both,
-			Total:     one+both,
+			Total:     one + both,
 		})
 
 	}
 
 	return res, nil
 }
-
 
 func BatchAtoi(nums ...string) ([]int, []error) {
 	var res []int
@@ -73,5 +71,3 @@ func BatchAtoi(nums ...string) ([]int, []error) {
 
 	return res, nil
 }
-
-

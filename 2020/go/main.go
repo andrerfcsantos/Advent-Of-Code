@@ -29,6 +29,7 @@ import (
 	"aoc/puzzle/solvers/2020/day08_2020"
 	"aoc/puzzle/solvers/2020/day09_2020"
 	"aoc/puzzle/solvers/2020/day10_2020"
+	"aoc/puzzle/solvers/2020/day11_2020"
 	"aoc/puzzle/utils"
 	"aoc/stats"
 	"fmt"
@@ -71,6 +72,7 @@ var solverMap = map[int]map[int][]puzzle.Solver{
 		8:  {day08_2020.NewSolver()},
 		9:  {day09_2020.NewSolver()},
 		10: {day10_2020.NewSolver()},
+		11: {day11_2020.NewSolver()},
 	},
 }
 
@@ -105,8 +107,8 @@ func main() {
 		for _, s := range yearStats {
 			p.Printf("%4d | %7d | %7d (%5.2f%%) | %7d (%5.2f%%) \n",
 				s.Day, s.Total,
-				s.FirstStar, float64(s.FirstStar * 100.0) / float64(s.Total),
-				s.BothStars, float64(s.BothStars * 100.0) / float64(s.Total),
+				s.FirstStar, float64(s.FirstStar*100.0)/float64(s.Total),
+				s.BothStars, float64(s.BothStars*100.0)/float64(s.Total),
 			)
 		}
 
