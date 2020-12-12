@@ -13,15 +13,15 @@ type Instruction struct {
 }
 
 type Solver struct {
-	Instructions     []Instruction
-	CurrentDirection Direction
-	CurrentPos       Coordinates
-	Waypoint         Coordinates
+	Instructions []Instruction
+	Direction    Direction
+	Pos          Coordinates
+	Waypoint     Coordinates
 }
 
 func NewSolver() *Solver {
 	return &Solver{
-		CurrentDirection: EAST,
+		Direction: EAST,
 	}
 }
 
@@ -43,54 +43,54 @@ func (s *Solver) ProcessInput(input string) error {
 }
 
 func (s *Solver) Part1() (string, error) {
-	for _, instruction := range s.Instructions {
-		switch instruction.Command {
+	for _, ins := range s.Instructions {
+		switch ins.Command {
 		case 'N':
-			s.CurrentPos.Add(0, instruction.Value)
+			s.Pos.Add(0, ins.Value)
 		case 'S':
-			s.CurrentPos.Add(0, -instruction.Value)
+			s.Pos.Add(0, -ins.Value)
 		case 'E':
-			s.CurrentPos.Add(instruction.Value, 0)
+			s.Pos.Add(ins.Value, 0)
 		case 'W':
-			s.CurrentPos.Add(-instruction.Value, 0)
+			s.Pos.Add(-ins.Value, 0)
 		case 'L':
-			s.CurrentDirection = s.CurrentDirection.ToLeftDeg(instruction.Value)
+			s.Direction = RotateDirectionLeft(s.Direction, ins.Value)
 		case 'R':
-			s.CurrentDirection = s.CurrentDirection.ToRightDeg(instruction.Value)
+			s.Direction = RotateDirectionRight(s.Direction, ins.Value)
 		case 'F':
-			v := directionVectors[s.CurrentDirection]
-			s.CurrentPos.Add(v.X*instruction.Value, v.Y*instruction.Value)
+			v := directionVectors[s.Direction]
+			s.Pos.Add(v.X*ins.Value, v.Y*ins.Value)
 		}
 	}
 
-	distance := math.Abs(float64(s.CurrentPos.X)) + math.Abs(float64(s.CurrentPos.Y))
+	distance := math.Abs(float64(s.Pos.X)) + math.Abs(float64(s.Pos.Y))
 	return strconv.Itoa(int(distance)), nil
 }
 
 func (s *Solver) Part2() (string, error) {
 	s.Waypoint = Coordinates{X: 10, Y: 1}
-	s.CurrentPos = Coordinates{X: 0, Y: 0}
+	s.Pos = Coordinates{X: 0, Y: 0}
 
-	for _, instruction := range s.Instructions {
+	for _, ins := range s.Instructions {
 
-		switch instruction.Command {
+		switch ins.Command {
 		case 'N':
-			s.Waypoint.Add(0, instruction.Value)
+			s.Waypoint.Add(0, ins.Value)
 		case 'S':
-			s.Waypoint.Add(0, -instruction.Value)
+			s.Waypoint.Add(0, -ins.Value)
 		case 'E':
-			s.Waypoint.Add(instruction.Value, 0)
+			s.Waypoint.Add(ins.Value, 0)
 		case 'W':
-			s.Waypoint.Add(-instruction.Value, 0)
+			s.Waypoint.Add(-ins.Value, 0)
 		case 'L':
-			s.Waypoint.Rotate(instruction.Value)
+			s.Waypoint.Rotate(ins.Value)
 		case 'R':
-			s.Waypoint.Rotate(360 - instruction.Value)
+			s.Waypoint.Rotate(360 - ins.Value)
 		case 'F':
-			s.CurrentPos.Add(s.Waypoint.X*instruction.Value, s.Waypoint.Y*instruction.Value)
+			s.Pos.Add(s.Waypoint.X*ins.Value, s.Waypoint.Y*ins.Value)
 		}
 	}
 
-	distance := math.Abs(float64(s.CurrentPos.X)) + math.Abs(float64(s.CurrentPos.Y))
+	distance := math.Abs(float64(s.Pos.X)) + math.Abs(float64(s.Pos.Y))
 	return strconv.Itoa(int(distance)), nil
 }
