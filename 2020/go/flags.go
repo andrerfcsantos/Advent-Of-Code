@@ -17,6 +17,8 @@ var fDownloadOnly bool
 var fInputBaseDir string
 var fLeaderboard bool
 var fLeaderboardId string
+var fCpuProfile bool
+var fMemProfile bool
 var command string
 
 func init() {
@@ -70,6 +72,10 @@ func init() {
 
 	pflag.StringVar(&fLeaderboardId, "leaderboard-id", os.Getenv("AOC_LEADERBOARD_ID"), "leaderboard id."+
 		"Has effect when the --leaderboard flag is also present.")
+
+	pflag.BoolVar(&fCpuProfile, "cpuprofile", false, "saves cpu profiling information")
+
+	pflag.BoolVar(&fMemProfile, "memprofile", false, "saves memory profiling information")
 
 	pflag.Parse()
 

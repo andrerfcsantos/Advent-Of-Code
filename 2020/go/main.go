@@ -36,7 +36,9 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"log"
+	"os"
 	"path/filepath"
+	"runtime/pprof"
 	"sort"
 )
 
@@ -93,6 +95,17 @@ func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
 }
 
 func main() {
+	if fCpuProfile {
+		f, err := os.Create("cpu.prof")
+		if err != nil {
+			log.Fatal("could not create CPU profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal("could not start CPU profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
+	}
 
 	if command == "stats" {
 		yearStats, err := stats.GetStats(fYear)
@@ -162,6 +175,18 @@ func main() {
 		err = runner.PrintSolutionAndStats(log.Writer())
 		if err != nil {
 			log.Fatalf("Error printing solution and stats: %v", err)
+		}
+	}
+
+	if fMemProfile {
+		f, err := os.Create("mem.prof")
+		if err != nil {
+			log.Fatal("could not create memory profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		//runtime.GC() // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Fatal("could not write memory profile: ", err)
 		}
 	}
 

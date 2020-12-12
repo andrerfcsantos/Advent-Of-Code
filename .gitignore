@@ -117,3 +117,5 @@ ENV/
 **/go/*.exe
 **/go/aoc2018
 **/go/aoc2019
+
+*.prof
