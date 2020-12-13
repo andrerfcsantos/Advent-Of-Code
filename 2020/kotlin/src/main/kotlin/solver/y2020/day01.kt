@@ -1,4 +1,4 @@
-package solver.y2020.d01
+package solver.y2020
 
 import solver.Solver
 

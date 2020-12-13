@@ -1,7 +1,6 @@
 import picocli.CommandLine
 import solver.Runner
-import solver.y2020.d01.Year2020Day01
-import solver.y2020.d02.Year2020Day02
+import solver.y2020.*
 import java.io.File
 import java.nio.file.Paths
 import java.time.*
