@@ -153,8 +153,9 @@ func MaskCombs(mask string) []string {
 		return []string{""}
 	}
 
-	var res []string
 	toMerge := MaskCombs(mask[1:])
+
+	var res []string
 
 	switch mask[0] {
 	case 'X':
@@ -162,15 +163,10 @@ func MaskCombs(mask string) []string {
 			res = append(res, "1"+m)
 			res = append(res, "0"+m)
 		}
-	case '1':
-		for _, m := range toMerge {
-			res = append(res, "1"+m)
-		}
-	case '0':
-		for _, m := range toMerge {
-			res = append(res, "0"+m)
-		}
 	default:
+		for _, m := range toMerge {
+			res = append(res, string(mask[0])+m)
+		}
 	}
 
 	return res
