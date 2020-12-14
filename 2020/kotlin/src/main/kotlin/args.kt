@@ -11,6 +11,7 @@ val solvers = mapOf(
     2020 to mapOf(
         1 to Year2020Day01(),
         2 to Year2020Day02(),
+        3 to Year2020Day03(),
     ),
 )
 
