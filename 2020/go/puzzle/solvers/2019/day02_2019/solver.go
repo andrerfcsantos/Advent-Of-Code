@@ -1,8 +1,8 @@
 package day02_2019
 
 import (
-	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/intcode"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/intcode"
 	"strconv"
 )
 

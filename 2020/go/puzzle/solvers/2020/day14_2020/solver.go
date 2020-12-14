@@ -1,8 +1,8 @@
 package day14_2020
 
 import (
-	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"strconv"
 	"strings"
 )
@@ -121,7 +121,6 @@ func (s *Solver) Part2() (string, error) {
 	return fmt.Sprintf("%v", sum), nil
 }
 
-
 // ApplyMaskToAddr applies a mask to an address and returns the string mask.
 // For each bit of the mask / address, the following rules apply:
 //	   - If the bitmask bit is 0, the corresponding memory address bit is unchanged.
@@ -149,7 +148,7 @@ func ApplyMaskToAddr(addr uint64, mask string) string {
 // MaskCombs takes a mask with 1's, 0's and X's and generates all the possible
 // combinations of masks possible by replacing the X's for 1's and 0's.
 func MaskCombs(mask string) []string {
-	if len(mask)==0 {
+	if len(mask) == 0 {
 		return []string{""}
 	}
 

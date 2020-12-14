@@ -1,8 +1,8 @@
 package day03_2018
 
 import (
-	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"regexp"
 	"strconv"
 )

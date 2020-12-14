@@ -1,9 +1,9 @@
 package puzzle
 
 import (
-	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"bytes"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"io"
 	"io/ioutil"
 	"os"

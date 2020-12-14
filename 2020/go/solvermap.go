@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle"
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/solvers/2018/day01_2018"
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/solvers/2018/day02_2018"
@@ -32,7 +33,6 @@ import (
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/solvers/2020/day12_2020"
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/solvers/2020/day13_2020"
 	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/solvers/2020/day14_2020"
-	"fmt"
 )
 
 func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
@@ -89,4 +89,3 @@ var solverMap = map[int]map[int][]puzzle.Solver{
 		14: {day14_2020.NewSolver()},
 	},
 }
-

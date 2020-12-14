@@ -1,8 +1,8 @@
 package day10_2020
 
 import (
-	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"fmt"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"sort"
 	"strconv"
 )
