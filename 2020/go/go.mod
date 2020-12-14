@@ -1,4 +1,4 @@
-module aoc
+module github.com/andrerfcsantos/Advent-Of-Code/2020/go
 
 go 1.15
 

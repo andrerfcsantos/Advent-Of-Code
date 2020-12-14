@@ -1,7 +1,7 @@
 package day06_2020
 
 import (
-	"aoc/puzzle/utils"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"strconv"
 )
 

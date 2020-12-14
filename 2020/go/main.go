@@ -1,10 +1,10 @@
 package main
 
 import (
-	"aoc/leaderboard"
-	"aoc/puzzle"
-	"aoc/puzzle/utils"
-	"aoc/stats"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/leaderboard"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/stats"
 	"fmt"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"

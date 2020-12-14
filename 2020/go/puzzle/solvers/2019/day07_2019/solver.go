@@ -1,8 +1,8 @@
 package day07_2019
 
 import (
-	"aoc/intcode"
-	"aoc/puzzle/utils"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/intcode"
+	"github.com/andrerfcsantos/Advent-Of-Code/2020/go/puzzle/utils"
 	"fmt"
 	"log"
 	"strconv"
