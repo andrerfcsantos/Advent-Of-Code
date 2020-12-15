@@ -60,6 +60,17 @@ func (s *Solver) Part1() (string, error) {
 
 func (s *Solver) Part2() (string, error) {
 
+	var remainders, divisors []int
+
+	for id, busPos := range s.BusIds {
+		remainders = append(remainders, busPos)
+		divisors = append(divisors, id)
+	}
+
+	return strconv.Itoa(ChineseRemainder(remainders, divisors)), nil
+}
+
+func (s *Solver) simpleSolution() int {
 	minValue := 0
 	prod := 1
 
@@ -69,6 +80,32 @@ func (s *Solver) Part2() (string, error) {
 		}
 		prod *= id
 	}
-
-	return strconv.Itoa(minValue), nil
+	return minValue
 }
+
+
+func ChineseRemainder(remainders []int, divisors []int) int {
+	bigN := 1
+	for _, divisor := range divisors {
+		bigN *= divisor
+	}
+
+	res := 0
+	size := len(remainders)
+	for i := 0; i < size; i++ {
+		ni := bigN / divisors[i]
+		xi := ComputeXi(ni, divisors[i])
+		res += ni * xi * remainders[i]
+	}
+	return bigN - (res % bigN)
+}
+
+func ComputeXi(ni int, mod int) int {
+	factor := ni % mod
+	for i := 1; ; i++ {
+		if (factor*i)%mod == 1 {
+			return i
+		}
+	}
+}
+
