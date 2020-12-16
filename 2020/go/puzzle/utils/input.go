@@ -60,6 +60,31 @@ func LinesAsInts(fileContents string) ([]int, error) {
 	return res, nil
 }
 
+// GroupByEmptyLines reads the contents fo the string and returns the lines in the file, grouped
+// by empty lines separating the,
+func GroupByEmptyLines(fileContents string) ([][]string, error) {
+	var res [][]string
+
+	lines := strings.Split(fileContents, "\n")
+
+	var partial []string
+	for _, line := range lines {
+		l := strings.TrimSpace(line)
+		if l == "" && len(partial) !=0 {
+			res = append(res, partial)
+			partial = []string{}
+			continue
+		}
+		partial = append(partial, line)
+	}
+
+	if len(partial) != 0 {
+		res = append(res, partial)
+	}
+
+	return res, nil
+}
+
 // GetFileAsString reads a file on the given path and returns its contents as a string with whitespace trimmed.
 func GetFileAsString(filepath string) (string, error) {
 	data, err := ioutil.ReadFile(filepath)
