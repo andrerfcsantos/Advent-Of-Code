@@ -1,5 +1,6 @@
 import day01.Day01Solver;
 import day02.Day02Solver;
+import day03.Day03Solver;
 import puzzle.Solver;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ public class Main {
 
     private static Map<Integer, Solver> daySolvers = Map.of(
             1, new Day01Solver(2020),
-            2, new Day02Solver()
+            2, new Day02Solver(),
+            3, new Day03Solver()
     );
 
     public static void main(String[] args) throws IOException, URISyntaxException {
@@ -35,7 +37,7 @@ public class Main {
         Solver solver = daySolvers.get(day);
 
         // Try to fetch input file from resources for this day
-        String filename  = String.format("day%02d.txt", day);
+        String filename = String.format("day%02d.txt", day);
         URI resourceURI = Main.class.getClassLoader().getResource(filename).toURI();
         String resourcePath = Paths.get(resourceURI).toString();
         List<String> fileLines = Files.readAllLines(Path.of(resourcePath));
