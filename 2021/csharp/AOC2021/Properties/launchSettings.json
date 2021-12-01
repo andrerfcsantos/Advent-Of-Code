@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AOC2021": {
+      "commandName": "Project",
+      "commandLineArgs": "-d 1 -i Inputs\\day01.txt"
+    }
+  }
+}
