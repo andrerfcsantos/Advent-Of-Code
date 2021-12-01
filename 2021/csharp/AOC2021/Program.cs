@@ -1,6 +1,7 @@
-﻿using AOCLibrary;
-using CommandLine;
+﻿using CommandLine;
+using System.Diagnostics;
 using System.Reflection;
+using AOCLibrary;
 
 namespace AOC2021
 {
@@ -18,36 +19,91 @@ namespace AOC2021
         static void Main(string[] args)
         {
 			var result = Parser.Default.ParseArguments<Options>(args).MapResult(
-				(opts) => RunOptionsAndReturnExitCode(opts), //in case parser sucess
+				(opts) => RunWithReflection(opts), //in case parser sucess
 				errs => HandleParseError(errs)); //in  case parser fail
 		}
 
-		static int RunOptionsAndReturnExitCode(Options o)
+		static int RunWithReflection(Options o)
 		{
 			if (o.InputPath == null)
             {
-				o.InputPath = $"Inputs\\Day{o.Day:D2}.txt";
+				o.InputPath = $"..\\..\\inputs\\2021_{o.Day:D2}.txt";
 			}
 
 			Console.WriteLine($"day={o.Day:D2} input={o.InputPath}");
 
+			Stopwatch stopWatch = new Stopwatch();
+
+			stopWatch.Start();
 			string fileData = File.ReadAllText(o.InputPath);
+			TimeSpan readTime = stopWatch.Elapsed;
+			stopWatch.Reset();
 
 			Type? t = Type.GetType($"AOC2021.Solvers.Day{o.Day:D2}");
 			ConstructorInfo? c = t.GetConstructor(new Type[] { });
 			var inst = c.Invoke(null);
 
 
+			stopWatch.Start();
 			MethodInfo? pi = t.GetMethod("ProcessInput", new Type[] { typeof(string) });
             _ = pi.Invoke(inst, new object[] { fileData });
+			TimeSpan processTime = stopWatch.Elapsed;
+			stopWatch.Reset();
 
-            MethodInfo? p1 = t.GetMethod("Part1", new Type[] {  });
+			stopWatch.Start();
+			MethodInfo? p1 = t.GetMethod("Part1", new Type[] {  });
 			var p1Res = p1.Invoke(inst, new object[] { });
+			TimeSpan p1Time = stopWatch.Elapsed;
+			stopWatch.Reset();
 
+			stopWatch.Start();
 			MethodInfo? p2 = t.GetMethod("Part2", new Type[] { });
 			var p2Res = p2.Invoke(inst, new object[] { });
+			TimeSpan p2Time = stopWatch.Elapsed;
+
+			stopWatch.Reset();
 
 			Console.WriteLine($"p1={p1Res} p2={p2Res}");
+			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds} p2={p2Time.TotalMilliseconds}ms");
+
+			return 0;
+		}
+
+		static int Run(Options o)
+		{
+			if (o.InputPath == null)
+			{
+				o.InputPath = $"..\\..\\inputs\\2021_{o.Day:D2}.txt";
+			}
+
+			Console.WriteLine($"day={o.Day:D2} input={o.InputPath}");
+
+			Stopwatch stopWatch = new Stopwatch();
+
+			stopWatch.Start();
+			string fileData = File.ReadAllText(o.InputPath);
+			TimeSpan readTime = stopWatch.Elapsed;
+			stopWatch.Reset();
+
+			ISolver solver = new Solvers.Day01();
+
+			stopWatch.Start();
+			solver.ProcessInput(fileData);
+			TimeSpan processTime = stopWatch.Elapsed;
+			stopWatch.Reset();
+
+			stopWatch.Start();
+			string p1Res = solver.Part1();
+			TimeSpan p1Time = stopWatch.Elapsed;
+			stopWatch.Reset();
+
+			stopWatch.Start();
+			string p2Res = solver.Part2();
+			TimeSpan p2Time = stopWatch.Elapsed;
+			stopWatch.Reset();
+
+			Console.WriteLine($"p1={p1Res} p2={p2Res}");
+			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds} p2={p2Time.TotalMilliseconds}ms");
 
 			return 0;
 		}
