@@ -65,7 +65,7 @@ namespace AOC2021
 			stopWatch.Reset();
 
 			Console.WriteLine($"p1={p1Res} p2={p2Res}");
-			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds} p2={p2Time.TotalMilliseconds}ms");
+			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds}ms p2={p2Time.TotalMilliseconds}ms");
 
 			return 0;
 		}
@@ -104,7 +104,7 @@ namespace AOC2021
 			stopWatch.Reset();
 
 			Console.WriteLine($"p1={p1Res} p2={p2Res}");
-			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds} p2={p2Time.TotalMilliseconds}ms");
+			Console.WriteLine($"Timings: read={readTime.TotalMilliseconds}ms process={processTime.TotalMilliseconds}ms p1={p1Time.TotalMilliseconds}ms p2={p2Time.TotalMilliseconds}ms");
 
 			return 0;
 		}
