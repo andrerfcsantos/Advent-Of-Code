@@ -28,7 +28,7 @@ namespace AOC2021
 			#pragma warning disable 8602
 			if (o.InputPath == null)
             {
-				o.InputPath = $"..\\..\\inputs\\2021_{o.Day:D2}.txt";
+				o.InputPath = Path.Combine("..", "..", "inputs", $"2021_{ o.Day:D2}.txt");
 			}
 
 			Console.WriteLine($"day={o.Day:D2} input={o.InputPath}");
@@ -74,7 +74,7 @@ namespace AOC2021
 		{
 			if (o.InputPath == null)
 			{
-				o.InputPath = $"..\\..\\inputs\\2021_{o.Day:D2}.txt";
+				o.InputPath = Path.Combine("..", "..", "inputs", $"2021_{ o.Day:D2}.txt");
 			}
 
 			Console.WriteLine($"day={o.Day:D2} input={o.InputPath}");
