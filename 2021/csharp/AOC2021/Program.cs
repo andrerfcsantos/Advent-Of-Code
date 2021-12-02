@@ -25,6 +25,7 @@ namespace AOC2021
 
 		static int RunWithReflection(Options o)
 		{
+			#pragma warning disable 8602
 			if (o.InputPath == null)
             {
 				o.InputPath = $"..\\..\\inputs\\2021_{o.Day:D2}.txt";
