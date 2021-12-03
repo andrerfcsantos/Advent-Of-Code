@@ -2,7 +2,8 @@
   "profiles": {
     "AOC2021": {
       "commandName": "Project",
-      "commandLineArgs": "-d 1 -i Inputs\\day01.txt"
+      "commandLineArgs": "-d 3",
+      "workingDirectory": "C:\\Users\\andre.cunha\\git\\Advent-Of-Code\\2021\\csharp\\AOC2021"
     }
   }
 }
