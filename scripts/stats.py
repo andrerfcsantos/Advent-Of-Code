@@ -3,9 +3,9 @@
 import re
 import requests as req
 
-r_day = re.compile('<a *href="/2017/day/\d+"> *(?P<day>\d+) *<span class="stats-both"> *(?P<two_stars>\d+) *</span> *<span class="stats-firstonly"> *(?P<one_star>\d+) *</span>')
+r_day = re.compile('<a *href="/2021/day/\d+"> *(?P<day>\d+) *<span class="stats-both"> *(?P<two_stars>\d+) *</span> *<span class="stats-firstonly"> *(?P<one_star>\d+) *</span>')
 
-reply  = req.get('https://adventofcode.com/2017/stats')
+reply  = req.get('https://adventofcode.com/2021/stats')
 
 day_stats = {}
 
