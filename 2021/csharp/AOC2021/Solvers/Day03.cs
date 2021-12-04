@@ -24,6 +24,9 @@ namespace AOC2021.Solvers
 
         public string Part1()
         {
+
+            MostCommonBit[] bitPopularity = mostCommonBits(numbers);
+
             int cols = numbers.First().Count();
 
             int gammaRate = 0;
@@ -31,25 +34,17 @@ namespace AOC2021.Solvers
 
             for (int i = 0; i < cols; i++)
             {
-                var digits = numbers.Select(row => row[i]);
-
-                int zeroes = digits.Count(d => d == 0);
-                int ones = digits.Count(d => d == 1);
-
-                gammaRate <<= 1;
-                epsilonRate <<= 1;
-                if (zeroes > ones)
+                if (bitPopularity[i] == MostCommonBit.ZERO)
                 {
-                    gammaRate |= 0b1;
+                    gammaRate += 1 << (cols - 1 - i);
                 }
                 else
                 {
-                    epsilonRate |= 0b1;
+                    epsilonRate += 1 << (cols - 1 - i);
                 }
             }
             return (gammaRate * epsilonRate).ToString();
         }
-
 
         public enum MostCommonBit
         {
@@ -59,15 +54,23 @@ namespace AOC2021.Solvers
         }
 
 
+        public enum BitCriteria
+        {
+            MOST_COMMON,
+            LEAST_COMMON
+        }
+
+
         private int bitsToNumber(int[] bits)
         {
             int n = 0;
-            for (int i = 0; i < bits.Count(); i++)
+            int size = bits.Count();
+
+            for (int i = 0; i < size; i++)
             {
-                n <<= 1;
                 if (bits[i] == 1)
                 {
-                    n |= 0b1;
+                    n += 1 << (size - 1 - i);
                 }
             }
 
@@ -98,57 +101,47 @@ namespace AOC2021.Solvers
 
             return popularity;
         }
+
+
+        private int[] filterByCriteria(int[][] bits, BitCriteria criteria)
+        {
+            bits = bits.ToArray();
+
+            Func<int, bool> zeroMatch = (criteria == BitCriteria.MOST_COMMON) ?
+                                        (i) => i == 0 :
+                                        (i) => i == 1;
+
+            for (int i = 0; i < bits.Length && bits.Count() > 1; i++)
+            {
+                MostCommonBit[] popularity = mostCommonBits(bits);
+                var pop = popularity[i];
+
+                switch (pop)
+                {
+                    case MostCommonBit.ZERO:
+                        bits = bits.Where(ds => zeroMatch(ds[i])).ToArray();
+                        break;
+                    case MostCommonBit.ONE:
+                        bits = bits.Where(ds => !zeroMatch(ds[i])).ToArray();
+                        break;
+                    case MostCommonBit.EQUAL:
+                        bits = bits.Where(ds => !zeroMatch(ds[i])).ToArray();
+                        break;
+                }
+
+            }
+
+            return bits[0];
+        }
         public string Part2()
         {
             int cols = numbers.First().Count();
 
-            int[][] oxygenNumbers = numbers.ToArray();
+            int[] oxygenBits= filterByCriteria(numbers.ToArray(), BitCriteria.MOST_COMMON);
+            int oxygenRating = bitsToNumber(oxygenBits);
 
-            for (int i = 0; i < cols && oxygenNumbers.Count() > 1; i++)
-            {
-                MostCommonBit[] popularity = mostCommonBits(oxygenNumbers);
-                var pop = popularity[i];
-
-                switch (pop)
-                {
-                    case MostCommonBit.ZERO:
-                        oxygenNumbers = oxygenNumbers.Where(ds => ds[i] == 0).ToArray();
-                        break;
-                    case MostCommonBit.ONE:
-                        oxygenNumbers = oxygenNumbers.Where(ds => ds[i] == 1).ToArray();
-                        break;
-                    case MostCommonBit.EQUAL:
-                        oxygenNumbers = oxygenNumbers.Where(ds => ds[i] == 1).ToArray();
-                        break;
-                }
-
-            }
-
-
-            int oxygenRating = bitsToNumber(oxygenNumbers[0]);
-
-            int[][] co2Numbers = numbers.ToArray();
-            for (int i = 0; i < cols && co2Numbers.Count() > 1; i++)
-            {
-                MostCommonBit[] popularity = mostCommonBits(co2Numbers);
-                var pop = popularity[i];
-
-                switch (pop)
-                {
-                    case MostCommonBit.ZERO:
-                        co2Numbers = co2Numbers.Where(ds => ds[i] == 1).ToArray();
-                        break;
-                    case MostCommonBit.ONE:
-                        co2Numbers = co2Numbers.Where(ds => ds[i] == 0).ToArray();
-                        break;
-                    case MostCommonBit.EQUAL:
-                        co2Numbers = co2Numbers.Where(ds => ds[i] == 0).ToArray();
-                        break;
-                }
-
-            }
-
-            int co2Rating = bitsToNumber(co2Numbers[0]);
+            int[] co2Bits= filterByCriteria(numbers.ToArray(), BitCriteria.LEAST_COMMON);
+            int co2Rating = bitsToNumber(co2Bits);
 
             Console.WriteLine($"co2Rating={co2Rating} oxygenRating={oxygenRating}");
             return (co2Rating * oxygenRating).ToString();
