@@ -2,8 +2,8 @@
   "profiles": {
     "AOC2021": {
       "commandName": "Project",
-      "commandLineArgs": "-d 4",
-      "workingDirectory": "C:\\Users\\andre\\git\\Advent-Of-Code\\2021\\csharp\\AOC2021"
+      "commandLineArgs": "-d 5",
+      "workingDirectory": "C:\\Users\\andre.cunha\\git\\Advent-Of-Code\\2021\\csharp\\AOC2021"
     }
   }
 }
