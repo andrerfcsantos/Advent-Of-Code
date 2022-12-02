@@ -35,7 +35,7 @@ export async function fileExists(filename: string): Promise<boolean> {
     return false;
 }
 
-export async function downloadInput(day: number, year: number, session?: string): Promise<string> {
+export async function getInput(day: number, year: number, session?: string): Promise<string> {
     const filename = `${year}_${day.toString(10).padStart(2, '0')}.txt`;
     const filepath = join(INPUTS_DIR, filename);
 
@@ -43,7 +43,11 @@ export async function downloadInput(day: number, year: number, session?: string)
         info(`Using cached input for ${year} day ${day}`);
         return await Deno.readTextFile(filepath);
     }
-    
+
+    return await downloadInput(day, year, filepath, session);
+}
+
+export async function downloadInput(day: number, year: number, filepath:string, session?: string): Promise<string> {
     const input = await fetchInput(day, year, session);
 
     const dirPath = dirname(filepath);
@@ -51,4 +55,41 @@ export async function downloadInput(day: number, year: number, session?: string)
     await Deno.writeTextFile(filepath, input, { create: true });
 
     return input;
+}
+
+
+
+export async function runProblem<StateType>(
+    day: number,
+    year: number,
+    parse: (lines: string[]) => StateType,
+    part1: (state: StateType) => string,
+    part2: (state: StateType) => string,
+    session?: string
+): Promise<void> {
+    performance.mark("start download");
+    const lines = (await getInput(day, year, session)).split(/\r?\n/);
+    performance.mark("end download");
+    
+    performance.mark("start parse");
+    const state = parse(lines);
+    performance.mark("end parse");
+    
+    performance.mark("start part1");
+    const p1 = part1(state);
+    performance.mark("end part1");
+    
+    performance.mark("start part2");
+    const p2 = part2(state);
+    performance.mark("end part2");
+    
+    const perf_download = performance.measure("download", "start download", "end download");
+    const perf_parse = performance.measure("parse", "start parse", "end parse");
+    const perf_part1 = performance.measure("part1", "start part1", "end part1");
+    const perf_part2 = performance.measure("part2", "start part2", "end part2");
+    
+    info(`Download in ${perf_download.duration}ms | Input parsing in ${perf_parse.duration}ms`);
+    info(`Part 1: ${p1} (${perf_part1.duration}ms)`);
+    info(`Part 2: ${p2} (${perf_part2.duration}ms)`);
+    
 }
