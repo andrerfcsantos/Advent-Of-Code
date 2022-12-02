@@ -10,8 +10,8 @@ enum Shape {
 }
 
 interface Round {
-  player1: Shape;
-  player2: string;
+  otherPlayer: Shape;
+  me: string;
 }
 
 enum RoundResult {
@@ -77,10 +77,10 @@ export function parse(lines: string[]): State {
     if (line === "") {
       continue;
     }
-    const [player1, player2] = line.split(" ");
+    const [otherPlayer, me] = line.split(" ");
     rounds.push({
-      player1: letterToShape.get(player1)!,
-      player2,
+      otherPlayer: letterToShape.get(otherPlayer)!,
+      me,
     });
   }
 
@@ -88,31 +88,17 @@ export function parse(lines: string[]): State {
 }
 
 function getRoundResult(round: Round): RoundResult {
-  const secondPlayerShape = secondColumnToShape.get(round.player2)!;
+  const secondPlayerShape = secondColumnToShape.get(round.me)!;
 
-  if (round.player1 === secondPlayerShape) {
+  if (round.otherPlayer === secondPlayerShape) {
     return RoundResult.Draw;
   }
 
-  if (xBeatsY.get(secondPlayerShape) === round.player1) {
+  if (xBeatsY.get(secondPlayerShape) === round.otherPlayer) {
     return RoundResult.Win;
   }
 
   return RoundResult.Loss;
-}
-
-export function part1(parsed: State): string {
-  let ourScore = 0;
-
-  for (const round of parsed.rounds) {
-    const pointsForResult = resultPoints.get(getRoundResult(round))!;
-    const pointsForShape = shapePoints.get(
-      secondColumnToShape.get(round.player2)!
-    )!;
-    ourScore += pointsForResult + pointsForShape;
-  }
-
-  return ourScore.toString();
 }
 
 function shapeForDesiredResult(
@@ -130,19 +116,31 @@ function shapeForDesiredResult(
   return xBeatsY.get(otherPlayerShape)!;
 }
 
-export function part2(parsed: State): string {
-  let ourScore = 0;
+export function part1(parsed: State): string {
+  let myScore = 0;
 
   for (const round of parsed.rounds) {
-    const desiredResult = secondColumnToResult.get(round.player2)!;
-    const shape = shapeForDesiredResult(desiredResult, round.player1);
+    const pointsForResult = resultPoints.get(getRoundResult(round))!;
+    const pointsForShape = shapePoints.get(secondColumnToShape.get(round.me)!)!;
+    myScore += pointsForResult + pointsForShape;
+  }
+
+  return myScore.toString();
+}
+
+export function part2(parsed: State): string {
+  let myScore = 0;
+
+  for (const round of parsed.rounds) {
+    const desiredResult = secondColumnToResult.get(round.me)!;
+    const shape = shapeForDesiredResult(desiredResult, round.otherPlayer);
 
     const pointsForResult = resultPoints.get(desiredResult)!;
     const pointsForShape = shapePoints.get(shape)!;
-    ourScore += pointsForResult + pointsForShape;
+    myScore += pointsForResult + pointsForShape;
   }
 
-  return ourScore.toString();
+  return myScore.toString();
 }
 
 await runProblem<State>(DAY, YEAR, parse, part1, part2);
