@@ -59,7 +59,10 @@ export async function getInput(
     return { input: await Deno.readTextFile(filepath), source: "file" };
   }
 
-  return { input: await fetchInput(day, year, session), source: "fetch" };
+  return {
+    input: await downloadInput(day, year, filepath, session),
+    source: "fetch",
+  };
 }
 
 interface SubmitResult {
@@ -79,18 +82,18 @@ export async function submitAnswer(
     session = Deno.env.get("AOC_SESSION");
   }
 
-  const formData = new FormData();
-  formData.append("level", level.toString());
-  formData.append("answer", answer);
-
   const reply = await fetch(
     `https://adventofcode.com/${year}/day/${day}/answer`,
     {
-      headers: {
-        Cookie: `session=${session}`,
-      },
-      body: `level=${level}&answer=${encodeURIComponent(answer)}`,
       method: "POST",
+      headers: {
+        cookie: `session=${session}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams([
+        ["level", level.toString()],
+        ["answer", answer],
+      ]),
     }
   );
   const fullText = await reply.text();
@@ -134,7 +137,6 @@ export async function runProblem<StateType>(
   session?: string
 ): Promise<void> {
   performance.mark("start download");
-
   const { input, source } = await getInput(day, year, session);
   const lines = input.split(/\r?\n/);
   performance.mark("end download");
@@ -199,4 +201,32 @@ export async function runProblem<StateType>(
       await Deno.writeTextFileSync("submit_error.html", submitResult.fullText);
     }
   }
+}
+
+export function sumNumbers(ns: number[]): number {
+  return ns.reduce((a, b) => a + b, 0);
+}
+
+export function intersectSets<T>(...sets: Set<T>[]): Set<T> {
+  const result = new Set<T>();
+  for (const set of sets) {
+    for (const item of set) {
+      if (sets.every((s) => s.has(item))) {
+        result.add(item);
+      }
+    }
+  }
+  return result;
+}
+
+export function chunkArray<T>(array: T[], chunkSize: number): T[][] {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    chunks.push(array.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+export function isUppercase(c: string): boolean {
+  return c === c.toUpperCase();
 }
