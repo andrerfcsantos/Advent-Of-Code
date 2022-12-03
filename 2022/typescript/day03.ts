@@ -4,6 +4,7 @@ import {
   intersectSets,
   chunkArray,
   isUppercase,
+  nonEmptyLines,
 } from "./aoclib.ts";
 
 const DAY = 3;
@@ -15,8 +16,8 @@ interface State {
   backpacks: Backpack[];
 }
 
-export function parse(lines: string[]): State {
-  return { backpacks: lines.filter((l) => l !== "") };
+export function parse(input: string): State {
+  return { backpacks: nonEmptyLines(input) };
 }
 
 export function part1(parsed: State): string {

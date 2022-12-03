@@ -131,18 +131,17 @@ export async function downloadInput(
 export async function runProblem<StateType>(
   day: number,
   year: number,
-  parse: (lines: string[]) => StateType,
+  parse: (lines: string) => StateType,
   part1: (state: StateType) => string,
   part2: (state: StateType) => string,
   session?: string
 ): Promise<void> {
   performance.mark("start download");
   const { input, source } = await getInput(day, year, session);
-  const lines = input.split(/\r?\n/);
   performance.mark("end download");
 
   performance.mark("start parse");
-  const state = parse(lines);
+  const state = parse(input);
   performance.mark("end parse");
 
   performance.mark("start part1");
@@ -229,4 +228,17 @@ export function chunkArray<T>(array: T[], chunkSize: number): T[][] {
 
 export function isUppercase(c: string): boolean {
   return c === c.toUpperCase();
+}
+
+const NEWLINE_REGEX = /\r?\n/;
+
+export function nonEmptyLines(input: string): string[] {
+  return input.split(NEWLINE_REGEX).filter((l) => l.length > 0);
+}
+
+export function groupedLines(
+  input: string,
+  groupSep: string | RegExp = /\r?\n\r?\n/
+): string[][] {
+  return input.split(groupSep).map(nonEmptyLines);
 }

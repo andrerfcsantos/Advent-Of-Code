@@ -1,4 +1,4 @@
-import { runProblem } from "./aoclib.ts";
+import { nonEmptyLines, runProblem } from "./aoclib.ts";
 
 const DAY = 2;
 const YEAR = 2022;
@@ -70,21 +70,18 @@ interface State {
   rounds: Round[];
 }
 
-export function parse(lines: string[]): State {
-  const rounds: Round[] = [];
+export function parse(input: string): State {
+  const lines = nonEmptyLines(input);
 
-  for (const line of lines) {
-    if (line === "") {
-      continue;
-    }
-    const [otherPlayer, me] = line.split(" ");
-    rounds.push({
-      otherPlayer: letterToShape.get(otherPlayer)!,
-      me,
-    });
-  }
-
-  return { rounds };
+  return {
+    rounds: lines.map((l) => {
+      const [otherPlayer, me] = l.split(" ");
+      return {
+        otherPlayer: letterToShape.get(otherPlayer)!,
+        me,
+      };
+    }),
+  };
 }
 
 function getRoundResult(round: Round): RoundResult {

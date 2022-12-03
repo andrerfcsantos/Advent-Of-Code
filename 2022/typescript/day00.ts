@@ -1,12 +1,15 @@
-import { runProblem } from "./aoclib.ts";
+import { runProblem, nonEmptyLines } from "./aoclib.ts";
 
 const DAY = 0;
 const YEAR = 2022;
 
-interface State {}
+interface State {
+  lines: string[];
+}
 
-export function parse(lines: string[]): State {
-  return {};
+export function parse(input: string): State {
+  const lines = nonEmptyLines(input);
+  return { lines };
 }
 
 export function part1(parsed: State): string {
