@@ -68,11 +68,9 @@ const config = JSON.parse(
   await Deno.readTextFile(join(".leaderboard", "config.json"))
 );
 
-const numericFields = ["ids", "dates", "days"];
-
 const args = parse(Deno.args, {
-  string: numericFields,
-  collect: numericFields,
+  string: ["ids", "dates", "days", "users"],
+  collect: ["ids", "dates", "days", "users"],
 }) as { [x: string]: any };
 
 const dashboardIds = new Set<string>(
@@ -94,6 +92,8 @@ const days = new Set(
     s.split(",").map((x: string) => parseInt(x, 10))
   )
 );
+
+const users = new Set(args.users.flatMap((s: string) => s.split(",")));
 
 interface LeaderboardLog {
   user: string;
@@ -144,6 +144,10 @@ for (const id of dashboardIds) {
     }
 
     if (dates.size > 0 && !dates.has(entry.time.getDate())) {
+      return false;
+    }
+
+    if (users.size > 0 && !users.has(entry.user)) {
       return false;
     }
 
