@@ -119,3 +119,5 @@ ENV/
 **/go/aoc2019
 
 *.prof
+
+.leaderboard/
