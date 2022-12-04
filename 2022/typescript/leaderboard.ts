@@ -68,16 +68,28 @@ const config = JSON.parse(
   await Deno.readTextFile(join(".leaderboard", "config.json"))
 );
 
+const leaderboardNamesToIds: Record<string, number> = {};
+for (const [id, info] of Object.entries(config.info)) {
+  leaderboardNamesToIds[(info as { [x: string]: string }).name.toLowerCase()] =
+    parseInt(id, 10);
+}
+
 const args = parse(Deno.args, {
-  string: ["ids", "dates", "days", "users"],
-  collect: ["ids", "dates", "days", "users"],
-}) as { [x: string]: any };
+  string: ["ids", "dates", "days", "users", "leaderboards"],
+  collect: ["ids", "dates", "days", "users", "leaderboards"],
+}) as { [x: string]: unknown };
+
+const dashboardIdsFromNames = new Set<number>(
+  args.leaderboards
+    .map((name: string) => leaderboardNamesToIds[name.toLowerCase()])
+    .filter((x?: number) => x)
+);
 
 const dashboardIds = new Set<string>(
   config.leaderboards.concat(
-    args.ids.flatMap((s: string) =>
-      s.split(",").map((x: string) => parseInt(x, 10))
-    )
+    args.ids
+      .flatMap((s: string) => s.split(",").map((x: string) => parseInt(x, 10)))
+      .concat([...dashboardIdsFromNames])
   )
 );
 
