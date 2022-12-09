@@ -47,15 +47,20 @@ interface GetInputResult {
   input: string;
 }
 
+interface GetInputOptions {
+  forceDownload?: boolean;
+}
+
 export async function getInput(
   day: number,
   year: number,
+  options: GetInputOptions = {},
   session?: string
 ): Promise<GetInputResult> {
   const filename = `${year}_${day.toString(10).padStart(2, "0")}.txt`;
   const filepath = join(INPUTS_DIR, filename);
 
-  if (await fileExists(filepath)) {
+  if (!options.forceDownload && (await fileExists(filepath))) {
     return { input: await Deno.readTextFile(filepath), source: "file" };
   }
 
@@ -136,8 +141,18 @@ export async function runProblem<StateType>(
   part2: (state: StateType) => string,
   session?: string
 ): Promise<void> {
+  const parsedArgs = argparse(Deno.args, {
+    string: ["submit"],
+    boolean: ["force-download"],
+  });
+
   performance.mark("start download");
-  const { input, source } = await getInput(day, year, session);
+  const { input, source } = await getInput(
+    day,
+    year,
+    { forceDownload: parsedArgs["force-download"] },
+    session
+  );
   performance.mark("end download");
 
   performance.mark("start parse");
@@ -170,8 +185,6 @@ export async function runProblem<StateType>(
   );
   info(`Part 1: ${p1} (${perf_part1.duration.toFixed(2)}ms)`);
   info(`Part 2: ${p2} (${perf_part2.duration.toFixed(2)}ms)`);
-
-  const parsedArgs = argparse(Deno.args, { string: ["submit"] });
 
   let submitResult: SubmitResult | undefined;
 
