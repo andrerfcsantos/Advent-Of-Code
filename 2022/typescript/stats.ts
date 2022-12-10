@@ -95,11 +95,12 @@ hydrated.forEach((d) => {
   )} ${formatPercentChange(d.dropoffSecond)}`;
 
   console.log(
-    `${bold(d.day!.toString())} ${totalVals.padEnd(35)} ${bothValues.padEnd(
-      49
-    )} ${rgb24(d.firstOnly!.toString(), 0x9999cc)} ${formatPercent(
-      d.firstOnlyPercent!
-    )}`
+    `${bold(d.day!.toString().padStart(2))} ${totalVals.padEnd(
+      35
+    )} ${bothValues.padEnd(49)} ${rgb24(
+      d.firstOnly!.toString(),
+      0x9999cc
+    )} ${formatPercent(d.firstOnlyPercent!)}`
   );
 });
 
