@@ -262,13 +262,16 @@ export function isUppercase(c: string): boolean {
 
 const NEWLINE_REGEX = /\r?\n/;
 
-export function nonEmptyLines(input: string): string[] {
-  return input.split(NEWLINE_REGEX).filter((l) => l.length > 0);
+export function nonEmptyLines(
+  input: string,
+  lineSeparator: string | RegExp = NEWLINE_REGEX
+): string[] {
+  return input.split(lineSeparator).filter((l) => l.length > 0);
 }
 
 export function groupedLines(
   input: string,
   groupSep: string | RegExp = /\r?\n\r?\n/
 ): string[][] {
-  return input.split(groupSep).map(nonEmptyLines);
+  return input.split(groupSep).map((g) => nonEmptyLines(g));
 }
