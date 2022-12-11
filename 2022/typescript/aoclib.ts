@@ -275,3 +275,29 @@ export function groupedLines(
 ): string[][] {
   return input.split(groupSep).map((g) => nonEmptyLines(g));
 }
+
+export function lcm(...numbers: number[]): number {
+  // Initialize the LCM to 1
+  let lcm = 1;
+
+  // Loop through the numbers and compute the LCM
+  for (const num of numbers) {
+    lcm = (lcm * num) / gcd(lcm, num);
+  }
+
+  return lcm;
+}
+
+export function gcd(a: number, b: number): number {
+  // Ensure that `a` is the larger number
+  if (a < b) [a, b] = [b, a];
+
+  // Compute the GCD using Euclid's algorithm
+  while (b > 0) {
+    const temp = b;
+    b = a % b;
+    a = temp;
+  }
+
+  return a;
+}
