@@ -8,14 +8,11 @@ type ElfCalories = Calories[];
 
 interface State {
   elvesCalories: ElfCalories[];
-  totalCaloriesByElf?: Calories[];
 }
 
 export function parse(input: string): State {
-  const groups = groupedLines(input);
-
   return {
-    elvesCalories: groups.map((g) => {
+    elvesCalories: groupedLines(input).map((g) => {
       return g.map((l) => parseInt(l, 10));
     }),
   };

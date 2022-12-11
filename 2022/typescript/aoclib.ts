@@ -155,16 +155,20 @@ export async function runProblem<StateType>(
   );
   performance.mark("end download");
 
-  performance.mark("start parse");
+  performance.mark("start parse p1");
   const state = parse(input);
-  performance.mark("end parse");
+  performance.mark("end parse p1");
 
   performance.mark("start part1");
   const p1 = part1(state);
   performance.mark("end part1");
 
+  performance.mark("start parse p2");
+  const newState = parse(input);
+  performance.mark("end parse p2");
+
   performance.mark("start part2");
-  const p2 = part2(state);
+  const p2 = part2(newState);
   performance.mark("end part2");
 
   const perf_download = performance.measure(
@@ -172,19 +176,32 @@ export async function runProblem<StateType>(
     "start download",
     "end download"
   );
-  const perf_parse = performance.measure("parse", "start parse", "end parse");
+  const perf_parse_p1 = performance.measure(
+    "parse",
+    "start parse p1",
+    "end parse p1"
+  );
+  const perf_parse_p2 = performance.measure(
+    "parse",
+    "start parse p2",
+    "end parse p2"
+  );
   const perf_part1 = performance.measure("part1", "start part1", "end part1");
   const perf_part2 = performance.measure("part2", "start part2", "end part2");
 
   const sourceMessage = source === "file" ? "Read from file" : "Download";
 
+  info(`${sourceMessage} in ${perf_download.duration.toFixed(2)}ms`);
   info(
-    `${sourceMessage} in ${perf_download.duration.toFixed(
+    `Part 1: ${p1} (${perf_part1.duration.toFixed(
       2
-    )}ms | Input parsing in ${perf_parse.duration.toFixed(2)}ms`
+    )}ms) | Input parsing in ${perf_parse_p1.duration.toFixed(2)}ms`
   );
-  info(`Part 1: ${p1} (${perf_part1.duration.toFixed(2)}ms)`);
-  info(`Part 2: ${p2} (${perf_part2.duration.toFixed(2)}ms)`);
+  info(
+    `Part 2: ${p2} (${perf_part2.duration.toFixed(
+      2
+    )}ms) | Input parsing in ${perf_parse_p2.duration.toFixed(2)}ms`
+  );
 
   let submitResult: SubmitResult | undefined;
 

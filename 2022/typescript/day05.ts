@@ -50,37 +50,27 @@ export function parse(input: string): State {
 }
 
 export function part1(parsed: State): string {
-  // copy parsed stacks contents to a new matrix
-  // so we are not mutating state
-  const stacks = parsed.stacks.map((stack) => [...stack]);
-
   for (const { amount, from, to } of parsed.instructions) {
-    const fromStack = stacks[from - 1];
-    const toStack = stacks[to - 1];
+    const fromStack = parsed.stacks[from - 1];
+    const toStack = parsed.stacks[to - 1];
     const items = fromStack.splice(fromStack.length - amount, amount).reverse();
     toStack.push(...items);
   }
 
-  // get item on top of each stack
-  const topItems = stacks.map((stack) => stack[stack.length - 1]);
+  const topItems = parsed.stacks.map((stack) => stack[stack.length - 1]);
 
   return topItems.join("");
 }
 
 export function part2(parsed: State): string {
-  // copy parsed stacks contents to a new matrix
-  // so we are not mutating state
-  const stacks = parsed.stacks.map((stack) => [...stack]);
-
   for (const { amount, from, to } of parsed.instructions) {
-    const fromStack = stacks[from - 1];
-    const toStack = stacks[to - 1];
+    const fromStack = parsed.stacks[from - 1];
+    const toStack = parsed.stacks[to - 1];
     const items = fromStack.splice(fromStack.length - amount, amount);
     toStack.push(...items);
   }
 
-  // get item on top of each stack
-  const topItems = stacks.map((stack) => stack[stack.length - 1]);
+  const topItems = parsed.stacks.map((stack) => stack[stack.length - 1]);
 
   return topItems.join("");
 }
