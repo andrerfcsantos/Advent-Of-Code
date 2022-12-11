@@ -1,4 +1,5 @@
-import { runProblem, nonEmptyLines } from "./aoclib.ts";
+import { info } from "https://deno.land/std@0.167.0/log/mod.ts";
+import { runProblem, nonEmptyLines, ocrScreenToText } from "./aoclib.ts";
 
 const DAY = 10;
 const YEAR = 2022;
@@ -64,7 +65,10 @@ export function part2(parsed: State): string {
 
   runInstructions(parsed.instructions, cycleFunc);
 
-  return "\n" + screen.join("\n") + "\n";
+  const text = ocrScreenToText(screen);
+  info("\n" + screen.join("\n"));
+
+  return text;
 }
 
 function runInstructions(
