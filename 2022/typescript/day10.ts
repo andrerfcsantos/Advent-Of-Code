@@ -26,27 +26,14 @@ export function parse(input: string): State {
 
 export function part1(parsed: State): string {
   let signalStrength = 0;
-  let xRegister = 1;
-  let currentCycle = 0;
 
-  for (const { opcode, operand } of parsed.instructions) {
-    currentCycle++;
-    if ((currentCycle - 20) % 40 === 0) {
-      signalStrength += xRegister * currentCycle;
-    }
-
-    switch (opcode) {
-      case "noop":
-        break;
-      case "addx":
-        currentCycle++;
-        if ((currentCycle - 20) % 40 === 0) {
-          signalStrength += xRegister * currentCycle;
-        }
-        xRegister += operand;
-        break;
+  function doCycle(cycle: number, xRegister: number) {
+    if ((cycle - 20) % 40 === 0) {
+      signalStrength += xRegister * cycle;
     }
   }
+
+  runInstructions(parsed.instructions, doCycle);
 
   return signalStrength.toString();
 }
@@ -64,35 +51,46 @@ function pixelHitByCathode(cathodPos: number, pixelPos: number) {
 }
 
 export function part2(parsed: State): string {
-  let xRegister = 1;
-  let screen: string[] = [];
+  const screen: string[] = [];
   let currentBuffer = "";
-  let currentCycle = 0;
 
-  for (const { opcode, operand } of parsed.instructions) {
-    currentCycle++;
+  function cycleFunc(cycle: number, xRegister: number) {
     currentBuffer += pixel(currentBuffer.length, xRegister);
-    if (currentCycle % 40 === 0) {
+    if (cycle % 40 === 0) {
       screen.push(currentBuffer);
       currentBuffer = "";
     }
+  }
 
+  runInstructions(parsed.instructions, cycleFunc);
+
+  return "\n" + screen.join("\n") + "\n";
+}
+
+function runInstructions(
+  instructions: Instruction[],
+  cyclceFunc: (cycle: number, xRegister: number) => void
+) {
+  let xRegister = 1;
+  let currentCycle = 0;
+
+  function doCycle() {
+    currentCycle++;
+    cyclceFunc(currentCycle, xRegister);
+  }
+
+  for (const { opcode, operand } of instructions) {
     switch (opcode) {
       case "noop":
+        doCycle();
         break;
       case "addx":
-        currentCycle++;
-        currentBuffer += pixel(currentBuffer.length, xRegister);
-        if (currentCycle % 40 === 0) {
-          screen.push(currentBuffer);
-          currentBuffer = "";
-        }
+        doCycle();
+        doCycle();
         xRegister += operand;
         break;
     }
   }
-
-  return "\n" + screen.join("\n");
 }
 
 await runProblem<State>(DAY, YEAR, parse, part1, part2);
