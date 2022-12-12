@@ -1,4 +1,5 @@
-import { runProblem, groupedLines } from "./aoclib.ts";
+import { runProblem } from "./aoclib/runner.ts";
+import { groupedLines } from "./aoclib/input.ts";
 
 const DAY = 5;
 const YEAR = 2022;

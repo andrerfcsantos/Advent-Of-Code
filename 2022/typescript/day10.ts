@@ -1,5 +1,7 @@
+import { runProblem } from "./aoclib/runner.ts";
+import { nonEmptyLines } from "./aoclib/input.ts";
+import { ocrScreenToText } from "./aoclib/ocr.ts";
 import { info } from "https://deno.land/std@0.167.0/log/mod.ts";
-import { runProblem, nonEmptyLines, ocrScreenToText } from "./aoclib.ts";
 
 const DAY = 10;
 const YEAR = 2022;

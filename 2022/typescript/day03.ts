@@ -1,11 +1,8 @@
-import {
-  runProblem,
-  sumNumbers,
-  intersectSets,
-  chunkArray,
-  isUppercase,
-  nonEmptyLines,
-} from "./aoclib.ts";
+import { runProblem } from "./aoclib/runner.ts";
+import { nonEmptyLines } from "./aoclib/input.ts";
+import { sumNumbers, chunkArray } from "./aoclib/arrays.ts";
+import { intersectSets } from "./aoclib/sets.ts";
+import { isUppercase } from "./aoclib/strings.ts";
 
 const DAY = 3;
 const YEAR = 2022;

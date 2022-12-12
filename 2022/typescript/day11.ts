@@ -1,4 +1,6 @@
-import { runProblem, nonEmptyLines, lcm } from "./aoclib.ts";
+import { runProblem } from "./aoclib/runner.ts";
+import { nonEmptyLines } from "./aoclib/input.ts";
+import { lcm } from "./aoclib/math.ts";
 
 const DAY = 11;
 const YEAR = 2022;

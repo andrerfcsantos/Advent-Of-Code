@@ -1,4 +1,6 @@
-import { runProblem, sumNumbers, groupedLines } from "./aoclib.ts";
+import { runProblem } from "./aoclib/runner.ts";
+import { sumNumbers } from "./aoclib/arrays.ts";
+import { groupedLines } from "./aoclib/input.ts";
 
 const DAY = 1;
 const YEAR = 2022;
