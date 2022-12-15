@@ -55,6 +55,10 @@ export class Point {
     this.y = y;
   }
 
+  add(v: Vector): Point {
+    return new Point(this.x + v.dx, this.y + v.dy);
+  }
+
   move(v: Vector): Point {
     this.x += v.dx;
     this.y += v.dy;
