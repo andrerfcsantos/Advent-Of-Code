@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day02"
+	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day03"
+	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day04"
 
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle"
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day01"
@@ -32,6 +34,12 @@ var solverMap = map[int]map[int][]puzzle.Solver{
 		},
 		2: {
 			day02.NewSolver(),
+		},
+		3: {
+			day03.NewSolver(),
+		},
+		4: {
+			day04.NewSolver(),
 		},
 	},
 }
