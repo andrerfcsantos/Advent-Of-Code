@@ -87,14 +87,13 @@ func (d *Solver) Part2() (string, error) {
 	currentSet := iterations[len(iterations)-1]
 
 	for len(currentSet) > 0 {
-		newSet := make([]int, 0)
+		newSet := make([]int, 0, len(currentSet))
 
 		for _, cardNo := range currentSet {
-			card := d.Cards[cardNo]
-			if card.Score() == 0 {
+			matching := matchingNumbers[cardNo]
+			if matching == 0 {
 				continue
 			}
-			matching := matchingNumbers[cardNo]
 			for i := 0; i < matching; i++ {
 				newSet = append(newSet, cardNo+1+i)
 			}
