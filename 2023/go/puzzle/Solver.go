@@ -13,6 +13,6 @@ type Solver interface {
 	// Part1 should return the solution for part 1 of the puzzle
 	Part1() (string, error)
 
-	// Part1 should return the solution for part 2 of the puzzle
+	// Part2 should return the solution for part 2 of the puzzle
 	Part2() (string, error)
 }
