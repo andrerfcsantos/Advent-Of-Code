@@ -63,7 +63,26 @@ func allEndingNodes(ns []Node) bool {
 	return true
 }
 
-func (d *Solver) TraverseStartingNodes() int {
+func (d *Solver) Period(node string) int {
+	currNode := d.Graph[node]
+	steps := 0
+
+	nInstructions := len(d.Instructions)
+
+	for i := 0; !strings.HasSuffix(currNode.Id, "Z"); i = (i + 1) % nInstructions {
+		instruction := d.Instructions[i]
+		if instruction == 'L' {
+			currNode = d.Graph[currNode.Left]
+		} else if instruction == 'R' {
+			currNode = d.Graph[currNode.Right]
+		}
+		steps += 1
+	}
+
+	return steps
+}
+
+func (d *Solver) StartingNodesToEndingNodes() int {
 
 	currNodes := make([]Node, 0)
 	for _, n := range d.Graph {
@@ -72,24 +91,13 @@ func (d *Solver) TraverseStartingNodes() int {
 		}
 	}
 
-	steps := 0
-	nInstructions := len(d.Instructions)
+	periods := make([]int, 0)
 
-	for i := 0; !allEndingNodes(currNodes); i = (i + 1) % nInstructions {
-		instruction := d.Instructions[i]
-
-		for j := 0; j < len(currNodes); j++ {
-			if instruction == 'L' {
-				currNodes[j] = d.Graph[currNodes[j].Left]
-			} else if instruction == 'R' {
-				currNodes[j] = d.Graph[currNodes[j].Right]
-			}
-		}
-
-		steps += 1
+	for _, n := range currNodes {
+		periods = append(periods, d.Period(n.Id))
 	}
 
-	return steps
+	return utils.LCM(periods...)
 }
 
 func (d *Solver) Part1() (string, error) {
@@ -97,5 +105,5 @@ func (d *Solver) Part1() (string, error) {
 }
 
 func (d *Solver) Part2() (string, error) {
-	return strconv.Itoa(d.TraverseStartingNodes()), nil
+	return strconv.Itoa(d.StartingNodesToEndingNodes()), nil
 }
