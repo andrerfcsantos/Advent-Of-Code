@@ -52,5 +52,11 @@ func (d *Solver) Part1() (string, error) {
 }
 
 func (d *Solver) Part2() (string, error) {
-	return "", nil
+	slices.SortFunc(d.Hands, CompareByStrengthAscWithJoker)
+
+	winnings := 0
+	for i, hand := range d.Hands {
+		winnings += hand.Bid * (i + 1)
+	}
+	return strconv.Itoa(winnings), nil
 }

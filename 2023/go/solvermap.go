@@ -8,6 +8,8 @@ import (
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day05"
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day06"
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day07"
+	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day08"
+	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day09"
 
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle"
 	"github.com/andrerfcsantos/Advent-Of-Code/2023/go/puzzle/solvers/day01"
@@ -53,6 +55,12 @@ var solverMap = map[int]map[int][]puzzle.Solver{
 		},
 		7: {
 			day07.NewSolver(),
+		},
+		8: {
+			day08.NewSolver(),
+		},
+		9: {
+			day09.NewSolver(),
 		},
 	},
 }

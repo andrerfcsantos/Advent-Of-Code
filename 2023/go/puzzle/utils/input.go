@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -70,12 +70,12 @@ func GroupByEmptyLines(fileContents string) ([][]string, error) {
 	var partial []string
 	for _, line := range lines {
 		l := strings.TrimSpace(line)
-		if l == "" && len(partial) !=0 {
+		if l == "" && len(partial) != 0 {
 			res = append(res, partial)
 			partial = []string{}
 			continue
 		}
-		partial = append(partial, line)
+		partial = append(partial, l)
 	}
 
 	if len(partial) != 0 {
@@ -87,7 +87,7 @@ func GroupByEmptyLines(fileContents string) ([][]string, error) {
 
 // GetFileAsString reads a file on the given path and returns its contents as a string with whitespace trimmed.
 func GetFileAsString(filepath string) (string, error) {
-	data, err := ioutil.ReadFile(filepath)
+	data, err := os.ReadFile(filepath)
 	if err != nil {
 		return "", fmt.Errorf("error reading input file as string: %w", err)
 	}
@@ -96,7 +96,7 @@ func GetFileAsString(filepath string) (string, error) {
 
 // GetReaderAsString reads a file on the given path and returns its contents as a string with whitespace trimmed.
 func GetReaderAsString(r io.Reader) (string, error) {
-	data, err := ioutil.ReadAll(r)
+	data, err := io.ReadAll(r)
 	if err != nil {
 		return "", fmt.Errorf("reading all input from reader: %w", err)
 	}
