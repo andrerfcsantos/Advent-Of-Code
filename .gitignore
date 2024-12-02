@@ -39,6 +39,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!*/typescript/lib/
 lib64/
 parts/
 sdist/
