@@ -105,10 +105,10 @@ export function part2(parsed: State): string {
       }
 
       if (localMasCount == 2) {
-        masCount += 1
+        masCount += 1;
+      }
     }
   }
-}
 
   return masCount.toString(10);
 }
