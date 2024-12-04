@@ -1,6 +1,6 @@
 import { info } from "@std/log";
 import { parseArgs } from "@std/cli";
-import { green, red } from "https://deno.land/std@0.167.0/fmt/colors.ts";
+import { green, red } from "@std/fmt/colors";
 import { getInput } from "./input.ts";
 import { submitAnswer, SubmitResult } from "./submit.ts";
 
