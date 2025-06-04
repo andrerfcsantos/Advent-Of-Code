@@ -1,6 +1,7 @@
 package com.asantosdev;
 
 import com.asantosdev.solutions.Day01;
+import com.asantosdev.solutions.Day02;
 import com.asantosdev.solutions.Solver;
 import com.asantosdev.utils.AOCUtils;
 import com.asantosdev.utils.ClassUtils;
@@ -28,12 +29,11 @@ public class AdventOfCode implements Callable<Integer> {
       defaultValue = "1")
   private int day;
 
-  private static final ClassLoader classLoader = AdventOfCode.class.getClassLoader();
-
   @Override
   public Integer call() throws Exception { // your business logic goes here...
     Map<Integer, Solver> solvers = Map.ofEntries(
-            Map.entry(1, new Day01())
+            Map.entry(1, new Day01()),
+            Map.entry(2, new Day02())
     );
 
     if (day < 1 || day > solvers.size()) {
