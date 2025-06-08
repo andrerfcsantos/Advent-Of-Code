@@ -15,15 +15,15 @@ public class Day02 implements Solver {
 
     private static final Pattern pattern = Pattern.compile( "(?<l>\\d+)x(?<w>\\d+)x(?<h>\\d+)");
 
-    public static Dimensions fromString(String dimensions) {
+    public static Optional<Dimensions> fromString(String dimensions) {
       String[] parts = dimensions.split("x");
       if (parts.length != 3) {
-        throw new IllegalArgumentException("Invalid dimensions format: " + dimensions);
+        return Optional.empty();
       }
       int length = Integer.parseInt(parts[0]);
       int width = Integer.parseInt(parts[1]);
       int height = Integer.parseInt(parts[2]);
-      return new Dimensions(length, width, height);
+      return Optional.of(new Dimensions(length, width, height));
     }
 
     public static Optional<Dimensions> fromStringRegex(String dimensions) {
@@ -73,6 +73,7 @@ public class Day02 implements Solver {
   public void processInput(String input) {
     List<String> lines = ReadUtils.nonEmptyLines(input);
     for (String line : lines) {
+
       Optional<Dimensions> d = Dimensions.fromStringRegex(line);
       d.ifPresent(this.dimensionList::add);
     }

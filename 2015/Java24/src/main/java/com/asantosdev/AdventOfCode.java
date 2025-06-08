@@ -5,6 +5,7 @@ import com.asantosdev.solutions.Day02;
 import com.asantosdev.solutions.Solver;
 import com.asantosdev.utils.AOCUtils;
 import com.asantosdev.utils.ClassUtils;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import java.lang.reflect.Constructor;
@@ -43,10 +44,18 @@ public class AdventOfCode implements Callable<Integer> {
 
     Solver solver = solvers.get(day);
     String input = AOCUtils.getStringInputForDay(day);
-    solver.processInput(input);
 
-    System.out.println("Part 1: " + solver.part1());
-    System.out.println("Part 2: " + solver.part2());
+    Stopwatch stopwatch = Stopwatch.createStarted();
+    solver.processInput(input);
+    stopwatch.stop();
+    System.out.println("Processed input in " + stopwatch);
+
+    stopwatch.reset().start();
+    System.out.println("Part 1: " + solver.part1() + " (in " + stopwatch + ")");
+    stopwatch.reset().start();
+    System.out.println("Part 2: " + solver.part2() + " (in " + stopwatch + ")");
+    stopwatch.stop();
+
     return 0;
   }
 
