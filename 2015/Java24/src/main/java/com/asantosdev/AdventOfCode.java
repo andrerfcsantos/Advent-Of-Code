@@ -4,13 +4,7 @@ import com.asantosdev.solutions.Day01;
 import com.asantosdev.solutions.Day02;
 import com.asantosdev.solutions.Solver;
 import com.asantosdev.utils.AOCUtils;
-import com.asantosdev.utils.ClassUtils;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
@@ -32,10 +26,8 @@ public class AdventOfCode implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception { // your business logic goes here...
-    Map<Integer, Solver> solvers = Map.ofEntries(
-            Map.entry(1, new Day01()),
-            Map.entry(2, new Day02())
-    );
+    Map<Integer, Solver> solvers =
+        Map.ofEntries(Map.entry(1, new Day01()), Map.entry(2, new Day02()));
 
     if (day < 1 || day > solvers.size()) {
       System.err.println("Invalid day. Please provide a day between 1 and " + solvers.size());
