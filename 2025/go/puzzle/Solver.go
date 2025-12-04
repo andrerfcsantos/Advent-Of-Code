@@ -16,3 +16,8 @@ type Solver interface {
 	// Part2 should return the solution for part 2 of the puzzle
 	Part2() (string, error)
 }
+
+type NamedSolver interface {
+	Solver
+	Name() string
+}

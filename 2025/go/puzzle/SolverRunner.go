@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -17,6 +16,8 @@ import (
 type SolverRunner struct {
 	// Input contains a reader to the puzzle input
 	Input io.Reader
+	// InputFilePath contains the path to the input file (if created from file)
+	InputFilePath string
 	// Solver is the solver that can solve the puzzle
 	Solver Solver
 	// PerformanceMetrics contains stats about input reading/processing and the
@@ -33,15 +34,16 @@ func NewSolverRunnerFromFile(filepath string, solver Solver) (*SolverRunner, err
 	}
 
 	readStart := time.Now()
-	fBytes, err := ioutil.ReadFile(filepath)
+	fBytes, err := os.ReadFile(filepath)
 	if err != nil {
 		return nil, fmt.Errorf("could not read from input file '%s': %w", filepath, err)
 	}
 	readElapsed := time.Since(readStart)
 
 	sr := &SolverRunner{
-		Input:  bytes.NewReader(fBytes),
-		Solver: solver,
+		Input:         bytes.NewReader(fBytes),
+		InputFilePath: filepath,
+		Solver:        solver,
 	}
 	sr.InputReadingTime = readElapsed
 
@@ -87,8 +89,15 @@ func (sr *SolverRunner) Run() (*Solution, error) {
 }
 
 func (sr *SolverRunner) PrintSolutionAndStats(w io.Writer) error {
+
 	ew := utils.NewErrorTolerantWriter(w)
 	fmt.Fprintf(ew, "🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅🎅\n")
+	if namedSolver, ok := (sr.Solver).(NamedSolver); ok {
+		fmt.Fprintf(w, "🎄 Solver: %s\n", namedSolver.Name())
+	}
+	if sr.InputFilePath != "" {
+		fmt.Fprintf(ew, "🎄 Input file: %s\n", sr.InputFilePath)
+	}
 	fmt.Fprintf(ew, "🎄 Input: reading=%v | processing=%v\n",
 		sr.PerformanceMetrics.InputReadingTime,
 		sr.PerformanceMetrics.InputProcessingTime)

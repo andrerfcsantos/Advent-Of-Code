@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -76,4 +77,38 @@ func LCM(integers ...int) int {
 	}
 
 	return result
+}
+
+func IntAbs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func Sign(x int) int {
+	if x < 0 {
+		return -1
+	} else if x > 0 {
+		return 1
+	}
+	return 0
+}
+
+func TruncatedDivMod(a, n int) (int, int) {
+	div := float64(a) / float64(n)
+	tdiv := int(math.Trunc(div))
+	return tdiv, a - n*tdiv
+}
+
+func FloorDivMod(a, n int) (int, int) {
+	div := float64(a) / float64(n)
+	fdiv := int(math.Floor(div))
+	return fdiv, a - n*fdiv
+}
+
+func EuclideanDivMod(a, n int) (int, int) {
+	div := float64(a) / float64(IntAbs(n))
+	ediv := int(math.Floor(div))
+	return Sign(n) * ediv, a - IntAbs(n)*ediv
 }

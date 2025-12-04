@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime/pprof"
 	"sort"
+	"strings"
 
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/leaderboard"
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle"
@@ -86,6 +87,24 @@ func main() {
 			log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
 		}
 		runners = append(runners, runner)
+	}
+
+	// Check if a test file exists and create runners for it with fresh solver instances
+	ext := filepath.Ext(inpFile)
+	testFile := strings.TrimSuffix(inpFile, ext) + "_test" + ext
+	if _, err := os.Stat(testFile); err == nil {
+		testSolvers, err := GetSolversForDay(fYear, fDay)
+		if err != nil {
+			log.Fatalf("Error getting solvers for test file day %v of %v: %v", fDay, fYear, err)
+		}
+
+		for _, solver := range testSolvers {
+			testRunner, err := puzzle.NewSolverRunnerFromFile(testFile, solver)
+			if err != nil {
+				log.Fatalf("Error getting runner for test file day %v of %v: %v", fDay, fYear, err)
+			}
+			runners = append(runners, testRunner)
+		}
 	}
 
 	for _, runner := range runners {

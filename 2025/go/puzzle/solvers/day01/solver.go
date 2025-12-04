@@ -1,16 +1,10 @@
 package day01
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/utils"
 )
-
-type Instruction struct {
-	Direction rune
-	Steps     int
-}
 
 type Solver struct {
 	Instructions []Instruction
@@ -18,14 +12,6 @@ type Solver struct {
 
 func NewSolver() *Solver {
 	return &Solver{}
-}
-
-func Mod(numerator, denominator int) int {
-	mod := numerator % denominator
-	if mod < 0 {
-		mod += denominator
-	}
-	return mod
 }
 
 func (s *Solver) ProcessInput(input string) error {
@@ -42,17 +28,26 @@ func (s *Solver) ProcessInput(input string) error {
 	return nil
 }
 
-func (s *Solver) Part1() (string, error) {
+func (s *Solver) Name() string {
+	return "Balanced Solver"
+}
 
+func (s *Solver) Part1() (string, error) {
+	const DIALS = 100
 	pos := 50
 	counter := 0
 
 	for _, instr := range s.Instructions {
+		var rawPos int
 		if instr.Direction == 'R' {
-			pos = Mod(pos+instr.Steps, 100)
+			rawPos = pos + instr.Steps
 		} else if instr.Direction == 'L' {
-			pos = Mod(pos-instr.Steps, 100)
+			rawPos = pos - instr.Steps
 		}
+
+		_, newPos := utils.EuclideanDivMod(rawPos, DIALS)
+		pos = newPos
+
 		if pos == 0 {
 			counter++
 		}
@@ -61,20 +56,29 @@ func (s *Solver) Part1() (string, error) {
 }
 
 func (s *Solver) Part2() (string, error) {
+	const DIALS = 100
 	pos := 50
 	counter := 0
-	fmt.Println("Part2")
 
 	for _, instr := range s.Instructions {
-		posStart := pos
+		var zeros int
+		var rawPos int
+
 		if instr.Direction == 'R' {
-			pos = Mod(pos+instr.Steps, 100)
-		} else if instr.Direction == 'L' {
-			pos = Mod(pos-instr.Steps, 100)
+			rawPos = pos + instr.Steps
+			ediv, _ := utils.EuclideanDivMod(rawPos, DIALS)
+			zeros = ediv
+		} else { // 'L'
+			// Count multiples of 100 in the range [pos-steps, pos-1]
+			// which represents all positions we land on during left movement
+			ediv1, _ := utils.EuclideanDivMod(pos-1, DIALS)
+			ediv2, _ := utils.EuclideanDivMod(pos-1-instr.Steps, DIALS)
+			zeros = ediv1 - ediv2
+			rawPos = pos - instr.Steps
 		}
-		if (posStart > 0 && pos <= 0) || (posStart < 0 && pos >= 0) {
-			counter++
-		}
+
+		counter += zeros
+		_, pos = utils.EuclideanDivMod(rawPos, DIALS)
 	}
 	return strconv.Itoa(counter), nil
 }

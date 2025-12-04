@@ -8,25 +8,32 @@ import (
 )
 
 func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
-	var yearSolvers map[int][]puzzle.Solver
-	var s []puzzle.Solver
+	var yearSolvers map[int][]func() puzzle.Solver
+	var solverFactories []func() puzzle.Solver
 	var ok bool
 
 	if yearSolvers, ok = solverMap[year]; !ok {
 		return nil, fmt.Errorf("there is no solver for the year %v", year)
 	}
 
-	if s, ok = yearSolvers[day]; !ok {
+	if solverFactories, ok = yearSolvers[day]; !ok {
 		return nil, fmt.Errorf("there is no solver for the day %v of %v", day, year)
 	}
 
-	return s, nil
+	// Create new solver instances from factories
+	solvers := make([]puzzle.Solver, len(solverFactories))
+	for i, factory := range solverFactories {
+		solvers[i] = factory()
+	}
+
+	return solvers, nil
 }
 
-var solverMap = map[int]map[int][]puzzle.Solver{
+var solverMap = map[int]map[int][]func() puzzle.Solver{
 	2025: {
 		1: {
-			day01.NewSolver(),
+			func() puzzle.Solver { return day01.NewSolver() },
+			func() puzzle.Solver { return day01.NewEuclideanDivModSolver() },
 		},
 	},
 }
