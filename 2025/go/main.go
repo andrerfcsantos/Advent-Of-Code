@@ -51,6 +51,33 @@ func main() {
 		return
 	}
 
+	if fLeaderboard {
+		if fLeaderboardId == "" {
+			log.Printf("Error: --leaderboard flag is present, but no leaderboard id was given. " +
+				"Pass a leaderboard id with the --leaderboard-id flag or with a AOC_LEADERBOARD_ID env variable")
+		}
+		l, err := leaderboard.FetchLeaderboard(fSession, fLeaderboardId, fYear)
+		if err != nil {
+			log.Fatalf("could not get leaderboard from json: %v", err)
+			return
+		}
+
+		stars := l.StarsByDay(fDay)
+		sort.Sort(leaderboard.ByTimestamp(stars))
+
+		for _, star := range stars {
+			var starStr string
+			if star.Level == 1 {
+				starStr = "1st"
+			} else {
+				starStr = "2nd"
+			}
+
+			fmt.Printf("[%v] %v got the %v star for day %v\n", star.Timestamp.Format("2 Jan 2006 @ 15:04:05"), star.MemberName, starStr, star.Day)
+		}
+		return
+	}
+
 	var err error
 	var solvers []puzzle.Solver
 	var input string
@@ -150,32 +177,6 @@ func main() {
 		log.Printf("Submission result: %v", message)
 	default:
 		// Do nothing
-	}
-
-	if fLeaderboard {
-		if fLeaderboardId == "" {
-			log.Printf("Error: --leaderboard flag is present, but no leaderboard id was given. " +
-				"Pass a leaderboard id with the --leaderboard-id flag or with a AOC_LEADERBOARD_ID env variable")
-		}
-		l, err := leaderboard.FetchLeaderboard(fSession, fLeaderboardId, fYear)
-		if err != nil {
-			log.Fatalf("could not get leaderboard from json: %v", err)
-			return
-		}
-
-		stars := l.StarsByDay(fDay)
-		sort.Sort(leaderboard.ByTimestamp(stars))
-
-		for _, star := range stars {
-			var starStr string
-			if star.Level == 1 {
-				starStr = "1st"
-			} else {
-				starStr = "2nd"
-			}
-
-			fmt.Printf("[%v] %v got the %v star for day %v\n", star.Timestamp.Format("2 Jan 2006 @ 15:04:05"), star.MemberName, starStr, star.Day)
-		}
 	}
 
 }

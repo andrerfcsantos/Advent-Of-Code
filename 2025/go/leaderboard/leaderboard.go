@@ -19,7 +19,7 @@ type ByTimestamp []Star
 
 func (s ByTimestamp) Len() int           { return len(s) }
 func (s ByTimestamp) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
-func (s ByTimestamp) Less(i, j int) bool { return s[i].Timestamp.Before(s[j].Timestamp) }
+func (s ByTimestamp) Less(i, j int) bool { return s[i].Timestamp.Before(*(s[j].Timestamp)) }
 
 func (l *Leaderboard) Stars() []Star {
 	var stars []Star
@@ -90,7 +90,7 @@ type Star struct {
 	MemberName string
 	Day        int
 	Level      int
-	Timestamp  time.Time
+	Timestamp  *time.Time
 }
 
 type leaderboardReply struct {
@@ -147,19 +147,28 @@ func (m *memberInfoReply) toMemberInfo() (*MemberInfo, error) {
 		CompletionDayLevel: make(map[int]map[int]StarInfo),
 	}
 
-	if f, ok := m.LastStarTimestamp.(string); ok {
-
-		ts, err := strconv.ParseInt(f, 10, 64)
+	if m.LastStarTimestamp == nil {
+		res.LastStarTimestamp = nil
+	} else if f, ok := m.LastStarTimestamp.(float64); ok {
+		if f == 0 {
+			res.LastStarTimestamp = nil
+		} else {
+			ts := time.Unix(int64(f), 0)
+			res.LastStarTimestamp = &ts
+		}
+	} else if fStr, ok := m.LastStarTimestamp.(string); ok {
+		ts, err := strconv.ParseInt(fStr, 10, 64)
 		if err != nil {
 			return &res, fmt.Errorf("could not parse %v as an int unix timestamp: %v", m.LastStarTimestamp, err)
 		}
-		t := time.Unix(ts, 0)
-		res.LastStarTimestamp = &t
-
-	} else if _, ok := m.LastStarTimestamp.(float64); ok {
-		res.LastStarTimestamp = nil
+		if ts == 0 {
+			res.LastStarTimestamp = nil
+		} else {
+			t := time.Unix(ts, 0)
+			res.LastStarTimestamp = &t
+		}
 	} else {
-		return nil, fmt.Errorf("could not parse last_star_ts as either string or int")
+		return nil, fmt.Errorf("could not parse last_star_ts as either string or float64: %v", m.LastStarTimestamp)
 	}
 
 	for day, levels := range m.CompletionDayLevel {
@@ -168,7 +177,11 @@ func (m *memberInfoReply) toMemberInfo() (*MemberInfo, error) {
 		}
 
 		for level, sInfo := range levels {
-			res.CompletionDayLevel[day][level] = StarInfo{StarTimestamp: sInfo.StarTimestamp}
+			starInfo, err := sInfo.toStarInfo()
+			if err != nil {
+				return nil, fmt.Errorf("could not convert star info: %v", err)
+			}
+			res.CompletionDayLevel[day][level] = starInfo
 		}
 	}
 
@@ -176,16 +189,37 @@ func (m *memberInfoReply) toMemberInfo() (*MemberInfo, error) {
 }
 
 type StarInfo struct {
-	StarTimestamp time.Time `json:"get_star_ts"`
+	StarTimestamp *time.Time `json:"get_star_ts"`
 }
 
 type starInfoReply struct {
-	StarTimestamp time.Time `json:"get_star_ts"`
+	StarTimestamp interface{} `json:"get_star_ts"`
 }
 
 func (s *starInfoReply) toStarInfo() (StarInfo, error) {
+	var timestamp *time.Time
+
+	if s.StarTimestamp == nil {
+		return StarInfo{StarTimestamp: nil}, nil
+	}
+
+	// Handle integer Unix timestamp (most common case)
+	if tsInt, ok := s.StarTimestamp.(float64); ok {
+		ts := time.Unix(int64(tsInt), 0)
+		timestamp = &ts
+	} else if tsStr, ok := s.StarTimestamp.(string); ok {
+		ts, err := strconv.ParseInt(tsStr, 10, 64)
+		if err != nil {
+			return StarInfo{}, fmt.Errorf("could not parse get_star_ts as int unix timestamp: %v", err)
+		}
+		t := time.Unix(ts, 0)
+		timestamp = &t
+	} else {
+		return StarInfo{}, fmt.Errorf("could not parse get_star_ts as either float64 or string: %v", s.StarTimestamp)
+	}
+
 	return StarInfo{
-		StarTimestamp: s.StarTimestamp,
+		StarTimestamp: timestamp,
 	}, nil
 
 }
