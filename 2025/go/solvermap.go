@@ -32,8 +32,9 @@ func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
 var solverMap = map[int]map[int][]func() puzzle.Solver{
 	2025: {
 		1: {
-			func() puzzle.Solver { return day01.NewSolver() },
+			func() puzzle.Solver { return day01.NewBalancedSolver() },
 			func() puzzle.Solver { return day01.NewEuclideanDivModSolver() },
+			func() puzzle.Solver { return day01.NewNaiveSolver() },
 		},
 	},
 }
