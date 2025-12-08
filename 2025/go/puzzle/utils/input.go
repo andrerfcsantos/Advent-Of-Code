@@ -25,6 +25,21 @@ func TrimmedLinesNoEmpty(fileContents string) []string {
 	return res
 }
 
+func NoEmptyLines(fileContents string) []string {
+	var res []string
+
+	lines := strings.Split(fileContents, "\n")
+
+	for i := 0; i < len(lines); i++ {
+		lines[i] = strings.Trim(lines[i], "\r")
+		if lines[i] != "" {
+			res = append(res, lines[i])
+		}
+	}
+
+	return res
+}
+
 // TrimmedLines takes a string with the contents of a file and divides into it'elems lines.
 // Whitespace is trimmed from every line.
 func TrimmedLines(fileContents string) []string {

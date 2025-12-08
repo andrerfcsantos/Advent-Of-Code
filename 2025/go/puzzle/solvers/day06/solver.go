@@ -1,9 +1,8 @@
 package day06
 
 import (
-	"fmt"
-	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/utils"
 )
@@ -39,87 +38,141 @@ func NewSolver() *Solver {
 	return &Solver{}
 }
 
-func (d *Solver) ProcessInput(input string) error {
-	lines := utils.TrimmedLinesNoEmpty(input)
+func OperationsAndColStartsFromLine(line string) ([]OperationType, []int) {
+	var ops []OperationType
+	var colStarts []int
 
-	spaceRegex := regexp.MustCompile(`\s+`)
-	splittedLines := make([][]string, 0, len(lines))
-	for _, line := range lines {
-		splittedLine := spaceRegex.Split(line, -1)
-		splittedLines = append(splittedLines, splittedLine)
-	}
-
-	numbers := make([][]int, 0, len(splittedLines))
-	for _, splittedLine := range splittedLines[:len(splittedLines)-1] {
-		nums := make([]int, 0, len(splittedLine))
-		for _, numStr := range splittedLine {
-			nums = append(nums, utils.MustAtoi(numStr))
-		}
-		numbers = append(numbers, nums)
-	}
-
-	ops := make([]OperationType, 0, len(splittedLines))
-	for _, op := range splittedLines[len(splittedLines)-1] {
+	for i, op := range line {
 		switch op {
-		case "+":
+		case '+':
 			ops = append(ops, Addition)
-		case "*":
+			colStarts = append(colStarts, i)
+		case '*':
 			ops = append(ops, Multiplication)
-		default:
-			return fmt.Errorf("unknown operation: %s", op)
+			colStarts = append(colStarts, i)
 		}
 	}
 
-	nCols := len(ops)
+	return ops, colStarts
+}
 
-	for col := 0; col < nCols; col++ {
-		problem := Problem{
-			Operation: ops[col],
-			Operands:  make([]int, 0, len(numbers)),
+func MaxLenInLines(lines [][]string) []int {
+	maxLens := make([]int, 0, len(lines))
+
+	for i := 0; i < len(lines); i++ {
+		maxLen := 0
+		line := lines[i]
+		for j := 0; j < len(line); j++ {
+			if len(line[j]) > maxLen {
+				maxLen = len(line[j])
+			}
 		}
-		for row := 0; row < len(numbers); row++ {
-			problem.Operands = append(problem.Operands, numbers[row][col])
+		maxLens = append(maxLens, maxLen)
+	}
+	return maxLens
+}
+
+func (d *Solver) ProcessInput(input string) error {
+	lines := utils.NoEmptyLines(input)
+
+	nLines := len(lines)
+
+	// Find all operations and the column where they start
+	ops, colStarts := OperationsAndColStartsFromLine(lines[nLines-1])
+
+	// Transpose numbers and keep spaces to the left of numbers.
+	// We want to keep the numbers as strings for now.
+	fragmentedLines := make([][]string, 0, len(lines)-1)
+	for _, sIdx := range colStarts {
+		var lineFragments []string
+		for _, line := range lines[:nLines-1] {
+			readingNumber := true
+			foundDigit := false
+			part := ""
+			for j := 0; readingNumber && sIdx+j < len(line); j++ {
+				c := line[sIdx+j]
+				if c == ' ' {
+					if !foundDigit {
+						part += string(c)
+					} else {
+						readingNumber = false
+					}
+				} else if c >= '0' && c <= '9' {
+					part += string(c)
+					foundDigit = true
+				} else {
+					break
+				}
+			}
+			lineFragments = append(lineFragments, part)
+		}
+		fragmentedLines = append(fragmentedLines, lineFragments)
+	}
+
+	// Pad right with spaces all strings in each fragmented line.
+	// This makes sure all strings have the same length equal to the max length
+	// of the column in the original input.
+	maxLens := MaxLenInLines(fragmentedLines)
+
+	for i := 0; i < len(fragmentedLines); i++ {
+		line := fragmentedLines[i]
+		maxLen := maxLens[i]
+		for j := 0; j < len(line); j++ {
+			numStr := line[j]
+			lenNum := len(numStr)
+			if lenNum < maxLen {
+				numStr += strings.Repeat(" ", maxLen-lenNum)
+				fragmentedLines[i][j] = numStr
+			}
+		}
+	}
+
+	// Part 1 - Convert strings to numbers for part 1,
+	// where each number can be converted into a int directly.
+	nOps := len(ops)
+	for i := 0; i < nOps; i++ {
+		problem := Problem{
+			Operation: ops[i],
+			Operands:  make([]int, 0, len(fragmentedLines[i])),
+		}
+		for j := 0; j < len(fragmentedLines[i]); j++ {
+			n := utils.MustAtoi(strings.TrimSpace(fragmentedLines[i][j]))
+			problem.Operands = append(problem.Operands, n)
 		}
 		d.Problems = append(d.Problems, problem)
 	}
 
-	// Part 2
+	// Part 1 - Convert strings to numbers for part 2,
+	// where each number is computed by concatenating digits from each line,
+	// from top to bottom, right to left.
+	for i := 0; i < nOps; i++ {
+		opMaxLen := maxLens[i]
+		operands := fragmentedLines[i]
+		nOperands := len(operands)
 
-	nRowsTransposed := len(splittedLines[0])
-	transposedLines := make([][]string, 0, nRowsTransposed)
-	for col := 0; col < nRowsTransposed; col++ {
-		newLine := make([]string, 0, len(splittedLines)-1)
-		for row := 0; row < len(splittedLines)-1; row++ {
-			newLine = append(newLine, splittedLines[row][col])
-		}
-		transposedLines = append(transposedLines, newLine)
-	}
+		numbersStr := make([]string, opMaxLen)
+		for j := opMaxLen - 1; j >= 0; j-- {
 
-	for i := 0; i < len(transposedLines); i++ {
-		line := transposedLines[i]
-
-		maxLen := MaxLen(line)
-		ns := make([]string, maxLen)
-
-		for j := 0; j < len(line); j++ {
-			numStr := line[j]
-			lenNum := len(numStr)
-			for ii := 0; ii < lenNum; ii++ {
-				ns[ii] += string(numStr[lenNum-1-ii])
+			idx := (opMaxLen - 1) - j
+			for k := 0; k < nOperands; k++ {
+				numStr := operands[k]
+				numbersStr[idx] += string(numStr[j])
 			}
 		}
 
-		nums := make([]int, 0, len(ns))
-		for _, numStr := range ns {
-			nums = append(nums, utils.MustAtoi(numStr))
+		numbersInt := make([]int, 0, opMaxLen)
+		for _, numStr := range numbersStr {
+			n := utils.MustAtoi(strings.TrimSpace(numStr))
+			numbersInt = append(numbersInt, n)
 		}
+
 		problem := Problem{
 			Operation: ops[i],
-			Operands:  nums,
+			Operands:  numbersInt,
 		}
 		d.ProblemsP2 = append(d.ProblemsP2, problem)
-
 	}
+
 	return nil
 }
 

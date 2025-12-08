@@ -108,14 +108,6 @@ func main() {
 
 	var runners []*puzzle.SolverRunner
 
-	for _, solver := range solvers {
-		runner, err := puzzle.NewSolverRunnerFromFile(inpFile, solver)
-		if err != nil {
-			log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
-		}
-		runners = append(runners, runner)
-	}
-
 	// Check if a test file exists and create runners for it with fresh solver instances
 	ext := filepath.Ext(inpFile)
 	testFile := strings.TrimSuffix(inpFile, ext) + "_test" + ext
@@ -132,6 +124,14 @@ func main() {
 			}
 			runners = append(runners, testRunner)
 		}
+	}
+
+	for _, solver := range solvers {
+		runner, err := puzzle.NewSolverRunnerFromFile(inpFile, solver)
+		if err != nil {
+			log.Fatalf("Error getting runner for day %v of %v: %v", fDay, fYear, err)
+		}
+		runners = append(runners, runner)
 	}
 
 	for _, runner := range runners {
