@@ -10,13 +10,13 @@ import (
 
 type Solver struct {
 	Grid                *grid.Grid
-	StartingPoint       grid.GridPoint
-	TimelineMemoization map[grid.GridPoint]int
+	StartingPoint       grid.Point
+	TimelineMemoization map[grid.Point]int
 }
 
 func NewSolver() *Solver {
 	return &Solver{
-		TimelineMemoization: make(map[grid.GridPoint]int),
+		TimelineMemoization: make(map[grid.Point]int),
 	}
 }
 
@@ -37,15 +37,15 @@ func (d *Solver) ProcessInput(input string) error {
 
 func (d *Solver) Part1() (string, error) {
 
-	beamHistorySet := make(map[grid.GridPoint]bool)
-	activeBeams := make(map[grid.GridPoint]*Beam)
+	beamHistorySet := make(map[grid.Point]bool)
+	activeBeams := make(map[grid.Point]*Beam)
 
 	startingBeam := NewBeam(d.StartingPoint)
 	activeBeams[startingBeam.StartingPoint] = startingBeam
 	splits := 0
 	for len(activeBeams) > 0 {
-		var beamsToDelete []grid.GridPoint
-		var beamsToSpawn []grid.GridPoint
+		var beamsToDelete []grid.Point
+		var beamsToSpawn []grid.Point
 
 		for _, beam := range activeBeams {
 			beamHistorySet[beam.CurrentPoint] = true
@@ -92,7 +92,7 @@ func (d *Solver) Part1() (string, error) {
 	return strconv.Itoa(splits), nil
 }
 
-func (d *Solver) AlternativeTimelinesFrom(start grid.GridPoint) int {
+func (d *Solver) AlternativeTimelinesFrom(start grid.Point) int {
 	if val, ok := d.TimelineMemoization[start]; ok {
 		return val
 	}

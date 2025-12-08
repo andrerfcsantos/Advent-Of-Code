@@ -1,24 +1,24 @@
 package grid
 
 var (
-	UpGridVector        = GridVector{ColDelta: 0, RowDelta: -1}
-	DownGridVector      = GridVector{ColDelta: 0, RowDelta: 1}
-	LeftGridVector      = GridVector{ColDelta: -1, RowDelta: 0}
-	RightGridVector     = GridVector{ColDelta: 1, RowDelta: 0}
-	UpLeftGridVector    = GridVector{ColDelta: -1, RowDelta: -1}
-	UpRightGridVector   = GridVector{ColDelta: 1, RowDelta: -1}
-	DownLeftGridVector  = GridVector{ColDelta: -1, RowDelta: 1}
-	DownRightGridVector = GridVector{ColDelta: 1, RowDelta: 1}
+	UpGridVector        = Vector{ColDelta: 0, RowDelta: -1}
+	DownGridVector      = Vector{ColDelta: 0, RowDelta: 1}
+	LeftGridVector      = Vector{ColDelta: -1, RowDelta: 0}
+	RightGridVector     = Vector{ColDelta: 1, RowDelta: 0}
+	UpLeftGridVector    = Vector{ColDelta: -1, RowDelta: -1}
+	UpRightGridVector   = Vector{ColDelta: 1, RowDelta: -1}
+	DownLeftGridVector  = Vector{ColDelta: -1, RowDelta: 1}
+	DownRightGridVector = Vector{ColDelta: 1, RowDelta: 1}
 )
 
-var cardiinalGridVectors = []GridVector{
+var cardiinalGridVectors = []Vector{
 	UpGridVector,
 	DownGridVector,
 	LeftGridVector,
 	RightGridVector,
 }
 
-var intermediateDirections = []GridVector{
+var intermediateDirections = []Vector{
 	UpLeftGridVector,
 	UpRightGridVector,
 	DownLeftGridVector,
@@ -27,7 +27,7 @@ var intermediateDirections = []GridVector{
 
 var allGridVectors = append(cardiinalGridVectors, intermediateDirections...)
 
-type GridVector struct {
+type Vector struct {
 	ColDelta int
 	RowDelta int
 }

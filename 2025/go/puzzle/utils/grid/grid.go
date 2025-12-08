@@ -20,7 +20,7 @@ func (g *Grid) AddRow(row string) {
 	g.Cells = append(g.Cells, []rune(row))
 }
 
-func (g *Grid) Set(pos GridPoint, val rune) {
+func (g *Grid) Set(pos Point, val rune) {
 	if pos.Row < 0 || pos.Row >= len(g.Cells) || len(g.Cells) == 0 {
 		return
 	}
@@ -30,7 +30,7 @@ func (g *Grid) Set(pos GridPoint, val rune) {
 	g.Cells[pos.Row][pos.Col] = val
 }
 
-func (g *Grid) HasPoint(pos GridPoint) bool {
+func (g *Grid) HasPoint(pos Point) bool {
 	if pos.Row < 0 || pos.Row >= len(g.Cells) || len(g.Cells) == 0 || pos.Col < 0 || pos.Col >= len(g.Cells[0]) {
 		return false
 	}
@@ -38,24 +38,24 @@ func (g *Grid) HasPoint(pos GridPoint) bool {
 	return true
 }
 
-func (g *Grid) FindRune(c rune) (bool, GridPoint) {
+func (g *Grid) FindRune(c rune) (bool, Point) {
 	for r, row := range g.Cells {
 		for col, cell := range row {
 			if cell == c {
-				return true, GridPoint{Col: col, Row: r}
+				return true, Point{Col: col, Row: r}
 			}
 		}
 	}
 
-	return false, GridPoint{}
+	return false, Point{}
 }
 
-func (g *Grid) FindRuneAll(c rune) []GridPoint {
-	var points []GridPoint
+func (g *Grid) FindRuneAll(c rune) []Point {
+	var points []Point
 	for r, row := range g.Cells {
 		for col, cell := range row {
 			if cell == c {
-				points = append(points, GridPoint{Col: col, Row: r})
+				points = append(points, Point{Col: col, Row: r})
 			}
 		}
 	}
@@ -63,14 +63,14 @@ func (g *Grid) FindRuneAll(c rune) []GridPoint {
 	return points
 }
 
-func (g *Grid) AtOr(pos GridPoint, defaultVal rune) rune {
+func (g *Grid) AtOr(pos Point, defaultVal rune) rune {
 	if !g.HasPoint(pos) {
 		return defaultVal
 	}
 	return g.Cells[pos.Row][pos.Col]
 }
 
-func (g *Grid) At(pos GridPoint) rune {
+func (g *Grid) At(pos Point) rune {
 	return g.Cells[pos.Row][pos.Col]
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/solvers/day05"
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/solvers/day06"
 	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/solvers/day07"
+	"github.com/andrerfcsantos/Advent-Of-Code/2025/go/puzzle/solvers/day08"
 )
 
 func GetSolversForDay(year int, day int) ([]puzzle.Solver, error) {
@@ -59,6 +60,9 @@ var solverMap = map[int]map[int][]func() puzzle.Solver{
 		},
 		7: {
 			func() puzzle.Solver { return day07.NewSolver() },
+		},
+		8: {
+			func() puzzle.Solver { return day08.NewSolver() },
 		},
 	},
 }
