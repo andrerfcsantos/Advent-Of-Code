@@ -14,6 +14,13 @@ func (p *Point2D) Add(vector Vector2D) Point2D {
 	}
 }
 
+func (p *Point2D) VectorTo(point Point2D) Vector2D {
+	return Vector2D{
+		DX: point.X - p.X,
+		DY: point.Y - p.Y,
+	}
+}
+
 type Point3D struct {
 	X int
 	Y int

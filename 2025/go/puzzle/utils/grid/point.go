@@ -14,6 +14,13 @@ func (gp *Point) Add(vector Vector) Point {
 	}
 }
 
+func (gp *Point) VectorTo(point Point) Vector {
+	return Vector{
+		ColDelta: point.Col - gp.Col,
+		RowDelta: point.Row - gp.Row,
+	}
+}
+
 func (gp *Point) String() string {
 	return fmt.Sprintf("(%d, %d)", gp.Col, gp.Row)
 }
